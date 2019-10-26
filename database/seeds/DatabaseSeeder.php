@@ -13,11 +13,9 @@ class DatabaseSeeder extends Seeder {
      */
     public function run()
     {
-        Model::unguard();
-
         $account = Account::create(['name' => 'Acme Corporation']);
 
-        // Mike's account
+        // accounts
         $eugene = User::create([
             'account_id' => $account->id,
             'first_name' => 'Eugene',
