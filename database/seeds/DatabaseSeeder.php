@@ -24,7 +24,7 @@ class DatabaseSeeder extends Seeder {
             'last_name' => 'Havrylov',
             'email' => 'link6596@gmail.com',
             'owner' => true,
-            'password' => bcrypt('ubuntu123')
+            'password' => 'ubuntu123'
 
         ]);
 
@@ -34,7 +34,7 @@ class DatabaseSeeder extends Seeder {
             'last_name' => 'Velykyi',
             'email' => 'velikiy300@gmail.com',
             'owner' => true,
-            'password' => bcrypt('ubuntu123')
+            'password' => 'ubuntu123'
         ]);
     }
 }

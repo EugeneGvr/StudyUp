@@ -14,7 +14,5 @@ class CreateAccountsTable extends Migration
             $table->string('name', 50);
             $table->timestamps();
         });
-
-        $account = Account::create(['name' => 'Acme Corporation']);
     }
 }
