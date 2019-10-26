@@ -3,6 +3,18 @@
     "description": "The Laravel Framework.",
     "keywords": ["framework", "laravel"],
     "license": "MIT",
+    "authors": [
+      {
+        "name": "Evhenii Havrylov",
+        "email": "link6596@gmail.com",
+        "role": "Developer"
+      },
+      {
+        "name": "Ivan Velykyi",
+        "email": "ivan@mail.ua",
+        "role": "Developer"
+      }
+    ],
     "type": "project",
     "require": {
         "php": "^7.2",
@@ -15,13 +27,9 @@
         "tightenco/ziggy": "^0.8.0"
     },
     "require-dev": {
-        "barryvdh/laravel-debugbar": "^3.2",
-        "beyondcode/laravel-dump-server": "^1.0",
-        "facade/ignition": "^1.4",
-        "fzaninotto/faker": "^1.4",
-        "mockery/mockery": "^1.0",
-        "nunomaduro/collision": "^3.0",
-        "phpunit/phpunit": "^8.0"
+      "facade/ignition": "^1.4",
+      "nunomaduro/collision": "^3.0",
+      "phpunit/phpunit": "^8.0"
     },
     "autoload": {
         "classmap": [
