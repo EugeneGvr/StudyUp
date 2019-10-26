@@ -3,7 +3,6 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-use App\Account;
 
 class CreateAccountsTable extends Migration
 {
@@ -14,5 +13,10 @@ class CreateAccountsTable extends Migration
             $table->string('name', 50);
             $table->timestamps();
         });
+
+        $account = new App\Account();
+        $account
+            ->setAttribute('name', 'admin')
+            ->save();
     }
 }

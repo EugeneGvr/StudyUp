@@ -14,26 +14,18 @@ class DatabaseSeeder extends Seeder {
     public function run()
     {
         $account = Account::create(['name' => 'Acme Corporation']);
+
+        //run Admins seed
+        $seeder = new AdminsTableSeeder();
+        $seeder->run();
+
+        //run Users seed
+        $seeder = new UsersTableSeeder();
+        $seeder->run();
+
+        //run Localities seed
         $seeder = new LocalitiesTableSeeder();
         $seeder->run();
-        // accounts
-        $eugene = User::create([
-            'account_id' => $account->id,
-            'first_name' => 'Eugene',
-            'last_name' => 'Havrylov',
-            'email' => 'link6596@gmail.com',
-            'owner' => true,
-            'password' => 'ubuntu123'
 
-        ]);
-
-        $ivan = User::create([
-            'account_id' => $account->id,
-            'first_name' => 'Ivan',
-            'last_name' => 'Velykyi',
-            'email' => 'velikiy300@gmail.com',
-            'owner' => true,
-            'password' => 'ubuntu123'
-        ]);
     }
 }

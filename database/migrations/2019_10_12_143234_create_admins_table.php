@@ -1,23 +1,27 @@
 <?php
 
-use App\User;
+use App\Admin;
+
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUsersTable extends Migration
+class CreateAdminsTable extends Migration
 {
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('admins', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('account_id')->index();
             $table->string('first_name', 25);
             $table->string('last_name', 25);
-            $table->string('city_id')->nullable();
-            $table->string('username')->unique();
-            $table->string('email', 50)->unique();
+            $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('photo_path', 100)->nullable();
@@ -25,5 +29,15 @@ class CreateUsersTable extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('admins');
     }
 }
