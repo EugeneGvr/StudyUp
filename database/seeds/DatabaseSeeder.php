@@ -14,7 +14,8 @@ class DatabaseSeeder extends Seeder {
     public function run()
     {
         $account = Account::create(['name' => 'Acme Corporation']);
-
+        $seeder = new LocalitiesTableSeeder();
+        $seeder->run();
         // accounts
         $eugene = User::create([
             'account_id' => $account->id,

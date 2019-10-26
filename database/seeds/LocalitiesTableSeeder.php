@@ -17,7 +17,7 @@ class LocalitiesTableSeeder extends Seeder
         'name' => 'Eugene',
         'parent_code' => '000',
         'center' => true,
-        'type' => 'С',
+        'type' => 'С'
     ]);
     }
 }
