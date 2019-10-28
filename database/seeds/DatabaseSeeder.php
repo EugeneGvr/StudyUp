@@ -24,8 +24,8 @@ class DatabaseSeeder extends Seeder {
         $seeder->run();
 
         //run Localities seed
-        $seeder = new LocalitiesTableSeeder();
-        $seeder->run();
+        //$seeder = new LocalitiesTableSeeder();
+        //$seeder->run();
 
     }
 }
