@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1 class="mb-8 font-bold text-3xl">
-      <inertia-link class="text-indigo-light hover:text-indigo-dark" :href="route('users')">Users</inertia-link>
+      <inertia-link class="text-indigo-light hover:text-indigo-dark" :href="route('admin.users')">Users</inertia-link>
       <span class="text-indigo-light font-medium">/</span> Create
     </h1>
     <div class="bg-white rounded shadow overflow-hidden max-w-lg">
@@ -67,7 +67,7 @@ export default {
       data.append('owner', this.form.owner ? '1' : '0')
       data.append('photo', this.form.photo || '')
 
-      this.$inertia.post(this.route('users.store'), data)
+      this.$inertia.post(this.route('admin.users.store'), data)
         .then(() => this.sending = false)
     },
   },

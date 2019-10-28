@@ -10,7 +10,7 @@
           <option value="only">Only Trashed</option>
         </select>
       </search-filter>
-      <inertia-link class="btn-indigo" :href="route('contacts.create')">
+      <inertia-link class="btn-indigo" :href="route('admin.contacts.create')">
         <span>Create</span>
         <span class="hidden md:inline">Contact</span>
       </inertia-link>
@@ -25,30 +25,30 @@
         </tr>
         <tr v-for="contact in contacts.data" :key="contact.id" class="hover:bg-grey-lightest focus-within:bg-grey-lightest">
           <td class="border-t">
-            <inertia-link class="px-6 py-4 flex items-center focus:text-indigo" :href="route('contacts.edit', contact.id)">
+            <inertia-link class="px-6 py-4 flex items-center focus:text-indigo" :href="route('admin.contacts.edit', contact.id)">
               {{ contact.name }}
               <icon v-if="contact.deleted_at" name="trash" class="flex-no-shrink w-3 h-3 fill-grey ml-2" />
             </inertia-link>
           </td>
           <td class="border-t">
-            <inertia-link class="px-6 py-4 flex items-center" :href="route('contacts.edit', contact.id)" tabindex="-1">
+            <inertia-link class="px-6 py-4 flex items-center" :href="route('admin.contacts.edit', contact.id)" tabindex="-1">
               <div v-if="contact.organization">
                 {{ contact.organization.name }}
               </div>
             </inertia-link>
           </td>
           <td class="border-t">
-            <inertia-link class="px-6 py-4 flex items-center" :href="route('contacts.edit', contact.id)" tabindex="-1">
+            <inertia-link class="px-6 py-4 flex items-center" :href="route('admin.contacts.edit', contact.id)" tabindex="-1">
               {{ contact.city }}
             </inertia-link>
           </td>
           <td class="border-t">
-            <inertia-link class="px-6 py-4 flex items-center" :href="route('contacts.edit', contact.id)" tabindex="-1">
+            <inertia-link class="px-6 py-4 flex items-center" :href="route('admin.contacts.edit', contact.id)" tabindex="-1">
               {{ contact.phone }}
             </inertia-link>
           </td>
           <td class="border-t w-px">
-            <inertia-link class="px-4 flex items-center" :href="route('contacts.edit', contact.id)" tabindex="-1">
+            <inertia-link class="px-4 flex items-center" :href="route('admin.contacts.edit', contact.id)" tabindex="-1">
               <icon name="cheveron-right" class="block w-6 h-6 fill-grey" />
             </inertia-link>
           </td>
@@ -93,7 +93,7 @@ export default {
     form: {
       handler: _.throttle(function() {
         let query = _.pickBy(this.form)
-        this.$inertia.replace(this.route('contacts', Object.keys(query).length ? query : { remember: 'forget' }))
+        this.$inertia.replace(this.route('admin.contacts', Object.keys(query).length ? query : { remember: 'forget' }))
       }, 150),
       deep: true,
     },

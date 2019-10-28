@@ -10,7 +10,7 @@
           <option value="only">Only Trashed</option>
         </select>
       </search-filter>
-      <inertia-link class="btn-indigo" :href="route('organizations.create')">
+      <inertia-link class="btn-indigo" :href="route('admin.organizations.create')">
         <span>Create</span>
         <span class="hidden md:inline">Organization</span>
       </inertia-link>
@@ -24,13 +24,13 @@
         </tr>
         <tr v-for="organization in organizations.data" :key="organization.id" class="hover:bg-grey-lightest focus-within:bg-grey-lightest">
           <td class="border-t">
-            <inertia-link class="px-6 py-4 flex items-center focus:text-indigo" :href="route('organizations.edit', organization.id)">
+            <inertia-link class="px-6 py-4 flex items-center focus:text-indigo" :href="route('admin.organizations.edit', organization.id)">
               {{ organization.name }}
               <icon v-if="organization.deleted_at" name="trash" class="flex-no-shrink w-3 h-3 fill-grey ml-2" />
             </inertia-link>
           </td>
           <td class="border-t">
-            <inertia-link class="px-6 py-4 flex items-center" :href="route('organizations.edit', organization.id)" tabindex="-1">
+            <inertia-link class="px-6 py-4 flex items-center" :href="route('admin.organizations.edit', organization.id)" tabindex="-1">
               {{ organization.city }}
             </inertia-link>
           </td>
@@ -40,7 +40,7 @@
             </inertia-link>
           </td>
           <td class="border-t w-px">
-            <inertia-link class="px-4 flex items-center" :href="route('organizations.edit', organization.id)" tabindex="-1">
+            <inertia-link class="px-4 flex items-center" :href="route('admin.organizations.edit', organization.id)" tabindex="-1">
               <icon name="cheveron-right" class="block w-6 h-6 fill-grey" />
             </inertia-link>
           </td>
@@ -85,7 +85,7 @@ export default {
     form: {
       handler: _.throttle(function() {
         let query = _.pickBy(this.form)
-        this.$inertia.replace(this.route('organizations', Object.keys(query).length ? query : { remember: 'forget' }))
+        this.$inertia.replace(this.route('admin.organizations', Object.keys(query).length ? query : { remember: 'forget' }))
       }, 150),
       deep: true,
     },

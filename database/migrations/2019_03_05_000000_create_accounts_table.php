@@ -13,10 +13,5 @@ class CreateAccountsTable extends Migration
             $table->string('name', 50);
             $table->timestamps();
         });
-
-        $account = new App\Account();
-        $account
-            ->setAttribute('name', 'admin')
-            ->save();
     }
 }

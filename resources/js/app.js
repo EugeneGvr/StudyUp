@@ -14,7 +14,7 @@ let app = document.getElementById('app')
 new Vue({
   metaInfo: {
     title: 'Loading…',
-    titleTemplate: '%s | Ping CRM',
+    titleTemplate: '%s · StudyUp Administrator panel',
   },
   render: h => h(InertiaApp, {
     props: {

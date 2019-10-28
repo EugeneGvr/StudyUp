@@ -32,4 +32,11 @@ class LoginController extends Controller
 
         return redirect()->back()->withInput($request->only(['email', 'remember']));
     }
+
+    public function logout()
+    {
+        Auth::guard('web-admin')->logout();
+
+        return redirect(route('admin.login'));
+    }
 }

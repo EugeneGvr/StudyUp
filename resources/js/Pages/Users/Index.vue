@@ -16,7 +16,7 @@
           <option value="only">Only Trashed</option>
         </select>
       </search-filter>
-      <inertia-link class="btn-indigo" :href="route('users.create')">
+      <inertia-link class="btn-indigo" :href="route('admin.users.create')">
         <span>Create</span>
         <span class="hidden md:inline">User</span>
       </inertia-link>
@@ -30,24 +30,24 @@
         </tr>
         <tr v-for="user in users" :key="user.id" class="hover:bg-grey-lightest focus-within:bg-grey-lightest">
           <td class="border-t">
-            <inertia-link class="px-6 py-4 flex items-center focus:text-indigo" :href="route('users.edit', user.id)">
+            <inertia-link class="px-6 py-4 flex items-center focus:text-indigo" :href="route('admin.users.edit', user.id)">
               <img v-if="user.photo" class="block w-5 h-5 rounded-full mr-2 -my-2" :src="user.photo">
               {{ user.name }}
               <icon v-if="user.deleted_at" name="trash" class="flex-no-shrink w-3 h-3 fill-grey ml-2" />
             </inertia-link>
           </td>
           <td class="border-t">
-            <inertia-link class="px-6 py-4 flex items-center" :href="route('users.edit', user.id)" tabindex="-1">
+            <inertia-link class="px-6 py-4 flex items-center" :href="route('admin.users.edit', user.id)" tabindex="-1">
               {{ user.email }}
             </inertia-link>
           </td>
           <td class="border-t">
-            <inertia-link class="px-6 py-4 flex items-center" :href="route('users.edit', user.id)" tabindex="-1">
+            <inertia-link class="px-6 py-4 flex items-center" :href="route('admin.users.edit', user.id)" tabindex="-1">
               {{ user.owner ? 'Owner' : 'User' }}
             </inertia-link>
           </td>
           <td class="border-t w-px">
-            <inertia-link class="px-4 flex items-center" :href="route('users.edit', user.id)" tabindex="-1">
+            <inertia-link class="px-4 flex items-center" :href="route('admin.users.edit', user.id)" tabindex="-1">
               <icon name="cheveron-right" class="block w-6 h-6 fill-grey" />
             </inertia-link>
           </td>

@@ -2,7 +2,7 @@
   <div>
     <div class="mb-8 flex justify-start max-w-lg">
       <h1 class="font-bold text-3xl">
-        <inertia-link class="text-indigo-light hover:text-indigo-dark" :href="route('users')">Users</inertia-link>
+        <inertia-link class="text-indigo-light hover:text-indigo-dark" :href="route('admin.users')">Users</inertia-link>
         <span class="text-indigo-light font-medium">/</span>
         {{ form.first_name }} {{ form.last_name }}
       </h1>
@@ -85,7 +85,7 @@ export default {
       data.append('photo', this.form.photo || '')
       data.append('_method', 'put')
 
-      this.$inertia.post(this.route('users.update', this.user.id), data)
+      this.$inertia.post(this.route('admin.users.update', this.user.id), data)
         .then(() => {
           this.sending = false
           if (Object.keys(this.$page.errors).length === 0) {
@@ -96,12 +96,12 @@ export default {
     },
     destroy() {
       if (confirm('Are you sure you want to delete this user?')) {
-        this.$inertia.delete(this.route('users.destroy', this.user.id))
+        this.$inertia.delete(this.route('admin.users.destroy', this.user.id))
       }
     },
     restore() {
       if (confirm('Are you sure you want to restore this user?')) {
-        this.$inertia.put(this.route('users.restore', this.user.id))
+        this.$inertia.put(this.route('admin.users.restore', this.user.id))
       }
     },
   },
