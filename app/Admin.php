@@ -50,7 +50,7 @@ class Admin extends Model implements AuthenticatableContract, AuthorizableContra
         }
     }
 
-    public function scopeOrderByName($query)
+    public function orderByName($query)
     {
         $query->orderBy('last_name')->orderBy('first_name');
     }
@@ -80,5 +80,13 @@ class Admin extends Model implements AuthenticatableContract, AuthorizableContra
                 $query->onlyTrashed();
             }
         });
+    }
+
+    public static function getAdmins()
+    {
+        $administrators = self::orderBy('created_at')->paginate()->only('id', 'first_name', 'last_name', 'email');
+
+
+        return $administrators;
     }
 }

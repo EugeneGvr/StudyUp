@@ -16,16 +16,20 @@ class DatabaseSeeder extends Seeder {
         $account = Account::create(['name' => 'Acme Corporation']);
 
         //run Admins seed
-        $seeder = new AdminsTableSeeder();
-        $seeder->run();
+        $adminsTableSeeder = new AdminsTableSeeder();
+        $adminsTableSeeder->run();
 
         //run Users seed
-        $seeder = new UsersTableSeeder();
-        $seeder->run();
+        $usersTableSeeder = new UsersTableSeeder();
+        $usersTableSeeder->run();
+
+        //run Roles seed
+        $rolesTableSeeder = new RolesTableSeeder();
+        $rolesTableSeeder->run();
 
         //run Localities seed
-        //$seeder = new LocalitiesTableSeeder();
-        //$seeder->run();
+        //$localitiesTableSeeder = new LocalitiesTableSeeder();
+        //$localitiesTableSeeder->run();
 
     }
 }
