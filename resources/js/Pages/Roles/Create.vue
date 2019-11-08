@@ -89,9 +89,17 @@ export default {
               .then(() => this.sending = false)
       },
       selectModule(module, permission) {
-          console.log(this.$refs[module][0]);
+          console.log(this.$refs[module][0].isChecked);
           for (const action of permission) {
-              this.form.permissions.push(module + '.' +action);
+              if(this.$refs[module][0].isChecked) {
+                  const index = this.form.permissions.indexOf(module + '.' + action);
+
+                  if (index > -1) {
+                      this.form.permissions.splice(index, 1);
+                  }
+              } else {
+                  this.form.permissions.push(module + '.' + action);
+              }
           }
       },
       selectAll() {
