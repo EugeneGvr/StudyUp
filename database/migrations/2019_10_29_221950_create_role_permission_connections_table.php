@@ -15,7 +15,8 @@ class CreateRolePermissionConnectionsTable extends Migration
     {
         Schema::create('role_permission_connections', function (Blueprint $table) {
             $table->integer('role_id');
-            $table->string('permission_key', 32);
+            $table->string('module', 32);
+            $table->string('action', 32);
         });
     }
 

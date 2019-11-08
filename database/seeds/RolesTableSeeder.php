@@ -13,20 +13,20 @@ class RolesTableSeeder extends Seeder
      */
     public function run()
     {
+        $permissions = config('permissions');
+
         $role = Role::create([
             'name'          => 'Super administrator',
             'description'   => 'This is role with all actions permitted',
         ]);
 
-        $tables =  ['admins', 'users', 'roles'];
-        $actions = ['read', 'create', 'edit', 'delete'];
-
-        foreach ($tables as $table) {
+        foreach ($permissions as $module => $actions) {
 
             foreach ($actions as $action) {
                 RolePermissionConnection::create([
-                    'role_id'          => $role->id,
-                    'permission_key'   => $table.'.'.$action,
+                    'role_id'   => $role->id,
+                    'module'    => $module,
+                    'action'    => $action
                 ]);
             }
         }

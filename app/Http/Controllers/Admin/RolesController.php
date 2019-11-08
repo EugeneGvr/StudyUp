@@ -25,77 +25,62 @@ class RolesController extends Controller
 
     public function create()
     {
-        $permissions = config('permissions');
+        $allPermissions = config('permissions');
 
         return Inertia::render('Roles/Create', [
-            'permissions' => $permissions
+            'allPermissions' => $allPermissions
         ]);
     }
 
     public function store()
     {
-//        Request::validate([
-//            'name' => ['required', 'max:50'],
-//            'description' => ['required', 'max:255', Rule::unique('roles')]
-//        ]);
-$params['name'] =Request::get('name');
-        Role::createRole($params);
-        Auth::user()->account->users()->create([
-            'first_name' => Request::get('first_name'),
-            'last_name' => Request::get('last_name'),
-            'email' => Request::get('email'),
-            'password' => Request::get('password'),
-            'owner' => Request::get('owner'),
-            'photo_path' => Request::file('photo') ? Request::file('photo')->store('users') : null,
+        $params = Request::validate([
+            'name' => ['required', 'max:50', Rule::unique('roles')],
+            'description' => ['required', 'max:255'],
+            'permissions' => ['required'],
         ]);
 
-        return Redirect::route('users')->with('success', 'User created.');
+        $role = new Role;
+        $role->addRole($params);
+
+        return Redirect::route('admin.roles')->with('success', 'Role created.');
     }
 
-    public function edit(User $user)
+    public function show($id)
     {
-        return Inertia::render('Users/Edit', [
-            'user' => [
-                'id' => $user->id,
-                'first_name' => $user->first_name,
-                'last_name' => $user->last_name,
-                'email' => $user->email,
-                'owner' => $user->owner,
-                'photo' => $user->photoUrl(['w' => 60, 'h' => 60, 'fit' => 'crop']),
-                'deleted_at' => $user->deleted_at,
-            ],
+        $allPermissions = config('permissions');
+        $role = Role::getRole($id);
+
+        return Inertia::render('Roles/Edit', [
+            'allPermissions' => $allPermissions,
+            'role' => $role
         ]);
     }
 
-    public function update(User $user)
+    public function update($id)
     {
-        Request::validate([
-            'first_name' => ['required', 'max:50'],
-            'last_name' => ['required', 'max:50'],
-            'email' => ['required', 'max:50', 'email', Rule::unique('users')->ignore($user->id)],
-            'password' => ['nullable'],
-            'owner' => ['required', 'boolean'],
-            'photo' => ['nullable', 'image'],
+        $params = Request::validate([
+            'name' => ['required', 'max:50'],
+            'description' => ['required', 'max:255'],
+            'permissions' => ['required'],
         ]);
 
-        $user->update(Request::only('first_name', 'last_name', 'email', 'owner'));
+        $role = new Role();
+        $role->updateRole($id, $params);
 
-        if (Request::file('photo')) {
-            $user->update(['photo_path' => Request::file('photo')->store('users')]);
+        return Redirect::route('admin.roles')->with('success', 'Role updated.');
+    }
+
+    public function destroy($id)
+    {
+        try {
+            $role = new Role();
+            $role->deleteRole($id);
+        } catch (\Exception $e) {
+            return Redirect::back()->with('error', $e->getMessage());
         }
 
-        if (Request::get('password')) {
-            $user->update(['password' => Request::get('password')]);
-        }
-
-        return Redirect::route('users.edit', $user)->with('success', 'User updated.');
-    }
-
-    public function destroy(User $user)
-    {
-        $user->delete();
-
-        return Redirect::route('users.edit', $user)->with('success', 'User deleted.');
+        return Redirect::route('admin.roles')->with('success', 'Role deleted.');
     }
 
     public function restore(User $user)

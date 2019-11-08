@@ -47,10 +47,9 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
         Route::get('/')->name('admin.roles')->uses('RolesController@index')->middleware('remember', 'auth:web-admin');
         Route::get('/create')->name('admin.roles.create')->uses('RolesController@create')->middleware('auth:web-admin');
         Route::post('/')->name('admin.roles.store')->uses('RolesController@store')->middleware('auth:web-admin');
-        Route::get('/{role}/edit')->name('admin.roles.edit')->uses('RolesController@edit')->middleware('auth:web-admin');
+        Route::get('/{role}')->name('admin.roles.show')->uses('RolesController@show')->middleware('auth:web-admin');
         Route::put('/{role}')->name('admin.roles.update')->uses('RolesController@update')->middleware('auth:web-admin');
         Route::delete('/{role}')->name('admin.roles.destroy')->uses('RolesController@destroy')->middleware('auth:web-admin');
-        Route::put('/{role}/restore')->name('admin.roles.restore')->uses('RolesController@restore')->middleware('auth:web-admin');
     });
 // Images
     Route::get('/img/{path}', 'ImagesController@show')->where('path', '.*');

@@ -19,16 +19,26 @@
       <table class="w-full whitespace-no-wrap">
         <tr class="text-left font-bold">
           <th class="px-6 pt-6 pb-4">Name</th>
+          <th class="px-6 pt-6 pb-4"></th>
         </tr>
         <tr v-for="role in roles.data" :key="role.id" class="hover:bg-grey-lightest focus-within:bg-grey-lightest">
           <td class="border-t">
-            <inertia-link class="px-6 py-4 flex items-center focus:text-indigo" :href="route('admin.roles.edit', role.id)">
+            <inertia-link class="px-6 py-4 flex items-center focus:text-indigo" :href="route('admin.roles.show', role.id)">
               {{ role.name }}
 <!--              <icon v-if="organization.deleted_at" name="trash" class="flex-no-shrink w-3 h-3 fill-grey ml-2" />-->
             </inertia-link>
           </td>
+            <td class="border-t w-px">
+                <div class="px-4 flex items-center">
+                    <div v-for="permission in role.permissions" :key="permission.module" :title="permission.module"
+                         class="bg-blue rounded-full mx-2 text-white text-sm px-3 py-2 flex items-center"
+                    >
+                        {{ permission.lvl }}
+                    </div>
+                </div>
+            </td>
           <td class="border-t w-px">
-            <inertia-link class="px-4 flex items-center" :href="route('admin.roles.edit', role.id)" tabindex="-1">
+            <inertia-link class="px-4 flex items-center" :href="route('admin.roles.show', role.id)" tabindex="-1">
               <icon name="cheveron-right" class="block w-6 h-6 fill-grey" />
             </inertia-link>
           </td>
