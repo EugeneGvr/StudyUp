@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Admin;
 use App\Http\Controllers\Controller;
+use App\Role;
 use Inertia\Inertia;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
@@ -40,11 +41,16 @@ class AdminsController extends Controller
 
     public function create()
     {
-        return Inertia::render('Users/Create');
+        $roles = Role::getRoles();
+
+        return Inertia::render('Admins/Create', [
+            'roles' => $roles,
+        ]);
     }
 
     public function store()
     {
+        $v=5;
         Request::validate([
             'first_name' => ['required', 'max:50'],
             'last_name' => ['required', 'max:50'],

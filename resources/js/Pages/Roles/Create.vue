@@ -4,7 +4,7 @@
           <div class="flex justify-between items-center">
               <h1 class="mb-6 font-bold text-3xl">
                   <inertia-link class="text-indigo-light hover:text-indigo-dark" :href="route('admin.roles')">Roles</inertia-link>
-                  <span class="text-indigo-light font-medium">/</span> Create
+                  <span class="text-indigo-light font-medium">/</span> Add
               </h1>
               <div class="p-3 border-t border-grey-lighter flex justify-end items-center">
                   <loading-button :loading="sending" class="btn-indigo" type="submit">Add Role</loading-button>
@@ -21,18 +21,31 @@
                   <div class="bg-white rounded shadow p-8 m-2">
                       <div class="mb-5">Permissions</div>
                       <div class="mb-5 flex items-center">
-                          <vs-switch class="mr-2" v-model="form.permissions" id="all-permissions" vs-value="all.all" @click="selectAll"/>
+                          <vs-switch class="mr-2" v-model="form.permissions" id="all-permissions" vs-value="all.all" ref="all.all" @click="selectAll(allPermissions)"/>
                           <label for="all-permissions">Select all</label>
                       </div>
                       <div class="ml-5">
                       <div v-for="(permission, p_key) in allPermissions" :key="p_key">
                           <div class="flex items-center">
-                              <vs-switch class="mr-2" v-model="form.permissions" :id="p_key" :vs-value="p_key" :ref="p_key" @click="selectModule(p_key, permission)" />
+                              <vs-switch
+                                  class="mr-2"
+                                  v-model="form.permissions"
+                                  :id="p_key"
+                                  :vs-value="p_key"
+                                  :ref="p_key"
+                                  @click="selectModule(p_key, permission, allPermissions)"
+                              />
                               <label :for="p_key">{{ p_key | capitalize }}</label>
                           </div>
                           <div class="ml-5 my-4">
                           <div v-for="(action, a_key) in permission" :key="a_key" class="my-3 flex items-center">
-                              <vs-switch class="mr-2" v-model="form.permissions" :id="p_key + '-' + action" :vs-value="p_key + '.' + action" />
+                              <vs-switch class="mr-2"
+                                         v-model="form.permissions"
+                                         :id="p_key + '-' + action"
+                                         :vs-value="p_key + '.' + action"
+                                         :ref="p_key + '.' + action"
+                                         @click="selectAction(p_key, action, permission, allPermissions)"
+                              />
                               <label :for="p_key + '-' + action">{{ action | capitalize }} {{ p_key }}</label>
                           </div>
                           </div>
@@ -88,8 +101,34 @@ export default {
           this.$inertia.post(this.route('admin.roles.store'), this.form)
               .then(() => this.sending = false)
       },
-      selectModule(module, permission) {
-          console.log(this.$refs[module][0].isChecked);
+      selectAction(module, action, permission, permissions) {
+          const moduleLength = this.form.permissions.filter(permission => permission.split('.')[0] == module).length + 1;
+          if (this.$refs[module + '.' + action][0].isChecked === false && permission.length === moduleLength) {
+              this.form.permissions.push(module)
+          } else {
+              const index = this.form.permissions.indexOf(module);
+              if (index > -1) {
+                  this.form.permissions.splice(index, 1);
+              }
+          }
+
+          let counter = 0;
+          for (const module in permissions) {
+                  counter++;
+              for (const action of permissions[module]) {
+                      counter++;
+              }
+          }
+          if (this.$refs['all.all'].isChecked == false && (counter === this.form.permissions.length + 1)) {
+              this.form.permissions.push('all.all');
+          } else {
+              const indexModule = this.form.permissions.indexOf('all.all');
+              if (indexModule > -1) {
+                  this.form.permissions.splice(indexModule, 1);
+              }
+          }
+      },
+      selectModule(module, permission, permissions) {
           for (const action of permission) {
               if(this.$refs[module][0].isChecked) {
                   const index = this.form.permissions.indexOf(module + '.' + action);
@@ -98,13 +137,39 @@ export default {
                       this.form.permissions.splice(index, 1);
                   }
               } else {
-                  this.form.permissions.push(module + '.' + action);
+                  if (this.form.permissions.indexOf(module + '.' + action) === -1) {
+                      this.form.permissions.push(module + '.' + action);
+                  }
               }
           }
       },
-      selectAll() {
+      selectAll(permissions) {
+          for (const module in permissions) {
 
-      }
+              for (const action of permissions[module]) {
+                  if (this.$refs['all.all'].isChecked) {
+                      const indexAction = this.form.permissions.indexOf(module + '.' + action);
+
+                      if (indexAction > -1) {
+                          this.form.permissions.splice(indexAction, 1);
+                      }
+                      const indexModule = this.form.permissions.indexOf(module);
+
+                      if (indexModule > -1) {
+                          this.form.permissions.splice(indexModule, 1);
+                      }
+                  } else {
+                      if (this.form.permissions.indexOf(module) === -1) {
+                          this.form.permissions.push(module);
+                      }
+
+                      if (this.form.permissions.indexOf(module + '.' + action) === -1) {
+                          this.form.permissions.push(module + '.' + action);
+                      }
+                  }
+              }
+          }
+      },
   },
 }
 </script>

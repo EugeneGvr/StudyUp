@@ -22,29 +22,43 @@
                 </div>
                 <div class="flex-col lg:w-1/2 sm:w-full">
                     <div class="bg-white rounded shadow p-8 m-2">
-                        <div
-                            class="mb-3 ml-3 cursor-pointer hover:text-blue-dark select-none"
-                        >
-                            select all
+                        <div class="mb-5">Permissions</div>
+                        <div class="mb-5 flex items-center">
+                            <vs-switch class="mr-2" v-model="form.permissions" id="all-permissions" vs-value="all.all" ref="all.all" @click="selectAll(allPermissions)"/>
+                            <label for="all-permissions">Select all</label>
                         </div>
-                        <div v-for="(permission, p_key) in allPermissions" :key="p_key">
-                            <div class="mb-5">{{ p_key | capitalize }}</div>
-                            <div v-for="(action, a_key) in permission" :key="a_key" class="ml-3 mb-3">
-                                <input
-                                    id="checkbox"
-                                    type="checkbox"
-                                    v-model="form.permissions"
-                                    :value="p_key + '.' + action"
-                                    :checked="role.permissions.includes(p_key + '.' + action)"
-                                >
-                                <label for="checkbox">{{ action | capitalize }} {{ p_key }}</label>
+                        <div class="ml-5">
+                            <div v-for="(permission, p_key) in allPermissions" :key="p_key">
+                                <div class="flex items-center">
+                                    <vs-switch
+                                        class="mr-2"
+                                        v-model="form.permissions"
+                                        :id="p_key"
+                                        :vs-value="p_key"
+                                        :ref="p_key"
+                                        @click="selectModule(p_key, permission, allPermissions)"
+                                    />
+                                    <label :for="p_key">{{ p_key | capitalize }}</label>
+                                </div>
+                                <div class="ml-5 my-4">
+                                    <div v-for="(action, a_key) in permission" :key="a_key" class="my-3 flex items-center">
+                                        <vs-switch class="mr-2"
+                                                   v-model="form.permissions"
+                                                   :id="p_key + '-' + action"
+                                                   :vs-value="p_key + '.' + action"
+                                                   :ref="p_key + '.' + action"
+                                                   @click="selectAction(p_key, action, permission, allPermissions)"
+                                        />
+                                        <label :for="p_key + '-' + action">{{ action | capitalize }} {{ p_key }}</label>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </form>
-        <div class="centerx">
+        <div class="center">
             <vs-popup class="holamundo"  title="Delete" :active.sync="popupActivo">
                 <div class="ml-6 mr-6 mt-3 mb-3">
                 <span>Are you sure you want to delete role</span><b> {{role.name}}</b><span>?</span>
@@ -97,13 +111,82 @@ export default {
     }
   },
   methods: {
-    submit() {
-      this.sending = true
-      this.$inertia.put(this.route('admin.roles.update', this.role.id), this.form)
-        .then(() => this.sending = false)
-    },
+      submit() {
+          this.sending = true
+          this.$inertia.put(this.route('admin.roles.update', this.role.id), this.form)
+              .then(() => this.sending = false)
+      },
       destroy() {
           this.$inertia.delete(this.route('admin.roles.destroy', this.role.id)).then(this.popupActivo = false)
+      },
+      selectAction(module, action, permission, permissions) {
+          const moduleLength = this.form.permissions.filter(permission => permission.split('.')[0] == module).length + 1;
+          if (this.$refs[module + '.' + action][0].isChecked === false && permission.length === moduleLength) {
+              this.form.permissions.push(module)
+          } else {
+              const index = this.form.permissions.indexOf(module);
+              if (index > -1) {
+                  this.form.permissions.splice(index, 1);
+              }
+          }
+
+          let counter = 0;
+          for (const module in permissions) {
+              counter++;
+              for (const action of permissions[module]) {
+                  counter++;
+              }
+          }
+          if (this.$refs['all.all'].isChecked == false && (counter === this.form.permissions.length + 1)) {
+              this.form.permissions.push('all.all');
+          } else {
+              const indexModule = this.form.permissions.indexOf('all.all');
+              if (indexModule > -1) {
+                  this.form.permissions.splice(indexModule, 1);
+              }
+          }
+      },
+      selectModule(module, permission, permissions) {
+          for (const action of permission) {
+              if (this.$refs[module][0].isChecked) {
+                  const index = this.form.permissions.indexOf(module + '.' + action);
+
+                  if (index > -1) {
+                      this.form.permissions.splice(index, 1);
+                  }
+              } else {
+                  if (this.form.permissions.indexOf(module + '.' + action) === -1) {
+                      this.form.permissions.push(module + '.' + action);
+                  }
+              }
+          }
+      },
+      selectAll(permissions) {
+          for (const module in permissions) {
+
+              for (const action of permissions[module]) {
+                  if (this.$refs['all.all'].isChecked) {
+                      const indexAction = this.form.permissions.indexOf(module + '.' + action);
+
+                      if (indexAction > -1) {
+                          this.form.permissions.splice(indexAction, 1);
+                      }
+                      const indexModule = this.form.permissions.indexOf(module);
+
+                      if (indexModule > -1) {
+                          this.form.permissions.splice(indexModule, 1);
+                      }
+                  } else {
+                      if (this.form.permissions.indexOf(module) === -1) {
+                          this.form.permissions.push(module);
+                      }
+
+                      if (this.form.permissions.indexOf(module + '.' + action) === -1) {
+                          this.form.permissions.push(module + '.' + action);
+                      }
+                  }
+              }
+          }
       },
   },
 }

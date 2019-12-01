@@ -30,10 +30,18 @@
           </td>
             <td class="border-t w-px">
                 <div class="px-4 flex items-center">
-                    <div v-for="permission in role.permissions" :key="permission.module" :title="permission.module"
+                    <div v-for="permission in role.permissions" :key="permission.module"
                          class="bg-blue rounded-full mx-2 text-white text-sm px-3 py-2 flex items-center"
                     >
-                        {{ permission.lvl }}
+                        <vs-dropdown  vs-trigger-click class="text-white">
+                                {{ permission.lvl }}
+                            <vs-dropdown-menu>
+                                <vs-dropdown-item><b>{{permission.module}}</b></vs-dropdown-item>
+                                <vs-dropdown-item v-for="action in permission.actions" :key=" action.action+'.'+action.module">
+                                    {{action.action}} {{action.module}}
+                                </vs-dropdown-item>
+                            </vs-dropdown-menu>
+                        </vs-dropdown>
                     </div>
                 </div>
             </td>

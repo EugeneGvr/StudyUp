@@ -17,10 +17,11 @@ class Role extends Model
             $permissions = [];
 
             foreach (config('permissions') as $module => $actions) {
-                $roleActions = RolePermissionConnection::where('role_id', $role['id'])->where('module', $module)->count();
+                $roleActions = RolePermissionConnection::where('role_id', $role['id'])->where('module', $module)->get(['module', 'action']);
                 $permission = [
                     'module'    => ucfirst($module),
-                    'lvl'       => $roleActions . '/' . count($actions)
+                    'actions'   => $roleActions->toArray(),
+                    'lvl'       => $roleActions->count() . '/' . count($actions)
                 ];
                 array_push($permissions, $permission);
             }
@@ -69,14 +70,16 @@ class Role extends Model
 
         try {
             foreach ($params['permissions'] as $permission) {
-                list($module, $action) = explode('.', $permission);
+                if($permission != 'all.all' && count(explode('.', $permission)) > 1) {
+                    list($module, $action) = explode('.', $permission);
 
-                $rolePermissionConnection = new RolePermissionConnection();
-                $rolePermissionConnection->role_id = $role->id;
-                $rolePermissionConnection->module = $module;
-                $rolePermissionConnection->action = $action;
-                $rolePermissionConnection->save();
-                $permissions[$permission] = $rolePermissionConnection;
+                    $rolePermissionConnection = new RolePermissionConnection();
+                    $rolePermissionConnection->role_id = $role->id;
+                    $rolePermissionConnection->module = $module;
+                    $rolePermissionConnection->action = $action;
+                    $rolePermissionConnection->save();
+                    $permissions[$permission] = $rolePermissionConnection;
+                }
             }
         } catch (\Exception $e) {
             $role->delete();

@@ -1,4 +1,5 @@
 <template>
+
   <div>
     <h1 class="mb-8 font-bold text-3xl">Administrators</h1>
     <div class="mb-6 flex justify-between items-center">
