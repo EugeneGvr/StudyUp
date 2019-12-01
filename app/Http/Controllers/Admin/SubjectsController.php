@@ -14,11 +14,11 @@ class SubjectsController extends Controller
 {
     public function index()
     {
-        $themes = Subject::getSubjects();
+        $subjects = Subject::getSubjects();
 
         return Inertia::render('Subjects/Index', [
             'filters' => Request::all('search', 'role', 'trashed'),
-            'admins' => $themes,
+            'subjects' => $subjects,
             ]);
     }
 
