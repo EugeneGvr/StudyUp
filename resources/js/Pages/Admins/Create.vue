@@ -52,13 +52,13 @@ import TextInput from '@/Shared/TextInput'
 import FileInput from '@/Shared/FileInput'
 
 export default {
-  metaInfo: { title: 'Create Organization' },
+  metaInfo: { title: 'Add Administrator' },
   layout: (h, page) => h(Layout, [page]),
   components: {
     LoadingButton,
     SelectInput,
     TextInput,
-      FileInput,
+    FileInput,
   },
     props: {
         roles: Object,
@@ -69,11 +69,11 @@ export default {
       sending: false,
       form: {
         name: null,
-          surname: null,
+        surname: null,
         email: null,
         phone: null,
         role: null,
-          photo: null,
+        photo: null,
       },
     }
   },

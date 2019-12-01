@@ -50,7 +50,6 @@ class AdminsController extends Controller
 
     public function store()
     {
-        $v=5;
         Request::validate([
             'first_name' => ['required', 'max:50'],
             'last_name' => ['required', 'max:50'],
@@ -72,17 +71,24 @@ class AdminsController extends Controller
         return Redirect::route('users')->with('success', 'User created.');
     }
 
-    public function edit(User $user)
+    public function edit($admin)
     {
-        return Inertia::render('Users/Edit', [
-            'user' => [
-                'id' => $user->id,
-                'first_name' => $user->first_name,
-                'last_name' => $user->last_name,
-                'email' => $user->email,
-                'owner' => $user->owner,
-                'photo' => $user->photoUrl(['w' => 60, 'h' => 60, 'fit' => 'crop']),
-                'deleted_at' => $user->deleted_at,
+        $v=5;
+        return Inertia::render('Admins/Edit', [
+            'admin' => [
+                'name'=> '',
+          'surname' => '',
+          'email' => '',
+          'phone' => '',
+          'role' => '',
+          'photo' => '',
+//                'id' => $user->id,
+//                'first_name' => $user->first_name,
+//                'last_name' => $user->last_name,
+//                'email' => $user->email,
+//                'owner' => $user->owner,
+//                'photo' => $user->photoUrl(['w' => 60, 'h' => 60, 'fit' => 'crop']),
+//                'deleted_at' => $user->deleted_at,
             ],
         ]);
     }
