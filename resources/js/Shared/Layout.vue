@@ -4,7 +4,7 @@
     <div class="flex flex-col">
       <div class="h-screen flex flex-col" @click="hideDropdownMenus">
         <div class="md:flex">
-          <div class="bg-black md:flex-no-shrink md:w-56 px-6 py-4 flex items-center justify-between md:justify-center">
+          <div class="bg-black md:flex-no-shrink md:w-64 px-6 py-4 flex items-center justify-between md:justify-center">
             <inertia-link class="mt-1" href="/">
               <logo-a-i class="fill-white" width="120" height="28" />
             </inertia-link>
@@ -34,7 +34,7 @@
           </div>
         </div>
         <div class="flex flex-grow overflow-hidden">
-          <main-menu :url="url()" class="bg-black flex-no-shrink w-56 p-12 hidden md:block overflow-y-auto" />
+          <main-menu :url="url()" class="bg-black flex-no-shrink w-64 p-12 hidden md:block overflow-y-auto" />
           <div class="w-full overflow-hidden px-4 py-8 md:p-12 overflow-y-auto" scroll-region>
             <flash-messages />
             <slot />
