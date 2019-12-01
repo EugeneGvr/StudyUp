@@ -18,7 +18,7 @@ class ThemesController extends Controller
 
         return Inertia::render('Themes/Index', [
             'filters' => Request::all('search', 'role', 'trashed'),
-            'admins' => $themes,
+            'themes' => $themes,
             ]);
     }
 

@@ -11,23 +11,15 @@ class Theme extends Model
 
     public static function getThemes()
     {
-        $themes = self::orderBy('created_at', 'desc')->paginate()->only('id', 'name')->toArray();
+        $themes = self::orderBy('created_at', 'desc')
+            ->paginate()
+            ->only('id', 'name', 'subject_id')
+            ->toArray();
 
-        foreach ($roles['data'] as $key => &$role) {
-            $permissions = [];
-
-            foreach (config('permissions') as $module => $actions) {
-                $roleActions = RolePermissionConnection::where('role_id', $role['id'])->where('module', $module)->get(['module', 'action']);
-                $permission = [
-                    'module'    => ucfirst($module),
-                    'actions'   => $roleActions->toArray(),
-                    'lvl'       => $roleActions->count() . '/' . count($actions)
-                ];
-                array_push($permissions, $permission);
-            }
-            $role['permissions'] = $permissions;
+        foreach ($themes['data'] as $key => &$theme) {
+            $theme['subject'] = Subject::getSubject($theme['subject_id'])['name'];
         }
-
+$v=6;
         return $themes;
     }
 
