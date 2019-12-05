@@ -82,11 +82,4 @@ class RolesController extends Controller
 
         return Redirect::route('admin.roles')->with('success', 'Role deleted.');
     }
-
-    public function restore(User $user)
-    {
-        $user->restore();
-
-        return Redirect::route('users.edit', $user)->with('success', 'User restored.');
-    }
 }

@@ -19,7 +19,7 @@ class Theme extends Model
         foreach ($themes['data'] as $key => &$theme) {
             $theme['subject'] = Subject::getSubject($theme['subject_id'])['name'];
         }
-$v=6;
+
         return $themes;
     }
 

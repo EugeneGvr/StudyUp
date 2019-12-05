@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Role extends Model
 {
-    protected $fillable = ['name', 'description',];
+    protected $fillable = ['name', 'description'];
 
     public static function getRoles()
     {
@@ -36,7 +36,7 @@ class Role extends Model
         $role = self::find($id);
 
         if(!$role) {
-            return 'ERROR f*** U';
+            return 'No rol with such id';
         }
 
         $permissions = [];

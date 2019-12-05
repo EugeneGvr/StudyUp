@@ -14,22 +14,10 @@ class UsersController extends Controller
 {
     public function index()
     {
+        $users = User::getUsers();
         return Inertia::render('Users/Index', [
-            'filters' => Request::all('search', 'role', 'trashed'),
-            'users' => Auth::user()->account->users()
-                ->orderByName()
-                ->filter(Request::only('search', 'role', 'trashed'))
-                ->get()
-                ->transform(function ($user) {
-                    return [
-                        'id' => $user->id,
-                        'name' => $user->name,
-                        'email' => $user->email,
-                        'owner' => $user->owner,
-                        'photo' => $user->photoUrl(['w' => 40, 'h' => 40, 'fit' => 'crop']),
-                        'deleted_at' => $user->deleted_at,
-                    ];
-                }),
+            'filters' => Request::all('search', 'locality', 'created_at', 'first_name', 'last_name', 'email'),
+            'users' => $users
         ]);
     }
 
@@ -41,50 +29,54 @@ class UsersController extends Controller
     public function store()
     {
         Request::validate([
-            'first_name' => ['required', 'max:50'],
-            'last_name' => ['required', 'max:50'],
-            'email' => ['required', 'max:50', 'email', Rule::unique('users')],
-            'password' => ['nullable'],
-            'owner' => ['required', 'boolean'],
-            'photo' => ['nullable', 'image'],
+            'first_name'    => ['required', 'max:50'],
+            'last_name'     => ['required', 'max:50'],
+            'email'         => ['required', 'max:50', 'email', Rule::unique('users')],
+            'password'      => ['nullable'],
+            'phone'         => ['required', 'max:10'],
+            'locality'      => ['required', 'max:70'],
+            'photo'         => ['nullable', 'image'],
         ]);
 
         Auth::user()->account->users()->create([
-            'first_name' => Request::get('first_name'),
-            'last_name' => Request::get('last_name'),
-            'email' => Request::get('email'),
-            'password' => Request::get('password'),
-            'owner' => Request::get('owner'),
-            'photo_path' => Request::file('photo') ? Request::file('photo')->store('users') : null,
+            'first_name'    => Request::get('first_name'),
+            'last_name'     => Request::get('last_name'),
+            'email'         => Request::get('email'),
+            'password'      => Request::get('password'),
+            'owner'         => Request::get('owner'),
+            'phone'         => Request::get('phone'),
+            'locality'      => Request::get('locality'),
+            'photo_path'    => Request::file('photo') ? Request::file('photo')->store('users') : null,
         ]);
 
         return Redirect::route('users')->with('success', 'User created.');
     }
 
-    public function edit(User $user)
+    public function edit($user)
     {
         return Inertia::render('Users/Edit', [
             'user' => [
-                'id' => $user->id,
-                'first_name' => $user->first_name,
-                'last_name' => $user->last_name,
-                'email' => $user->email,
-                'owner' => $user->owner,
-                'photo' => $user->photoUrl(['w' => 60, 'h' => 60, 'fit' => 'crop']),
-                'deleted_at' => $user->deleted_at,
+                'id'            => $user->id,
+                'first_name'    => ['required', 'max:50'],
+                'last_name'     => ['required', 'max:50'],
+                'email'         => ['required', 'max:50', 'email', Rule::unique('users')],
+                'password'      => ['nullable'],
+                'phone'         => ['required', 'boolean'],
+                'locality'      => ['required', 'max:70'],
+                'photo'         => ['nullable', 'image'],
             ],
         ]);
     }
 
-    public function update(User $user)
+    public function update($user)
     {
         Request::validate([
-            'first_name' => ['required', 'max:50'],
-            'last_name' => ['required', 'max:50'],
-            'email' => ['required', 'max:50', 'email', Rule::unique('users')->ignore($user->id)],
-            'password' => ['nullable'],
-            'owner' => ['required', 'boolean'],
-            'photo' => ['nullable', 'image'],
+            'first_name'    => ['required', 'max:50'],
+            'last_name'     => ['required', 'max:50'],
+            'email'         => ['required', 'max:50', 'email', Rule::unique('users')->ignore($user->id)],
+            'password'      => ['nullable'],
+            'owner'         => ['required', 'boolean'],
+            'photo'         => ['nullable', 'image'],
         ]);
 
         $user->update(Request::only('first_name', 'last_name', 'email', 'owner'));
@@ -100,14 +92,14 @@ class UsersController extends Controller
         return Redirect::route('users.edit', $user)->with('success', 'User updated.');
     }
 
-    public function destroy(User $user)
+    public function destroy($user)
     {
         $user->delete();
 
         return Redirect::route('users.edit', $user)->with('success', 'User deleted.');
     }
 
-    public function restore(User $user)
+    public function restore($user)
     {
         $user->restore();
 

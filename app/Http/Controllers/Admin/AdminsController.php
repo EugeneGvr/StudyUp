@@ -18,24 +18,8 @@ class AdminsController extends Controller
         $admins = Admin::getAdmins();
 
         return Inertia::render('Admins/Index', [
-            'filters' => Request::all('search', 'role', 'trashed'),
+            'filters' => Request::all('search', 'locality', 'first_name', 'last_name', 'email'),
             'admins' => $admins
-//            'filters' => Request::all('search', 'role', 'trashed'),
-//            'administrators' => Admin::
-//                ->orderByName()
-//                ->filter(Request::only('search', 'role', 'trashed'))
-//                ->get()
-//                ->transform(function ($administrator) {
-//                    return [
-//                        'id' => $administrator->id,
-//                        'name' => $administrator->name,
-//                        'email' => $administrator->email,
-//                        'owner' => $administrator->owner,
-//                        'photo' => $administrator->photoUrl(['w' => 40, 'h' => 40, 'fit' => 'crop']),
-//                        'deleted_at' => $administrator->deleted_at,
-//                    ];
-//                }),
-
         ]);
     }
 
@@ -50,84 +34,79 @@ class AdminsController extends Controller
 
     public function store()
     {
-        Request::validate([
-            'first_name' => ['required', 'max:50'],
-            'last_name' => ['required', 'max:50'],
-            'email' => ['required', 'max:50', 'email', Rule::unique('users')],
-            'password' => ['nullable'],
-            'owner' => ['required', 'boolean'],
-            'photo' => ['nullable', 'image'],
+        $params = Request::validate([
+            'first_name'    => ['required', 'max:50'],
+            'last_name'     => ['required', 'max:50'],
+            'email'         => ['required', 'max:50', 'email', Rule::unique('users')],
+            'phone'         => ['required', 'max:10'],
+            'role'          => ['required', 'positive_integer'],
+            'password'      => ['nullable'],
+            'photo'         => ['nullable', 'image'],
         ]);
 
-        Auth::user()->account->users()->create([
-            'first_name' => Request::get('first_name'),
-            'last_name' => Request::get('last_name'),
-            'email' => Request::get('email'),
-            'password' => Request::get('password'),
-            'owner' => Request::get('owner'),
-            'photo_path' => Request::file('photo') ? Request::file('photo')->store('users') : null,
-        ]);
+        $admin = new Admin;
+        $admin->addAdmin($params);
 
         return Redirect::route('users')->with('success', 'User created.');
     }
 
-    public function edit($admin)
+    public function show($id)
     {
-        $v=5;
+        $roles = Role::getRoles();
+        $admin = Admin::getAdmin($id);
         return Inertia::render('Admins/Edit', [
             'admin' => [
-                'name'=> '',
-          'surname' => '',
-          'email' => '',
-          'phone' => '',
-          'role' => '',
-          'photo' => '',
-//                'id' => $user->id,
-//                'first_name' => $user->first_name,
-//                'last_name' => $user->last_name,
-//                'email' => $user->email,
-//                'owner' => $user->owner,
-//                'photo' => $user->photoUrl(['w' => 60, 'h' => 60, 'fit' => 'crop']),
-//                'deleted_at' => $user->deleted_at,
+                'id' => $admin->id,
+                'first_name' => $admin->first_name,
+                'last_name' => $admin->last_name,
+                'email' => $admin->email,
+                'phone' => $admin->phone,
+                'role' => $admin->role,
+                'photo' => $admin->photoUrl(['w' => 60, 'h' => 60, 'fit' => 'crop']),
             ],
+            'roles' => $roles,
         ]);
     }
 
-    public function update(User $user)
+    public function update($id)
     {
-        Request::validate([
-            'first_name' => ['required', 'max:50'],
-            'last_name' => ['required', 'max:50'],
-            'email' => ['required', 'max:50', 'email', Rule::unique('users')->ignore($user->id)],
-            'password' => ['nullable'],
-            'owner' => ['required', 'boolean'],
-            'photo' => ['nullable', 'image'],
+        $params = Request::validate([
+            'first_name'    => ['required', 'max:50'],
+            'last_name'     => ['required', 'max:50'],
+            'email'         => ['required', 'max:50', 'email', Rule::unique('users')],
+            'phone'         => ['required', 'max:10'],
+            'role'          => ['required', 'positive_integer'],
+            'password'      => ['nullable'],
+            'photo'         => ['nullable', 'image'],
         ]);
 
-        $user->update(Request::only('first_name', 'last_name', 'email', 'owner'));
+        $admin = new Admin();
+        $admin->updateAdmin($id, $params);
 
         if (Request::file('photo')) {
-            $user->update(['photo_path' => Request::file('photo')->store('users')]);
+            $admin->update(['photo_path' => Request::file('photo')->store('admins')]);
         }
 
         if (Request::get('password')) {
-            $user->update(['password' => Request::get('password')]);
+            $admin->update(['password' => Request::get('password')]);
         }
 
-        return Redirect::route('users.edit', $user)->with('success', 'User updated.');
+        return Redirect::route('admin.admins')->with('success', 'Admin updated.');
     }
 
-    public function destroy(User $user)
+    public function destroy($id)
     {
-        $user->delete();
+        $admin = new Admin();
+        $admin->delete($id);
 
-        return Redirect::route('users.edit', $user)->with('success', 'User deleted.');
+        return Redirect::route('users.edit', $admin)->with('success', 'User deleted.');
     }
 
-    public function restore(User $user)
+    public function restore($id)
     {
-        $user->restore();
+        $admin = new Admin();
+        $admin->restore();
 
-        return Redirect::route('users.edit', $user)->with('success', 'User restored.');
+        return Redirect::route('users.edit', $admin)->with('success', 'User restored.');
     }
 }

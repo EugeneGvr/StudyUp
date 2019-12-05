@@ -17,7 +17,7 @@ class Admin extends Model implements AuthenticatableContract, AuthorizableContra
     use SoftDeletes, Authenticatable, Authorizable;
 
     protected $fillable = [
-        'first_name', 'last_name', 'email', 'password',
+        'first_name', 'last_name', 'email', 'phone', 'photo', 'password',
     ];
 
     protected $hidden = [
@@ -73,12 +73,8 @@ class Admin extends Model implements AuthenticatableContract, AuthorizableContra
             });
         })->when($filters['role'] ?? null, function ($query, $role) {
             $query->whereRole($role);
-        })->when($filters['trashed'] ?? null, function ($query, $trashed) {
-            if ($trashed === 'with') {
-                $query->withTrashed();
-            } elseif ($trashed === 'only') {
-                $query->onlyTrashed();
-            }
+        })->when($filters['locality'] ?? null, function ($query, $locality) {
+                $query->withLocality($locality);
         });
     }
 
@@ -88,5 +84,24 @@ class Admin extends Model implements AuthenticatableContract, AuthorizableContra
 
 
         return $administrators;
+    }
+
+    public static function getAdmin($id)
+    {
+        $admin = self::find($id);
+
+        if(!$admin) {
+            return 'No admin with such id';
+        }
+
+        return [
+            'id'            => $admin->id,
+            'first_name'    => $admin->first_name,
+            'last_name'     => $admin->last_name,
+            'email'         => $admin->email,
+            'phone'         => $admin->phone,
+            'role'          => $admin->role,
+            'photo'         => $admin->photoUrl(['w' => 60, 'h' => 60, 'fit' => 'crop']),
+        ];
     }
 }
