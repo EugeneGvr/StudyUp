@@ -21,32 +21,34 @@
                   <div class="bg-white rounded shadow p-8 m-2">
                       <div class="mb-5">Permissions</div>
                       <div class="mb-5 flex items-center">
-                          <vs-switch class="mr-2" v-model="form.permissions" id="all-permissions" vs-value="all.all" ref="all.all" @click="selectAll(allPermissions)"/>
-                          <label for="all-permissions">Select all</label>
+                          <md-switch class="md-primary mr-2" v-model="form.permissions" id="all-permissions" value="all.all" @click="selectAll(allPermissions)">
+                          Select all
+                          </md-switch>
                       </div>
                       <div class="ml-5">
                       <div v-for="(permission, p_key) in allPermissions" :key="p_key">
                           <div class="flex items-center">
-                              <vs-switch
-                                  class="mr-2"
+                              <md-switch
+                                  class="md-primary mr-2"
                                   v-model="form.permissions"
                                   :id="p_key"
-                                  :vs-value="p_key"
-                                  :ref="p_key"
+                                  :value="p_key"
                                   @click="selectModule(p_key, permission, allPermissions)"
-                              />
-                              <label :for="p_key">{{ p_key | capitalize }}</label>
+                              >
+                              {{ p_key | capitalize }}
+                              </md-switch>
                           </div>
                           <div class="ml-5 my-4">
                           <div v-for="(action, a_key) in permission" :key="a_key" class="my-3 flex items-center">
-                              <vs-switch class="mr-2"
-                                         v-model="form.permissions"
-                                         :id="p_key + '-' + action"
-                                         :vs-value="p_key + '.' + action"
-                                         :ref="p_key + '.' + action"
-                                         @click="selectAction(p_key, action, permission, allPermissions)"
-                              />
-                              <label :for="p_key + '-' + action">{{ action | capitalize }} {{ p_key }}</label>
+                              <md-switch class="md-primary mr-2"
+                                v-model="form.permissions"
+                                :id="p_key + '-' + action"
+                                :value= "p_key + '.' + action"
+                                :ref="p_key + '.' + action"
+                                @click="selectAction(p_key, action, permission, allPermissions)"
+                              >
+                              {{ action | capitalize }} {{ p_key }}
+                              </md-switch>
                           </div>
                           </div>
                       </div>
@@ -102,6 +104,10 @@ export default {
               .then(() => this.sending = false)
       },
       selectAction(module, action, permission, permissions) {
+          console.log(module);
+          console.log(action);
+          console.log(permission);
+          console.log(permissions);
           const moduleLength = this.form.permissions.filter(permission => permission.split('.')[0] == module).length + 1;
           if (this.$refs[module + '.' + action][0].isChecked === false && permission.length === moduleLength) {
               this.form.permissions.push(module)

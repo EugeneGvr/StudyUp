@@ -17,39 +17,41 @@
                         <textarea-input v-model="form.description" :errors="$page.errors.description" class="pb-2 w-full" label="Description"/>
                     </div>
                     <div class="bg-white rounded shadow pr-8 pl-8 pt-4 pb-4 m-2">
-                        <button class="btn-red" tabindex="-1" type="button" @click="popupActivo=true">Delete</button>
+                        <button class="btn-red" tabindex="-1" type="button" @click="deleteModal = true">Delete</button>
                     </div>
                 </div>
                 <div class="flex-col lg:w-1/2 sm:w-full">
                     <div class="bg-white rounded shadow p-8 m-2">
                         <div class="mb-5">Permissions</div>
                         <div class="mb-5 flex items-center">
-                            <vs-switch class="mr-2" v-model="form.permissions" id="all-permissions" vs-value="all.all" ref="all.all" @click="selectAll(allPermissions)"/>
-                            <label for="all-permissions">Select all</label>
+                            <md-switch class="md-primary mr-2" v-model="form.permissions" id="all-permissions" value="all.all" @click="selectAll(allPermissions)">
+                            Select all
+                            </md-switch>
                         </div>
                         <div class="ml-5">
                             <div v-for="(permission, p_key) in allPermissions" :key="p_key">
                                 <div class="flex items-center">
-                                    <vs-switch
-                                        class="mr-2"
+                                    <md-switch
+                                        class="md-primary mr-2"
                                         v-model="form.permissions"
                                         :id="p_key"
-                                        :vs-value="p_key"
+                                        :value="p_key"
                                         :ref="p_key"
                                         @click="selectModule(p_key, permission, allPermissions)"
-                                    />
-                                    <label :for="p_key">{{ p_key | capitalize }}</label>
+                                    >
+                                        {{ p_key | capitalize }}
+                                    </md-switch>
                                 </div>
                                 <div class="ml-5 my-4">
                                     <div v-for="(action, a_key) in permission" :key="a_key" class="my-3 flex items-center">
-                                        <vs-switch class="mr-2"
+                                        <md-switch class="md-primary mr-2"
                                                    v-model="form.permissions"
                                                    :id="p_key + '-' + action"
-                                                   :vs-value="p_key + '.' + action"
-                                                   :ref="p_key + '.' + action"
+                                                   :value="p_key + '.' + action"
                                                    @click="selectAction(p_key, action, permission, allPermissions)"
-                                        />
-                                        <label :for="p_key + '-' + action">{{ action | capitalize }} {{ p_key }}</label>
+                                        >
+                                            {{ action | capitalize }} {{ p_key }}
+                                        </md-switch>
                                     </div>
                                 </div>
                             </div>
@@ -58,16 +60,20 @@
                 </div>
             </div>
         </form>
-        <div class="center">
-            <vs-popup class="holamundo"  title="Delete" :active.sync="popupActivo">
-                <div class="ml-6 mr-6 mt-3 mb-3">
-                <span>Are you sure you want to delete role</span><b> {{role.name}}</b><span>?</span>
-                </div>
-                <div class="float-right">
+        <md-dialog :md-active.sync="deleteModal">
+            <md-dialog-title>
+                <span>Are you sure you want to delete role</span>
+                <span class="text-blue">{{role.name}}</span>
+                <span>?</span>
+            </md-dialog-title>
+            <md-dialog-content>
+                <span>This action will drop role and all admins who have this role will get default list of permissions</span>
+            </md-dialog-content>
+            <md-dialog-actions>
+                <md-button class="md-primary" @click="deleteModal = false">Close</md-button>
                 <button class="btn-red mr-2 mt-2 mb-2" tabindex="-1" type="button" @click="destroy">Delete</button>
-                </div>
-            </vs-popup>
-        </div>
+            </md-dialog-actions>
+        </md-dialog>
     </div>
 </template>
 
@@ -101,7 +107,7 @@ export default {
   remember: 'form',
   data() {
     return {
-      popupActivo:false,
+      deleteModal:false,
       sending: false,
       form: {
         name: this.role.name,
