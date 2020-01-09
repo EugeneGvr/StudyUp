@@ -3,26 +3,26 @@
       <form @submit.prevent="submit">
           <div class="flex justify-between items-center">
               <h1 class="mb-6 font-bold text-3xl">
-                  <inertia-link class="text-indigo-light hover:text-indigo-dark" :href="route('admin.roles')">Roles</inertia-link>
-                  <span class="text-indigo-light font-medium">/</span> Add
+                  <inertia-link class="text-blue hover:text-orange" :href="route('admin.roles')">{{$t('Roles')}}</inertia-link>
+                  <span class="text-blue font-medium">/</span> {{$t('Add')}}
               </h1>
               <div class="p-3 border-t border-grey-lighter flex justify-end items-center">
-                  <loading-button :loading="sending" class="btn-indigo" type="submit">Add Role</loading-button>
+                  <loading-button :loading="sending" class="btn-blue" type="submit">{{$t('Add Role')}}</loading-button>
               </div>
           </div>
           <div class="flex flex-wrap">
               <div class="flex-col lg:w-1/2 sm:w-full">
                   <div class="bg-white rounded shadow p-8 m-2">
-                  <text-input v-model="form.name" :errors="$page.errors.name" class="pb-8 w-full" label="Name"/>
-                  <textarea-input v-model="form.description" :errors="$page.errors.description" class="pb-2 w-full" label="Description"/>
+                  <text-input v-model="form.name" :errors="$page.errors.name" class="pb-8 w-full" :label="$t('Name')"/>
+                  <textarea-input v-model="form.description" :errors="$page.errors.description" class="pb-2 w-full" :label="$t('Description')"/>
                   </div>
               </div>
               <div class="flex-col lg:w-1/2 sm:w-full">
                   <div class="bg-white rounded shadow p-8 m-2">
-                      <div class="mb-5">Permissions</div>
+                      <div class="mb-5">{{$t('Permissions')}}</div>
                       <div class="mb-5 flex items-center">
                           <md-switch class="md-primary mr-2" v-model="form.permissions" id="all-permissions" value="all.all" @click="selectAll(allPermissions)">
-                          Select all
+                          {{$t('Select all')}}
                           </md-switch>
                       </div>
                       <div class="ml-5">
@@ -35,7 +35,7 @@
                                   :value="p_key"
                                   @click="selectModule(p_key, permission, allPermissions)"
                               >
-                              {{ p_key | capitalize }}
+                              {{ $t(p_key) | capitalize }}
                               </md-switch>
                           </div>
                           <div class="ml-5 my-4">
@@ -47,7 +47,7 @@
                                 :ref="p_key + '.' + action"
                                 @click="selectAction(p_key, action, permission, allPermissions)"
                               >
-                              {{ action | capitalize }} {{ p_key }}
+                                  {{ $t(action + ' ' + p_key) | capitalize }}
                               </md-switch>
                           </div>
                           </div>

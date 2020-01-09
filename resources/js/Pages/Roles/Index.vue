@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="mb-8 font-bold text-3xl">Roles</h1>
+    <h1 class="mb-8 font-bold text-3xl">{{$t('Roles')}}</h1>
     <div class="mb-6 flex justify-between items-center">
       <search-filter v-model="form.search" class="w-full max-w-sm mr-4" @reset="reset">
         <label class="block text-grey-darkest">Trashed:</label>
@@ -10,15 +10,14 @@
           <option value="only">Only Trashed</option>
         </select>
       </search-filter>
-      <inertia-link class="btn-indigo" :href="route('admin.roles.create')">
-        <span>Create</span>
-        <span class="hidden md:inline">Role</span>
+      <inertia-link class="btn-blue" :href="route('admin.roles.create')">
+        <span>{{$t('Add Role')}}</span>
       </inertia-link>
     </div>
     <div class="bg-white rounded shadow overflow-x-auto">
       <table class="w-full whitespace-no-wrap">
         <tr class="text-left font-bold">
-          <th class="px-6 pt-6 pb-4">Name</th>
+          <th class="px-6 pt-6 pb-4">{{$t('Name')}}</th>
           <th class="px-6 pt-6 pb-4"></th>
         </tr>
         <tr v-for="role in roles.data" :key="role.id" class="hover:bg-grey-lightest focus-within:bg-grey-lightest">
@@ -33,15 +32,13 @@
                     <div v-for="permission in role.permissions" :key="permission.module"
                          class="bg-blue rounded-full mx-2 text-white text-sm px-3 py-2 flex items-center"
                     >
-                        <vs-dropdown  vs-trigger-click class="text-white">
-                                {{ permission.lvl }}
-                            <vs-dropdown-menu>
-                                <vs-dropdown-item><b>{{permission.module}}</b></vs-dropdown-item>
-                                <vs-dropdown-item v-for="action in permission.actions" :key=" action.action+'.'+action.module">
-                                    {{action.action}} {{action.module}}
-                                </vs-dropdown-item>
-                            </vs-dropdown-menu>
-                        </vs-dropdown>
+                        {{ permission.lvl }}
+                        <md-tooltip md-delay="300">
+                            <span>{{permission.module}}</span>
+                            <span v-for="action in permission.actions" :key=" action.action+'.'+action.module">
+                                {{action.action}} {{action.module}}
+                            </span>
+                        </md-tooltip>
                     </div>
                 </div>
             </td>
@@ -52,7 +49,7 @@
           </td>
         </tr>
         <tr v-if="roles.data.length === 0">
-          <td class="border-t px-6 py-4" colspan="4">No organizations found.</td>
+          <td class="border-t px-6 py-4" colspan="4">No roles found.</td>
         </tr>
       </table>
     </div>
@@ -91,7 +88,7 @@ export default {
     form: {
       handler: _.throttle(function() {
         let query = _.pickBy(this.form)
-        this.$inertia.replace(this.route('admin.admins', Object.keys(query).length ? query : { remember: 'forget' }))
+        this.$inertia.replace(this.route('admin.roles', Object.keys(query).length ? query : { remember: 'forget' }))
       }, 150),
       deep: true,
     },

@@ -4,14 +4,24 @@ namespace App;
 
 use App\RolePermissionConnection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Role extends Model
 {
     protected $fillable = ['name', 'description'];
 
-    public static function getRoles()
+    public static function getRoles($params = [])
     {
-        $roles = self::orderBy('created_at', 'desc')->paginate()->only('id', 'name')->toArray();
+        $roles = self::sort(!empty($params['sort']) ? $params['sort'] : 'date');
+        $roles = self::search($roles, !empty($params['search']) ? $params['search'] : null);
+        $roles = $roles->paginate()
+            ->transform(function ($role) {
+                return [
+                    'id' => $role->id,
+                    'name' => $role->name,
+                ];
+            })
+            ->toArray();
 
         foreach ($roles['data'] as $key => &$role) {
             $permissions = [];
@@ -29,6 +39,26 @@ class Role extends Model
         }
 
         return $roles;
+    }
+
+    public static function sort($sort)
+    {
+        if($sort == 'permission') {
+            $data = self::orderBy('created_at', 'desc');
+        } else {
+            $data = self::orderBy('created_at', 'desc');
+        }
+
+        return $data;
+    }
+
+    public static function search($query, string $search = null)
+    {
+       if (!empty($search)) {
+           $query->where('name', 'like', '%'.$search.'%');
+       }
+
+        return $query;
     }
 
     public static function getRole($id)
@@ -138,21 +168,18 @@ class Role extends Model
 
     public function deleteRole($id)
     {
+        $role = $this->find($id);
 
-            $role = $this->find($id);
+        if (!$role) {
+            throw new \Exception("Role not found");
+        }
+        $rolePermissions = RolePermissionConnection::where('role_id', $id);
 
-            if (!$role) {
-                throw new \Exception("Role not found");
-            }
-            $rolePermissions = RolePermissionConnection::where('role_id', $id);
-
-            try {
-                $role->delete();
-                $rolePermissions->delete();
-            } catch (\Exception $e) {
-                throw new \Exception("Something went wrong during deleting role");
-            }
-
-
+        try {
+            $role->delete();
+            $rolePermissions->delete();
+        } catch (\Exception $e) {
+            throw new \Exception("Something went wrong during deleting role");
+        }
     }
 }

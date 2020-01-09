@@ -4,35 +4,45 @@
             <inertia-link class="flex items-center group py-3" :href="route('admin.dashboard')">
                 <icon name="dashboard" class="w-4 h-4 mr-2"
                       :class="isUrl('') ? 'fill-white' : 'fill-indigo-light group-hover:fill-white'"/>
-                <div :class="isUrl('') ? 'text-white' : 'text-indigo-lighter group-hover:text-white'">Головна</div>
+                <div :class="isUrl('') ? 'text-white' : 'text-indigo-lighter group-hover:text-white'">
+                    {{$t('Dashboard')}}
+                </div>
             </inertia-link>
         </div>
         <div class="mb-4">
             <inertia-link class="flex items-center group py-3" :href="route('admin.subjects')">
                 <icon name="book" class="w-4 h-4 mr-2"
                       :class="isUrl('') ? 'fill-white' : 'fill-indigo-light group-hover:fill-white'"/>
-                <div :class="isUrl('') ? 'text-white' : 'text-indigo-lighter group-hover:text-white'">Предмети</div>
+                <div :class="isUrl('') ? 'text-white' : 'text-indigo-lighter group-hover:text-white'">
+                    {{$t('Subjects')}}
+                </div>
             </inertia-link>
         </div>
         <div class="mb-4">
             <inertia-link class="flex items-center group py-3" :href="route('admin.themes')">
                 <icon name="book" class="w-4 h-4 mr-2"
                       :class="isUrl('') ? 'fill-white' : 'fill-indigo-light group-hover:fill-white'"/>
-                <div :class="isUrl('') ? 'text-white' : 'text-indigo-lighter group-hover:text-white'">Теми</div>
+                <div :class="isUrl('') ? 'text-white' : 'text-indigo-lighter group-hover:text-white'">
+                    {{$t('Themes')}}
+                </div>
             </inertia-link>
         </div>
         <div class="mb-4">
             <inertia-link class="flex items-center group py-3" :href="route('admin.subthemes')">
                 <icon name="book" class="w-4 h-4 mr-2"
                       :class="isUrl('') ? 'fill-white' : 'fill-indigo-light group-hover:fill-white'"/>
-                <div :class="isUrl('') ? 'text-white' : 'text-indigo-lighter group-hover:text-white'">Підтеми</div>
+                <div :class="isUrl('') ? 'text-white' : 'text-indigo-lighter group-hover:text-white'">
+                    {{$t('Subthemes')}}
+                </div>
             </inertia-link>
         </div>
         <div class="mb-4">
             <inertia-link class="flex items-center group py-3" :href="route('admin.questions')">
                 <icon name="book" class="w-4 h-4 mr-2"
                       :class="isUrl('') ? 'fill-white' : 'fill-indigo-light group-hover:fill-white'"/>
-                <div :class="isUrl('') ? 'text-white' : 'text-indigo-lighter group-hover:text-white'">Питання</div>
+                <div :class="isUrl('') ? 'text-white' : 'text-indigo-lighter group-hover:text-white'">
+                    {{$t('Questions')}}
+                </div>
             </inertia-link>
         </div>
         <div class="mb-4">
@@ -40,7 +50,7 @@
                 <icon name="users" class="w-4 h-4 mr-2"
                       :class="isUrl('') ? 'fill-white' : 'fill-indigo-light group-hover:fill-white'"/>
                 <div :class="isUrl('') ? 'text-white' : 'text-indigo-lighter group-hover:text-white'">
-                    Користувачі
+                    {{$t('Users')}}
                 </div>
             </inertia-link>
         </div>
@@ -49,7 +59,7 @@
                 <icon name="users" class="w-4 h-4 mr-2"
                       :class="isUrl('') ? 'fill-white' : 'fill-indigo-light group-hover:fill-white'"/>
                 <div :class="isUrl('') ? 'text-white' : 'text-indigo-lighter group-hover:text-white'">
-                    Адміністратори
+                    {{$t('Administrators')}}
                 </div>
             </inertia-link>
         </div>
@@ -57,7 +67,9 @@
             <inertia-link class="flex items-center group py-3" :href="route('admin.roles')">
                 <icon name="users" class="w-4 h-4 mr-2"
                       :class="isUrl('') ? 'fill-white' : 'fill-indigo-light group-hover:fill-white'"/>
-                <div :class="isUrl('') ? 'text-white' : 'text-indigo-lighter group-hover:text-white'">Ролі</div>
+                <div :class="isUrl('') ? 'text-white' : 'text-indigo-lighter group-hover:text-white'">
+                    {{$t('Roles')}}
+                </div>
             </inertia-link>
         </div>
         <!--    <div class="mb-4">-->

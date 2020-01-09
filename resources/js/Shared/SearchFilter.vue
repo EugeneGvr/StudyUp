@@ -12,9 +12,9 @@
           <slot />
         </div>
       </dropdown>
-      <input class="relative w-full px-6 py-3 rounded-r focus:shadow-outline" autocomplete="off" type="text" name="search" placeholder="Search…" :value="value" @input="$emit('input', $event.target.value)">
+      <input class="relative w-full px-6 py-3 rounded-r focus:shadow-outline" autocomplete="off" type="text" name="search" :placeholder="$t('Search')" :value="value" @input="$emit('input', $event.target.value)">
     </div>
-    <button class="ml-3 text-sm text-grey-dark hover:text-grey-darker focus:text-indigo" type="button" @click="$emit('reset')">Reset</button>
+    <button class="ml-3 text-sm text-grey-dark hover:text-grey-darker focus:text-indigo" type="button" @click="$emit('reset')">{{$t('Reset')}}</button>
   </div>
 </template>
 

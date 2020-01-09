@@ -25,10 +25,10 @@
                                     label="Phone"/>
                         <select-input v-model="form.role" :errors="$page.errors.role"
                                       class="pb-3 w-full" label="Role">
-                            <option :value="null"/>
-                            <option v-for="role in roles.data" :key="role.id" :value="role.id">
+                            <md-option :value="null"/>
+                            <md-option v-for="role in roles.data" :key="role.id" :value="role.id">
                                 {{role.name}}
-                            </option>
+                            </md-option>
                         </select-input>
                     </div>
                 </div>

@@ -17,7 +17,7 @@ class AdminsController extends Controller
     {
         $admins = Admin::getAdmins();
 
-        return Inertia::render('Admins/Index', [
+        return $this->render('Admins/Index', [
             'filters' => Request::all('search', 'locality', 'first_name', 'last_name', 'email'),
             'admins' => $admins
         ]);
@@ -27,7 +27,7 @@ class AdminsController extends Controller
     {
         $roles = Role::getRoles();
 
-        return Inertia::render('Admins/Create', [
+        return $this->render('Admins/Create', [
             'roles' => $roles,
         ]);
     }
@@ -54,7 +54,7 @@ class AdminsController extends Controller
     {
         $roles = Role::getRoles();
         $admin = Admin::getAdmin($id);
-        return Inertia::render('Admins/Edit', [
+        return $this->render('Admins/Edit', [
             'admin' => [
                 'id' => $admin->id,
                 'first_name' => $admin->first_name,

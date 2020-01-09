@@ -6,6 +6,7 @@
 @import "buttons";
 @import "form";
 @import "nprogress";
+@import "custom_styles.css";
 
 /* Utilities */
 @import "tailwindcss/utilities";

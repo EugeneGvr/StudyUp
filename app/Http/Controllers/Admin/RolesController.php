@@ -15,9 +15,11 @@ class RolesController extends Controller
 {
     public function index()
     {
-        $roles = Role::getRoles();
+        $params = Request::only('search', 'sort');
 
-        return Inertia::render('Roles/Index', [
+        $roles = Role::getRoles($params);
+
+        return $this->render('Roles/Index', [
             'filters' => Request::all('search', 'role', 'trashed'),
             'roles' => $roles
         ]);
@@ -27,7 +29,7 @@ class RolesController extends Controller
     {
         $allPermissions = config('permissions');
 
-        return Inertia::render('Roles/Create', [
+        return $this->render('Roles/Create', [
             'allPermissions' => $allPermissions
         ]);
     }
@@ -51,7 +53,7 @@ class RolesController extends Controller
         $allPermissions = config('permissions');
         $role = Role::getRole($id);
 
-        return Inertia::render('Roles/Edit', [
+        return $this->render('Roles/Edit', [
             'allPermissions' => $allPermissions,
             'role' => $role
         ]);

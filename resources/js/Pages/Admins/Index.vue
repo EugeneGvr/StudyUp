@@ -1,7 +1,7 @@
 <template>
 
   <div>
-    <h1 class="mb-8 font-bold text-3xl">Administrators</h1>
+    <h1 class="mb-8 font-bold text-3xl">{{$t('Administrators')}}</h1>
     <div class="mb-6 flex justify-between items-center">
       <search-filter v-model="form.search" class="w-full max-w-sm mr-4" @reset="reset">
         <label class="block text-grey-darkest">Trashed:</label>
@@ -12,8 +12,7 @@
         </select>
       </search-filter>
       <inertia-link class="btn-indigo" :href="route('admin.admins.create')">
-        <span>Create</span>
-        <span class="hidden md:inline">Organization</span>
+        <span>{{$t('Add Administrator')}}</span>
       </inertia-link>
     </div>
     <div class="bg-white rounded shadow overflow-x-auto">
