@@ -7,17 +7,16 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 
 class Admin extends Model implements AuthenticatableContract, AuthorizableContract
 {
-    use SoftDeletes, Authenticatable, Authorizable;
+    use Authenticatable, Authorizable;
 
     protected $fillable = [
-        'first_name', 'last_name', 'email', 'phone', 'photo', 'password',
+        'first_name', 'last_name', 'email', 'photo', 'password',
     ];
 
     protected $hidden = [
@@ -27,11 +26,6 @@ class Admin extends Model implements AuthenticatableContract, AuthorizableContra
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-
-    public function account()
-    {
-        return $this->belongsTo(Account::class);
-    }
 
     public function getNameAttribute()
     {

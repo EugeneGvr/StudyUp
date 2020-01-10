@@ -7,10 +7,14 @@ return [
     'url' => env('APP_URL', 'http://localhost'),
     'asset_url' => env('ASSET_URL', null),
     'timezone' => 'UTC',
+
+    //localization
     'locales' => ['ua','ru','en'],
     'locale' => 'ua',
     'fallback_locale' => 'en',
     'faker_locale' => 'en_US',
+    //localization
+
     'key' => env('APP_KEY'),
     'cipher' => 'AES-256-CBC',
     'providers' => [

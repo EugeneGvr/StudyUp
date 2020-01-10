@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use App\User;
-use App\Account;
 use Tests\TestCase;
 use App\Organization;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -16,10 +15,10 @@ class OrganizationsTest extends TestCase
     {
         parent::setUp();
 
-        $account = Account::create(['name' => 'Acme Corporation']);
+//        $account = Account::create(['name' => 'Acme Corporation']);
 
         $this->user = factory(User::class)->create([
-            'account_id' => $account->id,
+            'account_id' => 1,
             'first_name' => 'John',
             'last_name' => 'Doe',
             'email' => 'johndoe@example.com',
@@ -29,9 +28,9 @@ class OrganizationsTest extends TestCase
 
     public function test_can_view_organizations()
     {
-        $this->user->account->organizations()->saveMany(
-            factory(Organization::class, 5)->make()
-        );
+//        $this->user->account->organizations()->saveMany(
+//            factory(Organization::class, 5)->make()
+//        );
 
         $this->actingAs($this->user)
             ->get('/organizations')
@@ -47,9 +46,9 @@ class OrganizationsTest extends TestCase
 
     public function test_can_search_for_organizations()
     {
-        $this->user->account->organizations()->saveMany(
-            factory(Organization::class, 5)->make()
-        )->first()->update(['name' => 'Some Big Fancy Company Name']);
+//        $this->user->account->organizations()->saveMany(
+//            factory(Organization::class, 5)->make()
+//        )->first()->update(['name' => 'Some Big Fancy Company Name']);
 
         $this->actingAs($this->user)
             ->get('/organizations?search=Some Big Fancy Company Name')
@@ -63,9 +62,9 @@ class OrganizationsTest extends TestCase
 
     public function test_cannot_view_deleted_organizations()
     {
-        $this->user->account->organizations()->saveMany(
-            factory(Organization::class, 5)->make()
-        )->first()->delete();
+//        $this->user->account->organizations()->saveMany(
+//            factory(Organization::class, 5)->make()
+//        )->first()->delete();
 
         $this->actingAs($this->user)
             ->get('/organizations')
@@ -75,9 +74,9 @@ class OrganizationsTest extends TestCase
 
     public function test_can_filter_to_view_deleted_organizations()
     {
-        $this->user->account->organizations()->saveMany(
-            factory(Organization::class, 5)->make()
-        )->first()->delete();
+//        $this->user->account->organizations()->saveMany(
+//            factory(Organization::class, 5)->make()
+//        )->first()->delete();
 
         $this->actingAs($this->user)
             ->get('/organizations?trashed=with')

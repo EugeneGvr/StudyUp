@@ -1,7 +1,6 @@
 <?php
 
 use App\User;
-use App\Account;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
 
@@ -13,19 +12,17 @@ class DatabaseSeeder extends Seeder {
      */
     public function run()
     {
-        $account = Account::create(['name' => 'Acme Corporation']);
+        //run Roles seed
+        $rolesTableSeeder = new RolesTableSeeder();
+        $rolesTableSeeder->run();
 
         //run Admins seed
         $adminsTableSeeder = new AdminsTableSeeder();
         $adminsTableSeeder->run();
 
         //run Users seed
-        $usersTableSeeder = new UsersTableSeeder();
-        $usersTableSeeder->run();
-
-        //run Roles seed
-        $rolesTableSeeder = new RolesTableSeeder();
-        $rolesTableSeeder->run();
+//        $usersTableSeeder = new UsersTableSeeder();
+//        $usersTableSeeder->run();
 
         //run Localities seed
         //$localitiesTableSeeder = new LocalitiesTableSeeder();

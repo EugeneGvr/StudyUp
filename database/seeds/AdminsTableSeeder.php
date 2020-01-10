@@ -13,19 +13,19 @@ class AdminsTableSeeder extends Seeder
     public function run()
     {
         Admin::create([
-            'account_id'    => 1,
             'first_name'    => 'Евгений',
             'last_name'     => 'Гаврилов',
             'email'         => 'link6596@gmail.com',
-            'password'      => 'ubuntu123'
+            'password'      => 'ubuntu123',
+            'role_id'       => 1,
         ]);
 
         Admin::create([
-            'account_id'    => 1,
             'first_name'    => 'Ivan',
             'last_name'     => 'Velykyi',
             'email'         => 'velikiy300@gmail.com',
-            'password'      => 'ubuntu123'
+            'password'      => 'ubuntu123',
+            'role_id'       => 1,
         ]);
     }
 }

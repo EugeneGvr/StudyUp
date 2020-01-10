@@ -35,12 +35,7 @@
         },
         beforeMount() {
             const userLocale = localStorage.getItem('locale');
-            console.log(userLocale);
-            if (userLocale == null) {
-                console.log(this.default);
-            }
-            const locale = userLocale ? userLocale : this.default;
-            console.log(locale);
+            const locale = userLocale != 'null' ? userLocale : this.default;
             this.setLocale(locale);
         },
     }
