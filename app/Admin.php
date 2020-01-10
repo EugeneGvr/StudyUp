@@ -94,7 +94,7 @@ class Admin extends Model implements AuthenticatableContract, AuthorizableContra
             'last_name'     => $admin->last_name,
             'email'         => $admin->email,
             'phone'         => $admin->phone,
-            'role'          => $admin->role,
+            'role_id'       => $admin->role_id,
             'photo'         => $admin->photoUrl(['w' => 60, 'h' => 60, 'fit' => 'crop']),
         ];
     }

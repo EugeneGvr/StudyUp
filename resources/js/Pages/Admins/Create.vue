@@ -23,8 +23,11 @@
                                     label="Email"/>
                         <text-input v-model="form.phone" :errors="$page.errors.phone" class="pb-4 w-full"
                                     label="Phone"/>
-                        <select-input v-model="form.role" :errors="$page.errors.role"
-                                      class="pb-3 w-full" label="Role">
+                        <select-input
+                            v-model="form.role"
+                            :errors="$page.errors.role"
+                            class="pb-3 w-full" label="Role"
+                        >
                             <md-option :value="null"/>
                             <md-option v-for="role in roles.data" :key="role.id" :value="role.id">
                                 {{role.name}}

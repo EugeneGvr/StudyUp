@@ -112,7 +112,7 @@ return [
         'admins' => [
             'provider' => 'users',
             'table' => 'password_resets',
-            'expire' => 60,
+            'expire' => 15,
         ],
     ],
 

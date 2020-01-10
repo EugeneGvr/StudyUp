@@ -1,12 +1,18 @@
 <template>
     <div>
         <label v-if="label" class="form-label" :for="id">{{ label }}:</label>
-        <md-field>
-            <md-select :id="id" ref="input" v-model="selected" v-bind="$attrs" class="form-select"
-                       :class="{ error: errors.length }">
+
+            <md-select
+                :id="id"
+                ref="input"
+                v-model="selected"
+                v-bind="$attrs"
+                class="form-select"
+                :class="{ error: errors.length }"
+            >
                 <slot/>
             </md-select>
-        </md-field>
+
         <div v-if="errors.length" class="form-error">{{ errors[0] }}</div>
     </div>
 </template>
