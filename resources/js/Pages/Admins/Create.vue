@@ -15,10 +15,14 @@
             <div class="flex flex-wrap">
                 <div class="flex-col lg:w-1/2 sm:w-full">
                     <div class="bg-white rounded shadow p-12 m-2">
+                        <file-input v-model="form.photo" :errors="$page.errors.photo" class="pb-4 w-full"
+                                    label="Photo"/>
+                    </div>
+                </div>
+                <div class="flex-col lg:w-1/2 sm:w-full">
+                    <div class="bg-white rounded shadow p-12 m-2">
                         <text-input v-model="form.name" :errors="$page.errors.name" class="pb-4 w-full" label="Name"/>
                         <text-input v-model="form.surname" :errors="$page.errors.surname" class="pb-4 w-full" label="Surname"/>
-                    </div>
-                    <div class="bg-white rounded shadow p-12 m-2">
                         <text-input v-model="form.email" :errors="$page.errors.email" class="pb-4 w-full"
                                     label="Email"/>
                         <text-input v-model="form.phone" :errors="$page.errors.phone" class="pb-4 w-full"
@@ -28,18 +32,10 @@
                             :errors="$page.errors.role"
                             class="pb-3 w-full" label="Role"
                         >
-                            <md-option :value="null"/>
                             <md-option v-for="role in roles.data" :key="role.id" :value="role.id">
                                 {{role.name}}
                             </md-option>
                         </select-input>
-                    </div>
-                </div>
-                <div class="flex-col lg:w-1/2 sm:w-full">
-                    <div class="bg-white rounded shadow p-8 m-2">
-                        <div class="centrex">
-                            <vs-upload automatic  limit="1" class="flex" @on-success="successUpload" />
-                        </div>
                     </div>
                 </div>
             </div>

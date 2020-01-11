@@ -1,5 +1,6 @@
 <template>
   <div>
+      <img id="photo-loader" :src="showFile(value)"/>
     <label v-if="label" class="form-label">{{ label }}:</label>
     <div class="form-input p-0" :class="{ error: errors.length }">
       <input ref="file" type="file" :accept="accept" class="hidden" @change="change">
@@ -38,6 +39,9 @@ export default {
     },
   },
   methods: {
+      showFile(uploadedFile) {
+          return uploadedFile ? URL.createObjectURL(uploadedFile) : 'ggg';
+      },
     filesize(size) {
       var i = Math.floor(Math.log(size) / Math.log(1024))
       return (size / Math.pow(1024, i) ).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i]

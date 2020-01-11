@@ -1,7 +1,7 @@
 <template>
     <div>
         <label v-if="label" class="form-label" :for="id">{{ label }}:</label>
-
+<md-field>
             <md-select
                 :id="id"
                 ref="input"
@@ -12,7 +12,7 @@
             >
                 <slot/>
             </md-select>
-
+</md-field>
         <div v-if="errors.length" class="form-error">{{ errors[0] }}</div>
     </div>
 </template>
