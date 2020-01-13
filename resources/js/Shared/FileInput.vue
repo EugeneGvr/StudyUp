@@ -1,6 +1,8 @@
 <template>
   <div>
-      <img id="photo-loader" :src="showFile(value)"/>
+      <div class="uploaded-image">
+        <img :src="showFile(value)"/>
+      </div>
     <label v-if="label" class="form-label">{{ label }}:</label>
     <div class="form-input p-0" :class="{ error: errors.length }">
       <input ref="file" type="file" :accept="accept" class="hidden" @change="change">
@@ -40,7 +42,9 @@ export default {
   },
   methods: {
       showFile(uploadedFile) {
-          return uploadedFile ? URL.createObjectURL(uploadedFile) : 'ggg';
+          const defaultAvatar = '/images/default/avatar/male_avatar.svg';
+
+          return uploadedFile ? URL.createObjectURL(uploadedFile) : defaultAvatar;
       },
     filesize(size) {
       var i = Math.floor(Math.log(size) / Math.log(1024))

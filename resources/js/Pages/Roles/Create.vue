@@ -104,10 +104,6 @@ export default {
               .then(() => this.sending = false)
       },
       selectAction(module, action, permission, permissions) {
-          console.log(module);
-          console.log(action);
-          console.log(permission);
-          console.log(permissions);
           const moduleLength = this.form.permissions.filter(permission => permission.split('.')[0] == module).length + 1;
           if (this.$refs[module + '.' + action][0].isChecked === false && permission.length === moduleLength) {
               this.form.permissions.push(module)

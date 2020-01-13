@@ -51,3 +51,11 @@
         height: 0;
      }
 }
+
+.uploaded-image {
+    img {
+        border-radius: 50%;
+    }
+
+    @apply .mt-5 .mb-12 .justify-center .flex;
+}

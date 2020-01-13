@@ -9,7 +9,8 @@
                     <span class="text-indigo-light font-medium">/</span> Add
                 </h1>
                 <div class="p-3 border-t border-grey-lighter flex justify-end items-center">
-                    <loading-button :loading="sending" class="btn-indigo" type="submit">Add Administrator</loading-button>
+                    <loading-button :loading="sending" class="btn-indigo" type="submit">Add Administrator
+                    </loading-button>
                 </div>
             </div>
             <div class="flex flex-wrap">
@@ -22,7 +23,8 @@
                 <div class="flex-col lg:w-1/2 sm:w-full">
                     <div class="bg-white rounded shadow p-12 m-2">
                         <text-input v-model="form.name" :errors="$page.errors.name" class="pb-4 w-full" label="Name"/>
-                        <text-input v-model="form.surname" :errors="$page.errors.surname" class="pb-4 w-full" label="Surname"/>
+                        <text-input v-model="form.surname" :errors="$page.errors.surname" class="pb-4 w-full"
+                                    label="Surname"/>
                         <text-input v-model="form.email" :errors="$page.errors.email" class="pb-4 w-full"
                                     label="Email"/>
                         <text-input v-model="form.phone" :errors="$page.errors.phone" class="pb-4 w-full"
@@ -36,6 +38,16 @@
                                 {{role.name}}
                             </md-option>
                         </select-input>
+                        <md-switch v-model="form.password_auto_generation" class="md-primary">
+                            Generate password automatically
+                        </md-switch>
+                        <text-input
+                            v-if="!form.password_auto_generation"
+                            type="password"
+                            v-model="form.password"
+                            :errors="$page.errors.password"
+                            class="pb-4 w-full"
+                        />
                     </div>
                 </div>
             </div>
@@ -44,47 +56,53 @@
 </template>
 
 <script>
-import Layout from '@/Shared/Layout'
-import LoadingButton from '@/Shared/LoadingButton'
-import SelectInput from '@/Shared/SelectInput'
-import TextInput from '@/Shared/TextInput'
-import FileInput from '@/Shared/FileInput'
+    import Layout from '@/Shared/Layout'
+    import LoadingButton from '@/Shared/LoadingButton'
+    import SelectInput from '@/Shared/SelectInput'
+    import TextInput from '@/Shared/TextInput'
+    import FileInput from '@/Shared/FileInput'
 
-export default {
-  metaInfo: { title: 'Add Administrator' },
-  layout: (h, page) => h(Layout, [page]),
-  components: {
-    LoadingButton,
-    SelectInput,
-    TextInput,
-    FileInput,
-  },
-    props: {
-        roles: Object,
-    },
-  remember: 'form',
-  data() {
-    return {
-      sending: false,
-      form: {
-        name: null,
-        surname: null,
-        email: null,
-        phone: null,
-        role: null,
-        photo: null,
-      },
+    export default {
+        metaInfo: {title: 'Add Administrator'},
+        layout: (h, page) => h(Layout, [page]),
+        components: {
+            LoadingButton,
+            SelectInput,
+            TextInput,
+            FileInput,
+        },
+        props: {
+            roles: Object,
+        },
+        remember: 'form',
+        data() {
+            return {
+                sending: false,
+                form: {
+                    name: null,
+                    surname: null,
+                    email: null,
+                    phone: null,
+                    photo: null,
+                    role: null,
+                    password: null,
+                    password_auto_generation: true,
+                },
+            }
+        },
+        methods: {
+            submit() {
+                this.sending = true
+                this.$inertia.post(this.route('admin.admins.store'), this.form)
+                    .then(() => this.sending = false)
+            },
+            successUpload() {
+                this.$vs.notify({
+                    color: 'success',
+                    title: 'Upload Success',
+                    text: 'Lorem ipsum dolor sit amet, consectetur'
+                })
+            }
+        },
     }
-  },
-  methods: {
-    submit() {
-      this.sending = true
-      this.$inertia.post(this.route('admin.admins.store'), this.form)
-        .then(() => this.sending = false)
-    },
-      successUpload(){
-          this.$vs.notify({color:'success',title:'Upload Success',text:'Lorem ipsum dolor sit amet, consectetur'})
-      }
-  },
-}
 </script>
