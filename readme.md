@@ -41,7 +41,7 @@ Generate application key:
 php artisan key:generate
 ```
 
-Create an MySQL database
+## Create MySQL database:
 
 Enter the local mysql
 
