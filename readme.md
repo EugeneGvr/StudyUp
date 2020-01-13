@@ -1,16 +1,14 @@
-# Ping CRM
+# StudyUp
 
-A demo application to illustrate how Inertia.js works.
-
-![](https://raw.githubusercontent.com/inertiajs/pingcrm/master/screenshot.png)
+An application made for graduates for preparing to External Independent Evaluation. 
 
 ## Installation
 
 Clone the repo locally:
 
 ```sh
-git clone https://github.com/inertiajs/pingcrm.git pingcrm
-cd pingcrm
+git clone https://github.com/EugeneGvr/StudyUp.git
+cd StudyUp
 ```
 
 Install PHP dependencies:
@@ -43,10 +41,18 @@ Generate application key:
 php artisan key:generate
 ```
 
-Create an SQLite database. You can also use another database (MySQL, Postgres), simply update your configuration accordingly.
+Create an MySQL database
+
+Enter the local mysql
 
 ```sh
-touch database/database.sqlite
+mysql -u root -p
+```
+
+Input your password and create database
+
+```sh
+create database study_up_db character set utf8 collate utf8_general_ci;
 ```
 
 Run database migrations:
@@ -60,11 +66,6 @@ Run database seeder:
 ```sh
 php artisan db:seed
 ```
-
-You're ready to go! Visit Ping CRM in your browser, and login with:
-
-- **Username:** johndoe@example.com
-- **Password:** secret
 
 ## Running tests
 
