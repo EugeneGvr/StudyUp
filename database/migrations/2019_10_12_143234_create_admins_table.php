@@ -22,6 +22,7 @@ class CreateAdminsTable extends Migration
             $table->string('last_name', 25);
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
+            $table->string('invite_link', 25)->nullable();
             $table->string('password');
             $table->string('photo_path', 100)->nullable();
             $table->integer('role_id')->index();

@@ -87,6 +87,8 @@ class Admin extends Model implements AuthenticatableContract, AuthorizableContra
     public function addAdmin($params)
     {
         try {
+            $password = $params['password_auto_generation'] ? $this->generateString();
+
             $d = $this->generateString();
             $admin = $this;
 

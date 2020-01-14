@@ -24,7 +24,7 @@
                     <div class="bg-white rounded shadow p-8 m-2">
                         <div class="mb-5">{{$t('Permissions')}}</div>
                         <div class="mb-5 flex items-center">
-                            <md-switch class="md-primary mr-2" v-model="form.permissions" id="all-permissions" value="all.all" @click="selectAll(allPermissions)">
+                            <md-switch class="md-primary mr-2" v-model="form.permissions" id="all-permissions" value="all.all" @change="selectAll(allPermissions)">
                             {{$t('Select all')}}
                             </md-switch>
                         </div>
@@ -37,7 +37,7 @@
                                         :id="p_key"
                                         :value="p_key"
                                         :ref="p_key"
-                                        @click="selectModule(p_key, permission, allPermissions)"
+                                        @change="selectModule(p_key, permission, allPermissions)"
                                     >
                                         {{ $t(p_key) | capitalize }}
                                     </md-switch>
@@ -48,7 +48,7 @@
                                                    v-model="form.permissions"
                                                    :id="p_key + '-' + action"
                                                    :value="p_key + '.' + action"
-                                                   @click="selectAction(p_key, action, permission, allPermissions)"
+                                                   @change="selectAction(p_key, action, permission, allPermissions)"
                                         >
                                             {{ $t(action + ' ' + p_key) | capitalize }}
                                         </md-switch>
