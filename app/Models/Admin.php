@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use League\Glide\Server;
 use Illuminate\Support\Facades\App;
@@ -10,10 +10,11 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
+use App\Traits\StringGenerator;
 
 class Admin extends Model implements AuthenticatableContract, AuthorizableContract
 {
-    use Authenticatable, Authorizable;
+    use Authenticatable, Authorizable, StringGenerator;
 
     protected $fillable = [
         'first_name', 'last_name', 'email', 'photo', 'password',
@@ -27,15 +28,6 @@ class Admin extends Model implements AuthenticatableContract, AuthorizableContra
         'email_verified_at' => 'datetime',
     ];
 
-    public function getNameAttribute()
-    {
-        return $this->first_name.' '.$this->last_name;
-    }
-
-    public function setPasswordAttribute($password)
-    {
-        $this->attributes['password'] = Hash::make($password);
-    }
 
     public function photoUrl(array $attributes)
     {
@@ -49,13 +41,6 @@ class Admin extends Model implements AuthenticatableContract, AuthorizableContra
         $query->orderBy('last_name')->orderBy('first_name');
     }
 
-    public function scopeWhereRole($query, $role)
-    {
-        switch ($role) {
-            case 'user': return $query->where('owner', false);
-            case 'owner': return $query->where('owner', true);
-        }
-    }
 
     public function scopeFilter($query, array $filters)
     {
@@ -96,6 +81,27 @@ class Admin extends Model implements AuthenticatableContract, AuthorizableContra
             'phone'         => $admin->phone,
             'role_id'       => $admin->role_id,
             'photo'         => $admin->photoUrl(['w' => 60, 'h' => 60, 'fit' => 'crop']),
+        ];
+    }
+
+    public function addAdmin($params)
+    {
+        try {
+            $d = $this->generateString();
+            $admin = $this;
+
+            $admin->first_name = $params['first_name'];
+            $admin->second_name = $params['second_name'];
+            $admin->email = $params['email'];
+            $admin->phone = $params['phone'];
+            $admin->role_id = $params['role_id'];
+            $admin->save();
+        } catch (\Exception $e) {
+            return 'Something went wrong during role creating';
+        }
+
+        return [
+            'status' => 1
         ];
     }
 }

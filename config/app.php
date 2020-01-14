@@ -15,6 +15,9 @@ return [
     'faker_locale' => 'en_US',
     //localization
 
+    'characters' => 'abcdefghijklmnopqrstuvwxyz',
+    'numbers'   => '0123456789',
+
     'key' => env('APP_KEY'),
     'cipher' => 'AES-256-CBC',
     'providers' => [

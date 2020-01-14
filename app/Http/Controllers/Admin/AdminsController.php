@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Admin;
+use App\Models\Admin;
 use App\Http\Controllers\Controller;
-use App\Role;
+use App\Models\Role;
 use Inertia\Inertia;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
@@ -34,15 +34,18 @@ class AdminsController extends Controller
 
     public function store()
     {
-        $params = Request::validate([
+        $rules = [
             'first_name'    => ['required', 'max:50'],
             'last_name'     => ['required', 'max:50'],
-            'email'         => ['required', 'max:50', 'email', Rule::unique('users')],
+            'email'         => ['required', 'max:50', 'email', Rule::unique('admins')],
             'phone'         => ['required', 'max:10'],
-            'role'          => ['required', 'positive_integer'],
-            'password'      => ['nullable'],
+            'role'          => ['required', 'integer', 'min:0'],
             'photo'         => ['nullable', 'image'],
-        ]);
+            'password_auto_generation' => ['boolean'],
+            'password'      => ['nullable', 'min:6', 'max:50'],
+        ];
+
+        $params = Request::validate($rules);
 
         $admin = new Admin;
         $admin->addAdmin($params);

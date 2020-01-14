@@ -22,8 +22,8 @@
                 </div>
                 <div class="flex-col lg:w-1/2 sm:w-full">
                     <div class="bg-white rounded shadow p-12 m-2">
-                        <text-input v-model="form.name" :errors="$page.errors.name" class="pb-4 w-full" label="Name"/>
-                        <text-input v-model="form.surname" :errors="$page.errors.surname" class="pb-4 w-full"
+                        <text-input v-model="form.first_name" :errors="$page.errors.first_name" class="pb-4 w-full" label="Name"/>
+                        <text-input v-model="form.last_name" :errors="$page.errors.last_name" class="pb-4 w-full"
                                     label="Surname"/>
                         <text-input v-model="form.email" :errors="$page.errors.email" class="pb-4 w-full"
                                     label="Email"/>
@@ -79,8 +79,8 @@
             return {
                 sending: false,
                 form: {
-                    name: null,
-                    surname: null,
+                    first_name: null,
+                    last_name: null,
                     email: null,
                     phone: null,
                     photo: null,
@@ -92,6 +92,7 @@
         },
         methods: {
             submit() {
+                console.log(this.form);
                 this.sending = true
                 this.$inertia.post(this.route('admin.admins.store'), this.form)
                     .then(() => this.sending = false)

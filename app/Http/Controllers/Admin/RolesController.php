@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 
-use App\Role;
+use App\Models\Role;
 use App\Http\Controllers\Controller;
 use Inertia\Inertia;
 use Illuminate\Validation\Rule;
