@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use League\Glide\Server;
 use Illuminate\Support\Facades\App;
@@ -72,5 +72,13 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
                 $query->onlyTrashed();
             }
         });
+    }
+
+    public static function getUsers()
+    {
+        $users = self::orderBy('created_at')->paginate()->only('id', 'first_name', 'last_name', 'email', 'city_id');
+error_log(print_r($users, 1));
+
+        return $users;
     }
 }
