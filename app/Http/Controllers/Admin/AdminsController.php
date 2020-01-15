@@ -40,9 +40,9 @@ class AdminsController extends Controller
             'email'         => ['required', 'max:50', 'email', Rule::unique('admins')],
             'phone'         => ['required', 'max:10'],
             'role'          => ['required', 'integer', 'min:0'],
-            'photo'         => ['nullable', 'image'],
-            'password_auto_generation' => ['boolean'],
+            'photo'         => ['nullable'],
             'password'      => ['nullable', 'min:6', 'max:50'],
+            'password_auto_generation' => ['required'],
         ];
 
         $params = Request::validate($rules);

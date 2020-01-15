@@ -92,10 +92,21 @@
         },
         methods: {
             submit() {
-                console.log(this.form);
-                this.sending = true
-                this.$inertia.post(this.route('admin.admins.store'), this.form)
-                    .then(() => this.sending = false)
+                this.sending = true;
+
+                var data = new FormData();
+                data.append('first_name', this.form.first_name || '');
+                data.append('last_name', this.form.last_name || '');
+                data.append('email', this.form.email || '');
+                data.append('password', this.form.password || '');
+                data.append('phone', this.form.phone || '');
+                data.append('role', this.form.role || '');
+                data.append('password_auto_generation', this.form.password_auto_generation ? 1 : 0);
+                data.append('photo', this.form.photo || '');
+
+                this.$inertia.post(
+                    this.route('admin.admins.store'), data
+                ).then(() => this.sending = false)
             },
             successUpload() {
                 this.$vs.notify({

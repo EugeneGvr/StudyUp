@@ -15,7 +15,6 @@ class CreateUsersTable extends Migration
             $table->string('first_name', 25)->nullable();
             $table->string('last_name', 25)->nullable();
             $table->string('city_id')->nullable();
-            $table->foreign('city_id')->references('id')->on('localities');
             $table->string('username')->unique();
             $table->string('email', 50)->unique();
             $table->timestamp('email_verified_at')->nullable();

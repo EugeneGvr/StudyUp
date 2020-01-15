@@ -1,6 +1,6 @@
 <?php
 
-use App\Locality;
+use App\Models\Locality;
 use Illuminate\Database\Seeder;
 
 class LocalitiesTableSeeder extends Seeder

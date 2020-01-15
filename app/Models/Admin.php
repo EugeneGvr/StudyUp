@@ -91,18 +91,20 @@ class Admin extends Model implements AuthenticatableContract, AuthorizableContra
             $password = $params['password_auto_generation'] && empty($params['password']) ?
                 $this->generateString() :
                 $params['password'];
+            $photo_path = !empty($params['photo']) ? $params['photo']->store('admins') : 'default.svg';
 
             $admin->first_name = $params['first_name'];
-            $admin->second_name = $params['second_name'];
+            $admin->last_name = $params['last_name'];
             $admin->email = $params['email'];
-            $admin->phone = $params['phone'];
-            $admin->role_id = $params['role_id'];
+//            $admin->phone = $params['phone'];
+            $admin->role_id = $params['role'];
             $admin->password = $password;
+            $admin->photo_path = $photo_path;
             $admin->save();
         } catch (\Exception $e) {
             return 'Something went wrong during creating an administrator';
         }
-error_log(print_r('ok', 1));
+
         return [
             'status' => 1
         ];
