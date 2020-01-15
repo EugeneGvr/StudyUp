@@ -25,7 +25,7 @@ class CreateAdminsTable extends Migration
             $table->string('invite_link', 25)->nullable();
             $table->string('password');
             $table->string('photo_path', 100)->nullable();
-            $table->integer('role_id')->index();
+            $table->integer('role_id');
             $table->rememberToken();
             $table->timestamps();
         });

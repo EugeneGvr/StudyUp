@@ -10,10 +10,10 @@ trait StringGenerator
         $charactersLists = $withUpper && $onlyUpper ? strtoupper($characters) : $characters;
 
         if ($withUpper && !$onlyUpper) {
-            $charactersLists = array_merge($charactersLists, strtoupper($characters));
+            $charactersLists .= strtoupper($characters);
         }
         if ($withNumbers) {
-            $charactersLists = array_merge($charactersLists, $characters = config('app')['numbers']);
+            $charactersLists .= config('app')['numbers'];
         }
         $charactersLength = strlen($charactersLists);
         $randomString = '';
