@@ -24,23 +24,22 @@
         </tr>
         <tr v-for="admin in admins.data" :key="admin.id" class="hover:bg-grey-lightest focus-within:bg-grey-lightest">
           <td class="border-t">
-            <inertia-link class="px-6 py-4 flex items-center focus:text-indigo" :href="route('admin.admins.edit', admin.id)">
+            <inertia-link class="px-6 py-4 flex items-center focus:text-indigo" :href="route('admin.admins.show', admin.id)">
               {{ admin.first_name }}
-<!--              <icon v-if="organization.deleted_at" name="trash" class="flex-no-shrink w-3 h-3 fill-grey ml-2" />-->
             </inertia-link>
           </td>
           <td class="border-t">
-            <inertia-link class="px-6 py-4 flex items-center" :href="route('admin.admins.edit', admin.id)" tabindex="-1">
+            <inertia-link class="px-6 py-4 flex items-center" :href="route('admin.admins.show', admin.id)" tabindex="-1">
               {{ admin.email }}
             </inertia-link>
           </td>
           <td class="border-t">
-            <inertia-link class="px-6 py-4 flex items-center" :href="route('admin.admins.edit', admin.id)" tabindex="-1">
+            <inertia-link class="px-6 py-4 flex items-center" :href="route('admin.admins.show', admin.id)" tabindex="-1">
               {{ admin.last_name }}
             </inertia-link>
           </td>
           <td class="border-t w-px">
-            <inertia-link class="px-4 flex items-center" :href="route('admin.admins.edit', admin.id)" tabindex="-1">
+            <inertia-link class="px-4 flex items-center" :href="route('admin.admins.show', admin.id)" tabindex="-1">
               <icon name="cheveron-right" class="block w-6 h-6 fill-grey" />
             </inertia-link>
           </td>

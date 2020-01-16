@@ -80,7 +80,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
         Route::get('/')->name('admin.admins')->uses('AdminsController@index')->middleware('remember', 'auth:web-admin');
         Route::get('/create')->name('admin.admins.create')->uses('AdminsController@create')->middleware('auth:web-admin');
         Route::post('/')->name('admin.admins.store')->uses('AdminsController@store')->middleware('auth:web-admin');
-        Route::get('/{administrator}/edit')->name('admin.admins.edit')->uses('AdminsController@edit')->middleware('auth:web-admin');
+        Route::get('/{administrator}/show')->name('admin.admins.show')->uses('AdminsController@show')->middleware('auth:web-admin');
         Route::put('/{administrator}')->name('admin.admins.update')->uses('AdminsController@update')->middleware('auth:web-admin');
         Route::delete('/{administrator}')->name('admin.admins.destroy')->uses('AdminsController@destroy')->middleware('auth:web-admin');
         Route::put('/{administrator}/restore')->name('admin.admins.restore')->uses('AdminsController@restore')->middleware('auth:web-admin');

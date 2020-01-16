@@ -21,17 +21,12 @@ abstract class Model extends Eloquent
 
     public function uploadFile($file, $identifier, $folder)
     {
-       $fileName = $this->generateFilePath($folder);
-       $pathParts = str_split($fileName, 3);
-       $path = sprintf(
-           "%s/%s/%s",
-           $folder,
-           $pathParts[0],
-           $pathParts[1],
-       );
+       $prefix = $this->generateFilePath($folder);
+       $path = $this->getFilePath($prefix, $folder);
+
        list($type, $format) = explode('/', $file->getMimeType());
        $fileName = sprintf('%s-%s.%s',
-           $fileName,
+           $prefix,
            $identifier,
            $format
        );
@@ -39,8 +34,22 @@ abstract class Model extends Eloquent
        return Storage::putFileAs($path, $file, $fileName);
     }
 
-    public function getUploadedFile($fileName, $folder)
+    public function getFilePath($fileName, $folder)
     {
+        if (strpos($fileName, '.') !== false) {
+            $fileName = array_shift($fileName);
+        }
+        if (strpos($fileName, '-') !== false) {
+            $fileName = array_shift($fileName);
+        }
+        $pathParts = str_split($fileName, 3);
+
+        return sprintf(
+            "%s/%s/%s",
+            $folder,
+            $pathParts[0],
+            $pathParts[1]
+        );
 
     }
 

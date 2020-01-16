@@ -86,6 +86,8 @@ class Admin extends Model implements AuthenticatableContract, AuthorizableContra
 
     public function addAdmin($params)
     {
+        $avatarConfig = config('filesystems')['avatars'];
+
         try {
             $admin = $this;
             $password = $params['password_auto_generation'] && empty($params['password']) ?
@@ -97,12 +99,12 @@ class Admin extends Model implements AuthenticatableContract, AuthorizableContra
             $admin->email = $params['email'];
             $admin->phone = $params['phone'];
             $admin->role_id = $params['role'];
-            $admin->password = $password;
+            $admin->password = Hash::make($password);
             $admin->save();
 
             $admin->photo_path = !empty($params['photo']) ?
-                $this->uploadFile($params['photo'], $admin->id, 'admins/avatar') :
-                'default.svg';
+                $this->uploadFile($params['photo'], $admin->id, $avatarConfig['admins']['path']) :
+                null;
             $admin->save();
         } catch (\Exception $e) {
             return 'Something went wrong during creating an administrator';

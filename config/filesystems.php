@@ -67,12 +67,18 @@ return [
     ],
 
     'avatars' => [
-        'default' => [
-            'male' => 'male_default.svg',
-            'female' => 'female_default.svg',
-        ],
+//        'default' => [
+//            'male' => 'default/avatar/male_avatar.svg',
+//            'female' => 'default/avatar/female_avatar.svg',
+//        ],
         'name' => [
             'length' => 9
         ],
+        'admins' => [
+            'path' => 'admins/avatar'
+        ],
+        'users' => [
+            'path' => 'users/avatar'
+        ]
     ],
 ];
