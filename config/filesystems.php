@@ -66,4 +66,9 @@ return [
 
     ],
 
+    'name' => [
+        'length' => [
+            'avatar' => 9
+        ]
+    ]
 ];

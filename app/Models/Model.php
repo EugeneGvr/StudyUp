@@ -40,8 +40,16 @@ abstract class Model extends Eloquent
     public function generateFilePath($identifier, $folder)
     {
         $files = count(Storage::allFiles($folder));
-        $foldersTree = [];
-        $foldersTree[] = intval($files/1000);
-        $foldersTree[] = $files/100;
+        $fileNameCounter = strval($files + 1);
+        $nameLength = config('filesystem')['name']['length']['avatar'];
+        $charsLeft = $nameLength - strlen($fileNameCounter);
+        $fileName = '';
+
+        for($charsCounter = 0; $charsCounter < $charsLeft; $charsCounter++){
+            $fileName .= '0';
+        }
+        $fileName .= $fileNameCounter;
+
+        return `$fileName-$identifier`;
     }
 }
