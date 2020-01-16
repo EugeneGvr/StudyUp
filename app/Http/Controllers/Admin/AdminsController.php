@@ -50,7 +50,7 @@ class AdminsController extends Controller
         $admin = new Admin;
         $admin->addAdmin($params);
 
-        return Redirect::route('users')->with('success', 'User created.');
+        return Redirect::route('admin.admins')->with('success', 'User created.');
     }
 
     public function show($id)
