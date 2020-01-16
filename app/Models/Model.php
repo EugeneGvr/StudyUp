@@ -21,15 +21,22 @@ abstract class Model extends Eloquent
 
     public function uploadFile($file, $identifier, $folder)
     {
-       $this->generateFilePath($identifier, $folder);
-        //Storage::makeDirectory($directory);
-        list($type, $format) = explode('/', $file->getMimeType());
-        $fileName = sprintf('%s.%s',
-            $identifier,
-            $format
-        );
+       $fileName = $this->generateFilePath($folder);
+       $pathParts = str_split($fileName, 3);
+       $path = sprintf(
+           "%s/%s/%s",
+           $folder,
+           $pathParts[0],
+           $pathParts[1],
+       );
+       list($type, $format) = explode('/', $file->getMimeType());
+       $fileName = sprintf('%s-%s.%s',
+           $fileName,
+           $identifier,
+           $format
+       );
 
-        return Storage::putFileAs($folder, $file, $fileName);
+       return Storage::putFileAs($path, $file, $fileName);
     }
 
     public function getUploadedFile($fileName, $folder)
@@ -37,11 +44,11 @@ abstract class Model extends Eloquent
 
     }
 
-    public function generateFilePath($identifier, $folder)
+    public function generateFilePath($folder)
     {
         $files = count(Storage::allFiles($folder));
         $fileNameCounter = strval($files + 1);
-        $nameLength = config('filesystem')['name']['length']['avatar'];
+        $nameLength = config('filesystems')['avatars']['name']['length'];
         $charsLeft = $nameLength - strlen($fileNameCounter);
         $fileName = '';
 
@@ -50,6 +57,6 @@ abstract class Model extends Eloquent
         }
         $fileName .= $fileNameCounter;
 
-        return `$fileName-$identifier`;
+        return $fileName;
     }
 }

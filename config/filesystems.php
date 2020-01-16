@@ -66,9 +66,13 @@ return [
 
     ],
 
-    'name' => [
-        'length' => [
-            'avatar' => 9
-        ]
-    ]
+    'avatars' => [
+        'default' => [
+            'male' => 'male_default.svg',
+            'female' => 'female_default.svg',
+        ],
+        'name' => [
+            'length' => 9
+        ],
+    ],
 ];
