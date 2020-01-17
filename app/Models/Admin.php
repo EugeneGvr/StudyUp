@@ -65,13 +65,22 @@ class Admin extends Model implements AuthenticatableContract, AuthorizableContra
         return $administrators;
     }
 
-    public static function getAdmin($id)
+    public function getAdmin($id)
     {
         $admin = self::find($id);
 
         if(!$admin) {
             return 'No admin with such id';
         }
+        $avatarConfig = config('filesystems')['avatars'];
+
+        $photo_path = !empty($admin->photo_path) ?
+            sprintf(
+                '%s/%s',
+                $this->getFilePath($admin->photo_path,  $avatarConfig['admins']['path']),
+                $admin->photo_path
+            ) :
+            null;
 
         return [
             'id'            => $admin->id,
@@ -79,8 +88,8 @@ class Admin extends Model implements AuthenticatableContract, AuthorizableContra
             'last_name'     => $admin->last_name,
             'email'         => $admin->email,
             'phone'         => $admin->phone,
-            'role_id'       => $admin->role_id,
-            'photo'         => $admin->photoUrl(['w' => 60, 'h' => 60, 'fit' => 'crop']),
+            'role'       => $admin->role_id,
+            'photo'         => $photo_path,
         ];
     }
 

@@ -9,34 +9,46 @@
                     <span class="text-indigo-light font-medium">/</span> Add
                 </h1>
                 <div class="p-3 border-t border-grey-lighter flex justify-end items-center">
-                    <loading-button :loading="sending" class="btn-indigo" type="submit">Add Administrator</loading-button>
+                    <loading-button :loading="sending" class="btn-indigo" type="submit">
+                        Update Administrator
+                    </loading-button>
                 </div>
             </div>
             <div class="flex flex-wrap">
                 <div class="flex-col lg:w-1/2 sm:w-full">
                     <div class="bg-white rounded shadow p-12 m-2">
-                        <text-input v-model="form.name" :errors="$page.errors.name" class="pb-4 w-full" label="Name"/>
-                        <text-input v-model="form.surname" :errors="$page.errors.surname" class="pb-4 w-full" label="Surname"/>
+                        <file-input v-model="form.photo" :errors="$page.errors.photo" class="pb-4 w-full"
+                                    label="Photo"/>
                     </div>
+                </div>
+                <div class="flex-col lg:w-1/2 sm:w-full">
                     <div class="bg-white rounded shadow p-12 m-2">
+                        <text-input v-model="form.first_name" :errors="$page.errors.first_name" class="pb-4 w-full" label="Name"/>
+                        <text-input v-model="form.last_name" :errors="$page.errors.last_name" class="pb-4 w-full"
+                                    label="Surname"/>
                         <text-input v-model="form.email" :errors="$page.errors.email" class="pb-4 w-full"
                                     label="Email"/>
                         <text-input v-model="form.phone" :errors="$page.errors.phone" class="pb-4 w-full"
                                     label="Phone"/>
-                        <select-input v-model="form.role" :errors="$page.errors.role"
-                                      class="pb-3 w-full" label="Role">
-                            <option :value="null"/>
-                            <option v-for="role in roles.data" :key="role.id" :value="role.id">
+                        <select-input
+                            v-model="form.role"
+                            :errors="$page.errors.role"
+                            class="pb-3 w-full" label="Role"
+                        >
+                            <md-option v-for="role in roles" :key="role.id" :value="role.id">
                                 {{role.name}}
-                            </option>
+                            </md-option>
                         </select-input>
-                    </div>
-                </div>
-                <div class="flex-col lg:w-1/2 sm:w-full">
-                    <div class="bg-white rounded shadow p-8 m-2">
-                        <div class="centrex">
-                            <vs-upload automatic  limit="1" class="flex" @on-success="successUpload" />
-                        </div>
+                        <md-switch v-model="form.password_auto_generation" class="md-primary">
+                            Generate password automatically
+                        </md-switch>
+                        <text-input
+                            v-if="!form.password_auto_generation"
+                            type="password"
+                            v-model="form.password"
+                            :errors="$page.errors.password"
+                            class="pb-4 w-full"
+                        />
                     </div>
                 </div>
             </div>

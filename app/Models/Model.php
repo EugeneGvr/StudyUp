@@ -30,17 +30,20 @@ abstract class Model extends Eloquent
            $identifier,
            $format
        );
+        Storage::putFileAs($path, $file, $fileName);
 
-       return Storage::putFileAs($path, $file, $fileName);
+       return $fileName;
     }
 
     public function getFilePath($fileName, $folder)
     {
         if (strpos($fileName, '.') !== false) {
-            $fileName = array_shift($fileName);
+            $fileNameParts = explode('.', $fileName);
+            $fileName = array_shift($fileNameParts);
         }
         if (strpos($fileName, '-') !== false) {
-            $fileName = array_shift($fileName);
+            $fileNameParts = explode('-', $fileName);
+            $fileName = array_shift($fileNameParts);
         }
         $pathParts = str_split($fileName, 3);
 

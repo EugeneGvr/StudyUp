@@ -9,7 +9,8 @@
                     <span class="text-indigo-light font-medium">/</span> Add
                 </h1>
                 <div class="p-3 border-t border-grey-lighter flex justify-end items-center">
-                    <loading-button :loading="sending" class="btn-indigo" type="submit">Add Administrator
+                    <loading-button :loading="sending" class="btn-indigo" type="submit">
+                        Add Administrator
                     </loading-button>
                 </div>
             </div>
@@ -34,7 +35,7 @@
                             :errors="$page.errors.role"
                             class="pb-3 w-full" label="Role"
                         >
-                            <md-option v-for="role in roles.data" :key="role.id" :value="role.id">
+                            <md-option v-for="role in roles" :key="role.id" :value="role.id">
                                 {{role.name}}
                             </md-option>
                         </select-input>

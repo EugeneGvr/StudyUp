@@ -28,7 +28,7 @@ class AdminsController extends Controller
         $roles = Role::getRoles();
 
         return $this->render('Admins/Create', [
-            'roles' => $roles,
+            'roles' => $roles['data'],
         ]);
     }
 
@@ -47,8 +47,8 @@ class AdminsController extends Controller
 
         $params = Request::validate($rules);
 
-        $admin = new Admin;
-        $admin->addAdmin($params);
+        $adminObject = new Admin;
+        $adminObject->addAdmin($params);
 
         return Redirect::route('admin.admins')->with('success', 'User created.');
     }
@@ -56,18 +56,11 @@ class AdminsController extends Controller
     public function show($id)
     {
         $roles = Role::getRoles();
-        $admin = Admin::getAdmin($id);
+        $adminObject = new Admin;
+        $admin = $adminObject->getAdmin($id);
         return $this->render('Admins/Edit', [
-            'admin' => [
-                'id' => $admin->id,
-                'first_name' => $admin->first_name,
-                'last_name' => $admin->last_name,
-                'email' => $admin->email,
-                'phone' => $admin->phone,
-                'role' => $admin->role,
-                'photo' => $admin->photoUrl(['w' => 60, 'h' => 60, 'fit' => 'crop']),
-            ],
-            'roles' => $roles,
+            'admin' => $admin,
+            'roles' => $roles['data'],
         ]);
     }
 
