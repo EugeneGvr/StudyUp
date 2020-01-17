@@ -15,7 +15,7 @@ class UsersController extends Controller
     public function index()
     {
         $users = User::getUsers();
-        return Inertia::render('Users/Index', [
+        return $this->render('Users/Index', [
             'filters' => Request::all('search', 'locality', 'created_at', 'first_name', 'last_name', 'email'),
             'users' => $users
         ]);
@@ -54,7 +54,7 @@ class UsersController extends Controller
 
     public function edit($user)
     {
-        return Inertia::render('Users/Edit', [
+        return $this->render('Users/Edit', [
             'user' => [
                 'id'            => $user->id,
                 'first_name'    => ['required', 'max:50'],

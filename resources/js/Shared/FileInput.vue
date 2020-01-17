@@ -1,7 +1,8 @@
 <template>
   <div>
+      {{ asset(path) }}
       <div class="uploaded-image">
-        <img :src="showFile(value)"/>
+        <img :src="path"/>
       </div>
     <label v-if="label" class="form-label">{{ label }}:</label>
     <div class="form-input p-0" :class="{ error: errors.length }">
@@ -25,6 +26,7 @@
 <script>
 export default {
   props: {
+    path: String,
     value: File,
     label: String,
     accept: String,

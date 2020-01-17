@@ -6,7 +6,7 @@
                     <inertia-link class="text-indigo-light hover:text-indigo-dark" :href="route('admin.admins')">
                         Administrators
                     </inertia-link>
-                    <span class="text-indigo-light font-medium">/</span> Add
+                    <span class="text-indigo-light font-medium">/</span> {{ form.first_name }} {{ form.last_name }}
                 </h1>
                 <div class="p-3 border-t border-grey-lighter flex justify-end items-center">
                     <loading-button :loading="sending" class="btn-indigo" type="submit">
@@ -17,8 +17,13 @@
             <div class="flex flex-wrap">
                 <div class="flex-col lg:w-1/2 sm:w-full">
                     <div class="bg-white rounded shadow p-12 m-2">
-                        <file-input v-model="form.photo" :errors="$page.errors.photo" class="pb-4 w-full"
-                                    label="Photo"/>
+                        <file-input
+                            v-model="form.photo"
+                            :errors="$page.errors.photo"
+                            :path="form.photo_path"
+                            class="pb-4 w-full"
+                            label="Photo"
+                        />
                     </div>
                 </div>
                 <div class="flex-col lg:w-1/2 sm:w-full">
@@ -39,16 +44,6 @@
                                 {{role.name}}
                             </md-option>
                         </select-input>
-                        <md-switch v-model="form.password_auto_generation" class="md-primary">
-                            Generate password automatically
-                        </md-switch>
-                        <text-input
-                            v-if="!form.password_auto_generation"
-                            type="password"
-                            v-model="form.password"
-                            :errors="$page.errors.password"
-                            class="pb-4 w-full"
-                        />
                     </div>
                 </div>
             </div>
@@ -62,11 +57,11 @@ import Layout from '@/Shared/Layout'
 import LoadingButton from '@/Shared/LoadingButton'
 import SelectInput from '@/Shared/SelectInput'
 import TextInput from '@/Shared/TextInput'
-import TrashedMessage from '@/Shared/TrashedMessage'
+import FileInput from '@/Shared/FileInput'
 
 export default {
   metaInfo() {
-    return { title: this.form.name }
+    return { title: this.form.first_name }
   },
   layout: (h, page) => h(Layout, [page]),
   components: {
@@ -74,22 +69,25 @@ export default {
     LoadingButton,
     SelectInput,
     TextInput,
-    TrashedMessage,
+    FileInput,
   },
-  props: {
-    organization: Object,
-  },
+    props: {
+        admin: Object,
+        roles: Array
+        ,
+    },
   remember: 'form',
   data() {
     return {
       sending: false,
       form: {
-          name: this.admin.name,
-          surname: this.admin.surname,
+          first_name: this.admin.first_name,
+          last_name: this.admin.last_name,
           email: this.admin.email,
           phone: this.admin.phone,
+          photo_path: this.admin.photo_path,
+          photo: null,
           role: this.admin.role,
-          photo: this.admin.photo,
       },
     }
   },

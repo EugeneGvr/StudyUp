@@ -5,6 +5,7 @@ namespace App\Models;
 use League\Glide\Server;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Foundation\Auth\Access\Authorizable;
@@ -88,8 +89,8 @@ class Admin extends Model implements AuthenticatableContract, AuthorizableContra
             'last_name'     => $admin->last_name,
             'email'         => $admin->email,
             'phone'         => $admin->phone,
-            'role'       => $admin->role_id,
-            'photo'         => $photo_path,
+            'role'          => $admin->role_id,
+            'photo_path'    => $photo_path,
         ];
     }
 
@@ -97,30 +98,39 @@ class Admin extends Model implements AuthenticatableContract, AuthorizableContra
     {
         $avatarConfig = config('filesystems')['avatars'];
 
-        try {
-            $admin = $this;
-            $password = $params['password_auto_generation'] && empty($params['password']) ?
-                $this->generateString() :
-                $params['password'];
-
-            $admin->first_name = $params['first_name'];
-            $admin->last_name = $params['last_name'];
-            $admin->email = $params['email'];
-            $admin->phone = $params['phone'];
-            $admin->role_id = $params['role'];
-            $admin->password = Hash::make($password);
-            $admin->save();
-
-            $admin->photo_path = !empty($params['photo']) ?
-                $this->uploadFile($params['photo'], $admin->id, $avatarConfig['admins']['path']) :
-                null;
-            $admin->save();
-        } catch (\Exception $e) {
-            return 'Something went wrong during creating an administrator';
+        if ($params['password_auto_generation'] && empty($params['password'])) {
+            $params['password'] = $this->generateString();
         }
 
-        return [
-            'status' => 1
-        ];
+        DB::beginTransaction();
+            try {
+                $admin = $this;
+
+                $admin->first_name  = $params['first_name'];
+                $admin->last_name   = $params['last_name'];
+                $admin->email       = $params['email'];
+                $admin->phone       = $params['phone'];
+                $admin->role_id     = $params['role'];
+                $admin->password    = Hash::make($params['password']);
+                $admin->save();
+
+                $admin->photo_path = !empty($params['photo']) ?
+                    $this->uploadFile($params['photo'], $admin->id, $avatarConfig['admins']['path']) :
+                    null;
+                $admin->save();
+
+                DB::commit();
+            } catch (\Exception $e) {
+                DB::rollback();
+
+                return [
+                    'status' => 0,
+                    'message' =>'Something went wrong during creating an administrator',
+                ];
+            }
+
+            return [
+                'status' => 1
+            ];
     }
 }
