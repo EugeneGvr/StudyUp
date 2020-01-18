@@ -120,6 +120,11 @@ class Admin extends Model implements AuthenticatableContract, AuthorizableContra
                 $admin->save();
 
                 DB::commit();
+
+
+                //send mail to the admin email
+                //->
+                //
             } catch (\Exception $e) {
                 DB::rollback();
 
