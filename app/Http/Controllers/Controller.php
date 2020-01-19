@@ -13,7 +13,7 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    protected function render($template, $params)
+    protected function render($template, $params = [])
     {
         $baseParams = [
             'locales' => config('app')['locales'],

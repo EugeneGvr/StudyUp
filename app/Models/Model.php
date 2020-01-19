@@ -35,6 +35,11 @@ abstract class Model extends Eloquent
        return $fileName;
     }
 
+    public function deleteFile($fileName)
+    {
+        Storage::delete($fileName);
+    }
+
     public function getFilePath($fileName, $folder)
     {
         if (strpos($fileName, '.') !== false) {
@@ -70,5 +75,16 @@ abstract class Model extends Eloquent
         $fileName .= $fileNameCounter;
 
         return $fileName;
+    }
+
+    public function getFilePublicUrl($path, $folder)
+    {
+        return !empty($path) ?
+            asset(sprintf(
+                'storage/%s/%s',
+                $this->getFilePath($path,  $folder),
+                $path
+            )) :
+            null;
     }
 }

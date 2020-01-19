@@ -17,7 +17,7 @@ class CreateLocalitiesTable extends Migration
             $table->bigIncrements('id');
             $table->string('code',10);
             $table->string('name',128);
-            $table->string('parent_code',10);
+            $table->string('parent_id',10);
             $table->boolean('center');
             $table->char('type',1);
             $table->timestamps();

@@ -93,20 +93,26 @@ export default {
   },
   methods: {
     submit() {
-      this.sending = true
-      this.$inertia.put(this.route('admin.admins.update', this.admin.id), this.form)
-        .then(() => this.sending = false)
+        this.sending = true;
+
+        let data = new FormData();
+        data.append('first_name', this.form.first_name || '');
+        data.append('last_name', this.form.last_name || '');
+        data.append('email', this.form.email || '');
+        data.append('phone', this.form.phone || '');
+        data.append('role', this.form.role || '');
+        data.append('photo', this.form.photo || '');
+
+        this.$inertia.put(
+            this.route('admin.admins.update', this.admin.id),
+            data
+        ).then(() => this.sending = false)
     },
     destroy() {
       if (confirm('Are you sure you want to delete this administrator?')) {
         this.$inertia.delete(this.route('admin.admins.destroy', this.admin.id))
       }
     },
-    // restore() {
-    //   if (confirm('Are you sure you want to restore this administrator?')) {
-    //     this.$inertia.put(this.route('administrators.restore', this.admin.id))
-    //   }
-    // },
   },
 }
 </script>

@@ -20,6 +20,7 @@ class AdminsTableSeeder extends Seeder
             'password'      => Hash::make('ubuntu123'),
             'role_id'       => 1,
         ]);
+//        success("Admin created");
 
         Admin::create([
             'first_name'    => 'Ivan',

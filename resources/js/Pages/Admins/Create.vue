@@ -73,7 +73,7 @@
             FileInput,
         },
         props: {
-            roles: Object,
+            roles: Array,
         },
         remember: 'form',
         data() {
@@ -95,7 +95,7 @@
             submit() {
                 this.sending = true;
 
-                var data = new FormData();
+                let data = new FormData();
                 data.append('first_name', this.form.first_name || '');
                 data.append('last_name', this.form.last_name || '');
                 data.append('email', this.form.email || '');
@@ -106,7 +106,8 @@
                 data.append('photo', this.form.photo || '');
 
                 this.$inertia.post(
-                    this.route('admin.admins.store'), data
+                    this.route('admin.admins.store'),
+                    data
                 ).then(() => this.sending = false)
             },
             successUpload() {
