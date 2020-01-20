@@ -84,6 +84,7 @@ export default {
 
             this.$inertia.replace(this.route('admin.localities', {parent_code: code}))
                 .then(() => this.slide = false)
+            $(this).show("slide", { direction: "left" }, 1000);
         },
         reset() {
             this.form = _.mapValues(this.form, () => null)

@@ -2,6 +2,7 @@
 
 use App\Models\Locality;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Log;
 
 class LocalitiesTableSeeder extends Seeder
 {
@@ -21,6 +22,7 @@ class LocalitiesTableSeeder extends Seeder
         $type = "";
         $center1 = "";
         $center2 = "";
+       Log::info('Start Running LocalityTableSeeder');
         foreach ($arr->level1 as $elementLevel1) {
             $list = explode("/", $elementLevel1->name);
             if(count($list) == 1) {
@@ -38,6 +40,7 @@ class LocalitiesTableSeeder extends Seeder
             $localityElementLevel1->center       = ($list[0] == "М.КИЇВ");
             $localityElementLevel1->type         = $type;
             $localityElementLevel1->save();
+            Log::info('Locality "' . $list[0] . '" is uploaded');
 //            Locality::create([
 //                'code' => $elementLevel1->code,
 //                'name' => ucfirst(strtolower($list[0])),
@@ -65,6 +68,7 @@ class LocalitiesTableSeeder extends Seeder
                     $localityElementLevel2->center       = ($list[0] == $center1);
                     $localityElementLevel2->type         = $type;
                     $localityElementLevel2->save();
+                    Log::info('Locality "' . $list[0] . '" is uploaded');
 //                    Locality::create([
 //                        'code' => $elementLevel2->code,
 //                        'name' => $list[0],
@@ -88,6 +92,7 @@ class LocalitiesTableSeeder extends Seeder
                             $localityElementLevel3->center       = ($elementLevel3->name == $center2);
                             $localityElementLevel3->type         = $type;
                             $localityElementLevel3->save();
+                            Log::info('Locality "' . $elementLevel3->name . '" is uploaded');
 //                            Locality::create([
 //                                'code' => $elementLevel3->code,
 //                                'name' => $elementLevel3->name,
@@ -114,6 +119,7 @@ class LocalitiesTableSeeder extends Seeder
                                 $localityElementLevel4->center       = false;
                                 $localityElementLevel4->type         = $type;
                                 $localityElementLevel4->save();
+                                Log::info('Locality "' . $elementLevel4->name . '" is uploaded');
 //                                Locality::create([
 //                                    'code' => $elementLevel4->code,
 //                                    'name' => $elementLevel4->name,
@@ -127,5 +133,6 @@ class LocalitiesTableSeeder extends Seeder
                 }
             }
         }
+        Log::info('End Running LocalityTableSeeder');
     }
 }
