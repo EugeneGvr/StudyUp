@@ -36,7 +36,6 @@
                   </div>
               </div>
           </div>
-      <div :style="slideStyle">
       <div class="bg-white rounded shadow overflow-x-auto">
           <table class=" table-module w-full whitespace-no-wrap">
               <tr class="text-left font-bold">
@@ -51,7 +50,7 @@
                       </div>
                   </td>
                   <td class="border-t w-px">
-                      <div class="px-4 flex items-center" tabindex="-1">
+                      <div v-if="locality.has_children" class="px-4 flex items-center" tabindex="-1">
                           <icon name="cheveron-right" class="block w-6 h-6 fill-grey"/>
                       </div>
                   </td>
@@ -63,7 +62,6 @@
       </div>
 
     <pagination :links="localities.links" />
-      </div>
   </div>
 </template>
 
@@ -76,7 +74,6 @@ import SearchFilter from '@/Shared/SearchFilter'
 
 export default {
     metaInfo: {title: 'Localities'},
-    table: '.table-module',
     layout: (h, page) => h(Layout, [page]),
     components: {
         Icon,
@@ -90,7 +87,6 @@ export default {
     },
     data() {
         return {
-            slideStyle: {},
             form: {
                 search: this.filters.search,
                 trashed: this.filters.trashed,
@@ -108,15 +104,14 @@ export default {
     },
     methods: {
         treeStep(id, down = true) {
-            const slideLength = (down ? '-' : '') + window.innerHeight + 'px';
-            this.slideStyle = {
-                'margin-left': slideLength,
-                'position': 'absolute',
-                'z-index': '-1',
-                'transition': '.8s',
-            };
+            // const slideLength = (down ? '-' : '') + window.innerHeight + 'px';
+            // this.slideStyle = {
+            //     'margin-left': slideLength,
+            //     'position': 'absolute',
+            //     'z-index': '-1',
+            //     'transition': '.4s',
+            // };
             this.$inertia.replace(this.route('admin.localities', {parent_id: id}))
-                .then(() => this.slideStyle = {})
         },
         reset() {
             this.form = _.mapValues(this.form, () => null)

@@ -17,7 +17,7 @@ class LocalitiesController extends Controller
     {
         $params = Request::only('search', 'sort', 'parent_id');
 
-        $localitiesData = Locality::getLocalities($params);
+        $localitiesData = Locality::getLocalities($params, true);
 
         return $this->render('Localities/Index', [
             'filters' => Request::all('search', 'role', 'trashed'),

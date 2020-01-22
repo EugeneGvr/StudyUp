@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Locality extends Model
 {
-    public static function getLocalities($params = [])
+    public static function getLocalities($params = [], $childrenCheck = false)
     {
         if (empty($params))
         {
@@ -25,6 +25,18 @@ class Locality extends Model
             })
             ->toArray();
 
+        if ($childrenCheck) {
+            $localityIds =  array_column($localities['data'], 'id');
+            $localitiesWithChildren = self::whereIn('parent_id', $localityIds)
+                ->get()
+                ->groupBy('parent_id')
+                ->toArray();
+            $localityWithChildrenIds = array_keys($localitiesWithChildren);
+
+            foreach ($localities['data'] as &$locality) {
+                $locality['has_children'] = in_array($locality['id'], $localityWithChildrenIds);
+            }
+        }
         $breadcrumb = self::getBreadcrumb($params['parent_id']);
 
         return [
