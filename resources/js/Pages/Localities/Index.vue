@@ -22,7 +22,7 @@
                   <div
                       v-if="!breadcrumbElement.current"
                       class="text-blue hover:text-orange"
-                      @click="treeStep(breadcrumbElement.parent_id, false)"
+                      @click="treeStep(breadcrumbElement.parent_id)"
                   >
                       {{breadcrumbElement.title}}
                   </div>
@@ -42,8 +42,11 @@
                   <th class="px-6 pt-6 pb-4">{{$t('Name')}}</th>
                   <th class="px-6 pt-6 pb-4"></th>
               </tr>
-              <tr v-for="locality in localities.data" :key="locality.id"
-                  class="hover:bg-grey-lightest focus-within:bg-grey-lightest" @click="treeStep(locality.id)">
+              <tr
+                  v-for="locality in localities.data" :key="locality.id"
+                  class="hover:bg-grey-lightest focus-within:bg-grey-lightest"
+                  @click="treeStep(locality.id, locality.has_children)"
+              >
                   <td class="border-t">
                       <div class="px-6 py-4 flex items-center focus:text-indigo">
                           {{ locality.name }}
@@ -60,8 +63,21 @@
               </tr>
           </table>
       </div>
-
     <pagination :links="localities.links" />
+      <md-dialog :md-active.sync="editModal">
+          <md-dialog-title>
+              <span>Hey</span>
+              <span class="text-blue">Hey</span>
+              <span>?</span>
+          </md-dialog-title>
+          <md-dialog-content>
+              <span>This action will drop role and all admins who have this role will get default list of permissions</span>
+          </md-dialog-content>
+          <md-dialog-actions>
+              <md-button class="md-primary p-2 m-2" @click="editModal=false">Close</md-button>
+              <button class="btn-red m-2" tabindex="-1" type="button" @click="destroy">Delete</button>
+          </md-dialog-actions>
+      </md-dialog>
   </div>
 </template>
 
@@ -87,6 +103,7 @@ export default {
     },
     data() {
         return {
+            editModal: false,
             form: {
                 search: this.filters.search,
                 trashed: this.filters.trashed,
@@ -103,15 +120,12 @@ export default {
         },
     },
     methods: {
-        treeStep(id, down = true) {
-            // const slideLength = (down ? '-' : '') + window.innerHeight + 'px';
-            // this.slideStyle = {
-            //     'margin-left': slideLength,
-            //     'position': 'absolute',
-            //     'z-index': '-1',
-            //     'transition': '.4s',
-            // };
-            this.$inertia.replace(this.route('admin.localities', {parent_id: id}))
+        treeStep(id, goDeep = true) {
+            if (goDeep) {
+                this.$inertia.replace(this.route('admin.localities', {parent_id: id}))
+            } else {
+                this.editModal = true;
+            }
         },
         reset() {
             this.form = _.mapValues(this.form, () => null)
