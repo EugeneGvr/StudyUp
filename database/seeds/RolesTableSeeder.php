@@ -3,6 +3,7 @@
 use App\Models\Role;
 use App\Models\RolePermissionConnection;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Log;
 
 class RolesTableSeeder extends Seeder
 {
@@ -19,6 +20,7 @@ class RolesTableSeeder extends Seeder
             'name'          => 'Super administrator',
             'description'   => 'This is role with all actions permitted',
         ]);
+        Log::stack(['errorlog', 'slack'])->info('Role "Super administrator" is added');
 
         foreach ($permissions as $module => $actions) {
 

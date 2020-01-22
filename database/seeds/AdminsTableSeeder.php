@@ -3,6 +3,7 @@
 use App\Models\Admin;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Log;
 
 class AdminsTableSeeder extends Seeder
 {
@@ -20,7 +21,7 @@ class AdminsTableSeeder extends Seeder
             'password'      => Hash::make('ubuntu123'),
             'role_id'       => 1,
         ]);
-//        success("Admin created");
+        Log::stack(['errorlog', 'slack'])->info('Admin "Евгений Гаврилов" added');
 
         Admin::create([
             'first_name'    => 'Ivan',
@@ -29,5 +30,6 @@ class AdminsTableSeeder extends Seeder
             'password'      => Hash::make('ubuntu123'),
             'role_id'       => 1,
         ]);
+        Log::stack(['errorlog', 'slack'])->info('Admin "Ivan Velykyi" added');
     }
 }

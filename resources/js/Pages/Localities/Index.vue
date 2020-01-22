@@ -115,7 +115,6 @@ export default {
                 'z-index': '-1',
                 'transition': '.8s',
             };
-
             this.$inertia.replace(this.route('admin.localities', {parent_id: id}))
                 .then(() => this.slideStyle = {})
         },
