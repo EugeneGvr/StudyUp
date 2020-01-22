@@ -8,10 +8,9 @@ class Locality extends Model
 {
     public static function getLocalities($params = [])
     {
-        if(empty($params)) {
-            $params = [
-                'type' => 'О',
-            ];
+        if (empty($params))
+        {
+            $params['parent_id'] = 0;
         }
 //        $localities = self::sort(!empty($params['sort']) ? $params['sort'] : 'date');
 //        $localities = self::search($localities, !empty($params['search']) ? $params['search'] : null);
@@ -26,6 +25,38 @@ class Locality extends Model
             })
             ->toArray();
 
-        return $localities;
+        $breadcrumb = self::getBreadcrumb($params['parent_id']);
+
+        return [
+            'localities' => $localities,
+            'breadcrumb' => $breadcrumb,
+        ];
+    }
+
+    public static function getBreadcrumb($parentId)
+    {
+        $breadcrumb = [];
+        $root = [
+            'title'         => 'Украина',
+            'parent_id'     => '0',
+            'current'       => $parentId == 0 ? true : false,
+        ];
+
+        $current = true;
+        while ($parentId != 0) {
+            $currentLocale = self::find($parentId);
+            $breadcrumbElement = [
+                'title'         => $currentLocale->name,
+                'parent_id'     => $currentLocale->id,
+                'current'       => $current,
+            ];
+            array_unshift($breadcrumb, $breadcrumbElement);
+
+            $current = false;
+            $parentId = $currentLocale->parent_id;
+        }
+        array_unshift($breadcrumb, $root);
+
+        return $breadcrumb;
     }
 }

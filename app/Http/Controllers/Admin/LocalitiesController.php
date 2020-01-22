@@ -15,13 +15,14 @@ class LocalitiesController extends Controller
 {
     public function index()
     {
-        $params = Request::only('search', 'sort', 'parent_code');
+        $params = Request::only('search', 'sort', 'parent_id');
 
-        $localities = Locality::getLocalities($params);
+        $localitiesData = Locality::getLocalities($params);
 
         return $this->render('Localities/Index', [
             'filters' => Request::all('search', 'role', 'trashed'),
-            'localities' => $localities
+            'localities' => $localitiesData['localities'],
+            'breadcrumb' => $localitiesData['breadcrumb'],
         ]);
     }
 

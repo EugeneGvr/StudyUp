@@ -12,21 +12,21 @@ class DatabaseSeeder extends Seeder {
      */
     public function run()
     {
-//        //run Roles seed
-//        $rolesTableSeeder = new RolesTableSeeder();
-//        $rolesTableSeeder->run();
-//
-//        //run Admins seed
-//        $adminsTableSeeder = new AdminsTableSeeder();
-//        $adminsTableSeeder->run();
+        //run Roles seed
+        $rolesTableSeeder = new RolesTableSeeder();
+        $rolesTableSeeder->run();
+
+        //run Admins seed
+        $adminsTableSeeder = new AdminsTableSeeder();
+        $adminsTableSeeder->run();
 
 //        //run Users seed
 //        $usersTableSeeder = new UsersTableSeeder();
 //        $usersTableSeeder->run();
 
-        //run Localities seed
-        $localitiesTableSeeder = new LocalitiesTableSeeder();
-        $localitiesTableSeeder->run();
+//        //run Localities seed
+//        $localitiesTableSeeder = new LocalitiesTableSeeder();
+//        $localitiesTableSeeder->run();
 
     }
 }
