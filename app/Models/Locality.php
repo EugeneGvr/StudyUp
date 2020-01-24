@@ -45,6 +45,11 @@ class Locality extends Model
         ];
     }
 
+    public static function getLocality($id)
+    {
+
+    }
+
     public static function getBreadcrumb($parentId)
     {
         $breadcrumb = [];

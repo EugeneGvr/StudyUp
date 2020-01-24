@@ -18,11 +18,17 @@ class LocalitiesController extends Controller
         $params = Request::only('search', 'sort', 'parent_id');
 
         $localitiesData = Locality::getLocalities($params, true);
+        $currentLocality = Locality::getLocality($params['parent_id'] || 0);
+        $formattedCurrentLocality = [
+            'id' => $currentLocality['id'],
+            'name' => $currentLocality['name'],
+        ];
 
         return $this->render('Localities/Index', [
             'filters' => Request::all('search', 'role', 'trashed'),
             'localities' => $localitiesData['localities'],
             'breadcrumb' => $localitiesData['breadcrumb'],
+            'currentLocality' => $formattedCurrentLocality,
         ]);
     }
 
