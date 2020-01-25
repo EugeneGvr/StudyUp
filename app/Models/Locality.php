@@ -3,10 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Locality extends Model
 {
-    public static function getLocalities($params = [], $childrenCheck = false)
+    public function getLocalities($params = [], $childrenCheck = false)
     {
         if (empty($params))
         {
@@ -14,7 +15,7 @@ class Locality extends Model
         }
 //        $localities = self::sort(!empty($params['sort']) ? $params['sort'] : 'date');
 //        $localities = self::search($localities, !empty($params['search']) ? $params['search'] : null);
-        $localities = self::where($params);
+        $localities = $this->where($params);
         $localities = $localities->paginate()
             ->transform(function ($locality) {
                 return [
@@ -45,16 +46,93 @@ class Locality extends Model
         ];
     }
 
-    public static function getLocality($id)
+    public function getLocality($id)
     {
+        $locality = $this->find($id);
 
+        if(!$locality) {
+            return 'No locality with such id';
+        }
+
+        return [
+            'id'    => $locality->id,
+            'name'  => $locality->name,
+            'type'  => $locality->type,
+        ];
+    }
+
+    public function addLocality($params)
+    {
+        try {
+            DB::beginTransaction();
+
+            $locality = $this;
+            $locality->name = $params['name'];
+            $locality->parent_id = $params['parent_id'];
+            $locality->type = $params['type'];
+            //delete after new migration
+            $locality->code = '000000';
+            $locality->center = false;
+            $locality->save();
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            return [
+                'status' => 0,
+                'message' =>'Something went wrong during creating locality',
+            ];
+        }
+
+        return [
+            'status' => 1
+        ];
+    }
+
+    public function updateLocality($id, $params)
+    {
+        try {
+            $locality = $this->find($id);
+            if (!$locality) {
+                throw new \Exception("Locality not found");
+            }
+
+            DB::beginTransaction();
+            $locality->name = $params['name'];
+            $locality->save();
+            DB::commit();
+
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            return [
+                'status' => 0,
+                'message' => 'Something went wrong during updating an locality. Message: ['.$e->getMessage().']',
+            ];
+        }
+    }
+
+    public function deleteLocality($id)
+    {
+        $locality = $this->find($id);
+
+        if (!$locality) {
+            throw new \Exception("Locality not found");
+        }
+
+        try {
+            $locality->delete();
+        } catch (\Exception $e) {
+            throw new \Exception("Something went wrong during deleting locality");
+        }
     }
 
     public static function getBreadcrumb($parentId)
     {
         $breadcrumb = [];
         $root = [
-            'title'         => 'Украина',
+            'name'         => 'Украина',
             'parent_id'     => '0',
             'current'       => $parentId == 0 ? true : false,
         ];
@@ -63,9 +141,9 @@ class Locality extends Model
         while ($parentId != 0) {
             $currentLocale = self::find($parentId);
             $breadcrumbElement = [
-                'title'         => $currentLocale->name,
-                'parent_id'     => $currentLocale->id,
-                'current'       => $current,
+                'id'        => $currentLocale->id,
+                'name'      => $currentLocale->name,
+                'current'   => $current,
             ];
             array_unshift($breadcrumb, $breadcrumbElement);
 

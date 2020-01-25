@@ -137,15 +137,15 @@ class Admin extends Model implements AuthenticatableContract, AuthorizableContra
 
     public function updateAdmin($id, $params)
     {
-        $admin = self::find($id);
-
-        if (!$admin) {
-            throw new \Exception("Admin not found");
-        }
-        $avatarConfig = config('filesystems')['avatars'];
-
-        DB::beginTransaction();
         try {
+            $admin = $this->find($id);
+
+            if (!$admin) {
+                throw new \Exception("Admin not found");
+            }
+            $avatarConfig = config('filesystems')['avatars'];
+
+            DB::beginTransaction();
             $admin->first_name  = $params['first_name'];
             $admin->last_name   = $params['last_name'];
             $admin->email       = $params['email'];
@@ -166,7 +166,7 @@ class Admin extends Model implements AuthenticatableContract, AuthorizableContra
 
             return [
                 'status' => 0,
-                'message' =>'Something went wrong during updating an administrator',
+                'message' =>'Something went wrong during updating an administrator. Message: ['.$e->getMessage().']',
             ];
         }
 

@@ -98,9 +98,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
      //Localities
         Route::group(['prefix' => 'localities'], function () {
             Route::get('/')->name('admin.localities')->uses('LocalitiesController@index')->middleware('remember', 'auth:web-admin');
-            Route::get('/create')->name('admin.localities.create')->uses('LocalitiesController@create')->middleware('auth:web-admin');
             Route::post('/')->name('admin.localities.store')->uses('LocalitiesController@store')->middleware('auth:web-admin');
-            Route::get('/{locality}/show')->name('admin.localities.show')->uses('LocalitiesController@edit')->middleware('auth:web-admin');
             Route::put('/{locality}')->name('admin.localities.update')->uses('LocalitiesController@update')->middleware('auth:web-admin');
             Route::delete('/{locality}')->name('admin.localities.destroy')->uses('LocalitiesController@destroy')->middleware('auth:web-admin');
         });
