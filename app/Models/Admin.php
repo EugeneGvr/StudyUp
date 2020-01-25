@@ -12,6 +12,7 @@ use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use App\Traits\StringGenerator;
+use Illuminate\Support\Facades\Mail;
 
 class Admin extends Model implements AuthenticatableContract, AuthorizableContract
 {
@@ -123,7 +124,15 @@ class Admin extends Model implements AuthenticatableContract, AuthorizableContra
 
 
                 //send mail to the admin email
-                //->
+                $to_name = $admin->first_name;
+                $to_email = 'velikiy300@gmail.com';
+                $data = array('name'=>$admin->first_name.' '.$admin->last_name, "body" => "Test mail");
+
+                Mail::send('emails.mail', $data, function($message) use ($to_name, $to_email) {
+                    $message->to($to_email, $to_name)
+                        ->subject('Welcome');
+                    $message->from('studyup200@gmail.com','Study Up');
+                });
                 //
             } catch (\Exception $e) {
                 DB::rollback();
