@@ -66,26 +66,19 @@ class AdminsController extends Controller
 
     public function update($id)
     {
-        $params = Request::validate([
+        $rules = [
             'first_name'    => ['required', 'max:50'],
             'last_name'     => ['required', 'max:50'],
-            'email'         => ['required', 'max:50', 'email', Rule::unique('users')],
+            'email'         => ['required', 'max:50', 'email', Rule::unique('admins')->ignore($id)],
             'phone'         => ['required', 'max:10'],
-            'role'          => ['required', 'positive_integer'],
-            'password'      => ['nullable'],
+            'role'          => ['required', 'integer', 'min:0'],
             'photo'         => ['nullable', 'image'],
-        ]);
+        ];
+
+        $params = Request::validate($rules);
 
         $admin = new Admin();
         $admin->updateAdmin($id, $params);
-
-        if (Request::file('photo')) {
-            $admin->update(['photo_path' => Request::file('photo')->store('admins')]);
-        }
-
-        if (Request::get('password')) {
-            $admin->update(['password' => Request::get('password')]);
-        }
 
         return Redirect::route('admin.admins')->with('success', 'Admin updated.');
     }

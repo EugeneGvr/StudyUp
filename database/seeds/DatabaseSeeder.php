@@ -20,13 +20,13 @@ class DatabaseSeeder extends Seeder {
         $adminsTableSeeder = new AdminsTableSeeder();
         $adminsTableSeeder->run();
 
-        //run Users seed
+//        //run Users seed
 //        $usersTableSeeder = new UsersTableSeeder();
 //        $usersTableSeeder->run();
 
         //run Localities seed
-        //$localitiesTableSeeder = new LocalitiesTableSeeder();
-        //$localitiesTableSeeder->run();
+        $localitiesTableSeeder = new LocalitiesTableSeeder();
+        $localitiesTableSeeder->run();
 
     }
 }

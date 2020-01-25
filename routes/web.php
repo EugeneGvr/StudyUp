@@ -95,19 +95,13 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
         Route::put('/{role}')->name('admin.roles.update')->uses('RolesController@update')->middleware('auth:web-admin');
         Route::delete('/{role}')->name('admin.roles.destroy')->uses('RolesController@destroy')->middleware('auth:web-admin');
     });
-// Images
-    Route::get('/img/{path}', 'ImagesController@show')->where('path', '.*');
-
-// Organizations
-//    Route::group(['prefix' => 'organizations'], function () {
-//        Route::get('/')->name('admin.organizations')->uses('OrganizationsController@index')->middleware('remember', 'auth:web-admin');
-//        Route::get('/create')->name('admin.organizations.create')->uses('OrganizationsController@create')->middleware('auth:web-admin');
-//        Route::post('/')->name('admin.organizations.store')->uses('OrganizationsController@store')->middleware('auth:web-admin');
-//        Route::get('/{organization}/edit')->name('admin.organizations.edit')->uses('OrganizationsController@edit')->middleware('auth:web-admin');
-//        Route::put('/{organization}')->name('admin.organizations.update')->uses('OrganizationsController@update')->middleware('auth:web-admin');
-//        Route::delete('/{organization}')->name('admin.organizations.destroy')->uses('OrganizationsController@destroy')->middleware('auth:web-admin');
-//        Route::put('/{organization}/restore')->name('admin.organizations.restore')->uses('OrganizationsController@restore')->middleware('auth:web-admin');
-//    });
+     //Localities
+        Route::group(['prefix' => 'localities'], function () {
+            Route::get('/')->name('admin.localities')->uses('LocalitiesController@index')->middleware('remember', 'auth:web-admin');
+            Route::post('/')->name('admin.localities.store')->uses('LocalitiesController@store')->middleware('auth:web-admin');
+            Route::put('/{locality}')->name('admin.localities.update')->uses('LocalitiesController@update')->middleware('auth:web-admin');
+            Route::delete('/{locality}')->name('admin.localities.destroy')->uses('LocalitiesController@destroy')->middleware('auth:web-admin');
+        });
 // Contacts
 //    Route::group(['prefix' => 'contacts'], function () {
 //        Route::get('/')->name('admin.contacts')->uses('ContactsController@index')->middleware('remember', 'auth:web-admin');

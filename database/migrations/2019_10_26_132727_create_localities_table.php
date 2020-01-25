@@ -15,10 +15,10 @@ class CreateLocalitiesTable extends Migration
     {
         Schema::create('localities', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('code',10);
+            $table->string('code',10)->nullable();
             $table->string('name',128);
-            $table->string('parent_code',10);
-            $table->boolean('center');
+            $table->string('parent_id',10);
+            $table->boolean('center')->default(false);
             $table->char('type',1);
             $table->timestamps();
         });

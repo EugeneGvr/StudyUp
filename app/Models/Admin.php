@@ -74,15 +74,11 @@ class Admin extends Model implements AuthenticatableContract, AuthorizableContra
         if(!$admin) {
             return 'No admin with such id';
         }
-        $avatarConfig = config('filesystems')['avatars'];
 
-        $photo_path = !empty($admin->photo_path) ?
-            sprintf(
-                '%s/%s',
-                $this->getFilePath($admin->photo_path,  $avatarConfig['admins']['path']),
-                $admin->photo_path
-            ) :
-            null;
+        $photo_path = $this->getFilePublicUrl(
+            $admin->photo_path,
+            config('filesystems')['avatars']['admins']['path']
+        );
 
         return [
             'id'            => $admin->id,
@@ -146,5 +142,45 @@ class Admin extends Model implements AuthenticatableContract, AuthorizableContra
             return [
                 'status' => 1
             ];
+    }
+
+    public function updateAdmin($id, $params)
+    {
+        try {
+            $admin = $this->find($id);
+
+            if (!$admin) {
+                throw new \Exception("Admin not found");
+            }
+            $avatarConfig = config('filesystems')['avatars'];
+
+            DB::beginTransaction();
+            $admin->first_name  = $params['first_name'];
+            $admin->last_name   = $params['last_name'];
+            $admin->email       = $params['email'];
+            $admin->phone       = $params['phone'];
+            $admin->role_id     = $params['role'];
+
+            if (!empty($params['photo'])) {
+                if (!empty($admin->photo_path)) {
+                    $this->deleteFile($admin->photo_path);
+                }
+                $admin->photo_path = $this->uploadFile($params['photo'], $id, $avatarConfig['admins']['path']);
+            }
+            $admin->save();
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            return [
+                'status' => 0,
+                'message' =>'Something went wrong during updating an administrator. Message: ['.$e->getMessage().']',
+            ];
+        }
+
+        return [
+            'status' => 1
+        ];
     }
 }
