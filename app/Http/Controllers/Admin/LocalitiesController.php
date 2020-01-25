@@ -25,7 +25,7 @@ class LocalitiesController extends Controller
             'filters' => Request::all('search', 'role', 'trashed'),
             'localities' => $localitiesData['localities'],
             'breadcrumb' => $localitiesData['breadcrumb'],
-            'currentLocality' => $currentLocality,
+            'current' => $currentLocality,
         ]);
     }
 
