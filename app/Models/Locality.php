@@ -20,8 +20,8 @@ class Locality extends Model
             ->transform(function ($locality) {
                 return [
                     'id' => $locality->id,
-                    'code' => $locality->code,
                     'name' => $locality->name,
+                    'type' => $locality->type,
                 ];
             })
             ->toArray();
@@ -132,9 +132,9 @@ class Locality extends Model
     {
         $breadcrumb = [];
         $root = [
-            'name'         => 'Украина',
-            'parent_id'     => '0',
-            'current'       => $parentId == 0 ? true : false,
+            'id'        => '0',
+            'name'      => 'Украина',
+            'current'   => $parentId == 0 ? true : false,
         ];
 
         $current = true;
