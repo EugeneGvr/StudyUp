@@ -16,79 +16,53 @@ class LocalitiesController extends Controller
     public function index()
     {
         $params = Request::only('search', 'sort', 'parent_id');
-
-        $localitiesData = Locality::getLocalities($params, true);
-        $currentLocality = Locality::getLocality($params['parent_id'] || 0);
-        $formattedCurrentLocality = [
-            'id' => $currentLocality['id'],
-            'name' => $currentLocality['name'],
-        ];
+        $localityObject = new Locality();
+        $localitiesData = $localityObject->getLocalities($params, true);
+        $currentLocality = $localityObject->getLocality($params['parent_id'] ?? 0);
 
         return $this->render('Localities/Index', [
+            'types' => config('app')['localities']['types'],
             'filters' => Request::all('search', 'role', 'trashed'),
             'localities' => $localitiesData['localities'],
             'breadcrumb' => $localitiesData['breadcrumb'],
-            'currentLocality' => $formattedCurrentLocality,
-        ]);
-    }
-
-    public function create()
-    {
-        $allPermissions = config('permissions');
-
-        return $this->render('Roles/Create', [
-            'allPermissions' => $allPermissions
+            'current' => $currentLocality,
         ]);
     }
 
     public function store()
     {
         $params = Request::validate([
-            'name' => ['required', 'max:50', Rule::unique('roles')],
-            'description' => ['required', 'max:255'],
-            'permissions' => ['required'],
+            'name' => ['required', 'max:50'],
+            'parent_id' => ['required', 'integer', 'min:0'],
         ]);
 
-        $role = new Role;
-        $role->addRole($params);
+        $role = new Locality();
+        $role->addLocality($params);
 
-        return Redirect::route('admin.roles')->with('success', 'Role created.');
-    }
-
-    public function show($id)
-    {
-        $allPermissions = config('permissions');
-        $role = Role::getRole($id);
-
-        return $this->render('Roles/Edit', [
-            'allPermissions' => $allPermissions,
-            'role' => $role
-        ]);
+        return Redirect::route('admin.localities')->with('success', 'Locality created.');
     }
 
     public function update($id)
     {
         $params = Request::validate([
             'name' => ['required', 'max:50'],
-            'description' => ['required', 'max:255'],
-            'permissions' => ['required'],
         ]);
 
-        $role = new Role();
-        $role->updateRole($id, $params);
+        $locality = new Locality();
+        $locality->updateLocality($id, $params);
 
-        return Redirect::route('admin.roles')->with('success', 'Role updated.');
+        return Redirect::route('admin.localities')->with('success', 'Locality updated.');
     }
 
     public function destroy($id)
     {
         try {
-            $role = new Role();
-            $role->deleteRole($id);
+            $role = new Locality();
+            $role->deleteLocality($id);
         } catch (\Exception $e) {
             return Redirect::back()->with('error', $e->getMessage());
         }
 
-        return Redirect::route('admin.roles')->with('success', 'Role deleted.');
+        return Redirect::route('admin.localities')->with('success', 'Locality deleted.');
     }
 }

@@ -15,6 +15,18 @@ return [
     'faker_locale' => 'en_US',
     //localization
 
+    //localities types
+    'localities' => [
+        'types' => [
+            'М' => 'City',
+            'О' => 'State',
+            'Р' => 'Region',
+            'С' => 'Village',
+            'Т' => 'County-Village',
+        ],
+    ],
+    //localities types
+
     'characters' => 'abcdefghijklmnopqrstuvwxyz',
     'numbers'   => '0123456789',
 

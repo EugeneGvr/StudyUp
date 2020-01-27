@@ -72,6 +72,15 @@
                 </div>
             </inertia-link>
         </div>
+        <div class="mb-4">
+            <inertia-link class="flex items-center group py-3" :href="route('admin.localities')">
+                <icon name="book" class="w-4 h-4 mr-2"
+                      :class="isUrl('') ? 'fill-white' : 'fill-indigo-light group-hover:fill-white'"/>
+                <div :class="isUrl('') ? 'text-white' : 'text-indigo-lighter group-hover:text-white'">
+                    {{$t('Localities')}}
+                </div>
+            </inertia-link>
+        </div>
         <!--    <div class="mb-4">-->
         <!--      <inertia-link class="flex items-center group py-3" :href="route('admin.organizations')">-->
         <!--        <icon name="office" class="w-4 h-4 mr-2" :class="isUrl('admin.organizations') ? 'fill-white' : 'fill-indigo-light group-hover:fill-white'" />-->
