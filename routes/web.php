@@ -102,18 +102,6 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
             Route::put('/{locality}')->name('admin.localities.update')->uses('LocalitiesController@update')->middleware('auth:web-admin');
             Route::delete('/{locality}')->name('admin.localities.destroy')->uses('LocalitiesController@destroy')->middleware('auth:web-admin');
         });
-// Contacts
-//    Route::group(['prefix' => 'contacts'], function () {
-//        Route::get('/')->name('admin.contacts')->uses('ContactsController@index')->middleware('remember', 'auth:web-admin');
-//        Route::get('/create')->name('admin.contacts.create')->uses('ContactsController@create')->middleware('auth:web-admin');
-//        Route::post('/')->name('admin.contacts.store')->uses('ContactsController@store')->middleware('auth:web-admin');
-//        Route::get('/{contact}/edit')->name('admin.contacts.edit')->uses('ContactsController@edit')->middleware('auth:web-admin');
-//        Route::put('/{contact}')->name('admin.contacts.update')->uses('ContactsController@update')->middleware('auth:web-admin');
-//        Route::delete('/{contact}')->name('admin.contacts.destroy')->uses('ContactsController@destroy')->middleware('auth:web-admin');
-//        Route::put('/{contact}/restore')->name('admin.contacts.restore')->uses('ContactsController@restore')->middleware('auth:web-admin');
-//    });
-// Reports
-//    Route::get('reports')->name('admin.reports')->uses('ReportsController')->middleware('auth:web-admin');
 
 // 500 error
 //    Route::get('500', function () {

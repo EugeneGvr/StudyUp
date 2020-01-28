@@ -81,24 +81,6 @@
                 </div>
             </inertia-link>
         </div>
-        <!--    <div class="mb-4">-->
-        <!--      <inertia-link class="flex items-center group py-3" :href="route('admin.organizations')">-->
-        <!--        <icon name="office" class="w-4 h-4 mr-2" :class="isUrl('admin.organizations') ? 'fill-white' : 'fill-indigo-light group-hover:fill-white'" />-->
-        <!--        <div :class="isUrl('admin.organizations') ? 'text-white' : 'text-indigo-lighter group-hover:text-white'">Organizations</div>-->
-        <!--      </inertia-link>-->
-        <!--    </div>-->
-        <!--    <div class="mb-4">-->
-        <!--      <inertia-link class="flex items-center group py-3" :href="route('admin.contacts')">-->
-        <!--        <icon name="users" class="w-4 h-4 mr-2" :class="isUrl('admin.contacts') ? 'fill-white' : 'fill-indigo-light group-hover:fill-white'" />-->
-        <!--        <div :class="isUrl('admin.contacts') ? 'text-white' : 'text-indigo-lighter group-hover:text-white'">Contacts</div>-->
-        <!--      </inertia-link>-->
-        <!--    </div>-->
-        <!--    <div class="mb-4">-->
-        <!--      <inertia-link class="flex items-center group py-3" :href="route('admin.reports')">-->
-        <!--        <icon name="printer" class="w-4 h-4 mr-2" :class="isUrl('admin.reports') ? 'fill-white' : 'fill-indigo-light group-hover:fill-white'" />-->
-        <!--        <div :class="isUrl('admin.reports') ? 'text-white' : 'text-indigo-lighter group-hover:text-white'">Reports</div>-->
-        <!--      </inertia-link>-->
-        <!--    </div>-->
     </div>
 </template>
 

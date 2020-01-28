@@ -11,7 +11,7 @@
                 </select>
             </search-filter>
             <div class="manage-buttons flex">
-                <div class="btn-blue mx-2" @click="addLocalityModal=true">
+                <div class="btn-blue mx-2" @click="addModal=true">
                     <span>{{$t('Add Subject')}}</span>
                 </div>
             </div>
@@ -51,23 +51,33 @@
                 >
                     <td class="border-t">
                         <div class="px-6 py-4 flex items-center focus:text-indigo">
-                            {{ locality.name }}
+                            {{ subject.name }}
                         </div>
                     </td>
                     <td class="border-t w-px">
-                        <div v-if="locality.has_children" class="px-4 flex items-center" tabindex="-1">
-                            <icon name="cheveron-right" class="block w-6 h-6 fill-grey"/>
+                        <div class="flex">
+                            <div class="pl-4 pr-2" tabindex="-1" @click="showEditModal(subject)">
+                                <md-icon>edit</md-icon>
+                                <md-tooltip md-direction="top">{{$t('Edit')}}</md-tooltip>
+                            </div>
+                            <div class="pl-2 pr-2" tabindex="-1" @click="showDeleteModal(subject)">
+                                <md-icon>delete_outline</md-icon>
+                                <md-tooltip md-direction="top">{{$t('Delete')}}</md-tooltip>
+                            </div>
+                            <div class="px-4" tabindex="-1" @click="getThemes(subject)">
+                                <md-icon>keyboard_arrow_right</md-icon>
+                            </div>
                         </div>
                     </td>
                 </tr>
-                <tr v-if="localities.data.length === 0">
-                    <td class="border-t px-6 py-4" colspan="4">No localities found.</td>
+                <tr v-if="subject.data.length === 0">
+                    <td class="border-t px-6 py-4" colspan="4">No subjects found.</td>
                 </tr>
             </table>
         </div>
-        <pagination :links="localities.links"/>
+        <pagination :links="subjects.links"/>
         <div class="modals">
-            <md-dialog :md-active.sync="addLocalityModal">
+            <md-dialog :md-active.sync="addModal">
                 <md-dialog-title>
                     <span>Hey</span>
                     <span class="text-blue">Hey</span>
@@ -75,7 +85,7 @@
                 </md-dialog-title>
                 <md-dialog-content>
                     <span>This action will drop role and all admins who have this role will get default list of permissions</span>
-                    <text-input v-model="currentLocality.name" :errors="$page.errors.name" class="pb-8 w-full" :label="$t('Name')"/>
+                    <text-input v-model="newSubject.name" :errors="$page.errors.name" class="pb-8 w-full" :label="$t('Name')"/>
                 </md-dialog-content>
                 <md-dialog-actions>
                     <md-button class="md-primary p-2 m-2" @click="addModal=false">Close</md-button>
@@ -91,7 +101,7 @@
                 </md-dialog-title>
                 <md-dialog-content>
                     <span>This action will drop role and all admins who have this role will get default list of permissions</span>
-                    <text-input v-model="newLocality.name" :errors="$page.errors.name" class="pb-8 w-full" :label="$t('Name')"/>
+                    <text-input v-model="currentSubject.name" :errors="$page.errors.name" class="pb-8 w-full" :label="$t('Name')"/>
                 </md-dialog-content>
                 <md-dialog-actions>
                     <md-button class="md-primary p-2 m-2" @click="editModal=false">Close</md-button>
@@ -149,6 +159,10 @@ export default {
             newSubject: {
                 name: '',
             },
+            focusedSubject: {
+                id: null,
+                name: null,
+            },
         }
     },
     watch: {
@@ -167,16 +181,27 @@ export default {
         reset() {
             this.form = _.mapValues(this.form, () => null)
         },
+        showEditModal(subject) {
+            this.editModal = true;
+            this.focusedSubject = subject;
+        },
+        showAddModal() {
+            this.addModal = true;
+        },
+        showDeleteModal(subject) {
+            this.deleteModal = true;
+            this.focusedSubject = subject;
+        },
         add() {
             this.$inertia.put(
-                this.route('admin.subjects.create', this.currentLocality.id),
-                this.newLocality
+                this.route('admin.subjects.create'),
+                this.newSubject
             ).then(this.addModal = false)
         },
         edit() {
             this.$inertia.put(
-                this.route('admin.subjects.update', this.currentLocality.id),
-                this.currentLocality
+                this.route('admin.subjects.update', this.focusedSubject.id),
+                this.focusedSubject
             ).then(this.editModal = false)
         },
         destroy(id) {
