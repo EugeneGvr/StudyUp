@@ -4,155 +4,114 @@ namespace App;
 
 use App\RolePermissionConnection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class SubTheme extends Model
 {
     protected $fillable = ['name', 'description',];
 
-    public static function getThemes()
+    public function getSubThemes()
     {
-        $roles = self::orderBy('created_at', 'desc')->paginate()->only('id', 'name')->toArray();
+        $subThemes = $this->orderBy('created_at', 'desc')
+            ->paginate()
+            ->only('id', 'name')
+            ->toArray();
 
-        foreach ($roles['data'] as $key => &$role) {
-            $permissions = [];
 
-            foreach (config('permissions') as $module => $actions) {
-                $roleActions = RolePermissionConnection::where('role_id', $role['id'])->where('module', $module)->get(['module', 'action']);
-                $permission = [
-                    'module'    => ucfirst($module),
-                    'actions'   => $roleActions->toArray(),
-                    'lvl'       => $roleActions->count() . '/' . count($actions)
+        return $subThemes;
+    }
+
+    public function getSubTheme($id)
+    {
+        $subTheme = $this->find($id);
+
+        if(!$subTheme) {
+            return [
+                'status'    => 0,
+                'message'   => 'Subtheme not found',
+            ];
+        }
+
+        return [
+            'status'    => 1,
+            'id'        => $subTheme->id,
+            'name'      => $subTheme->name,
+        ];
+    }
+
+    public function addSubTheme($params)
+    {
+        try {
+            DB::beginTransaction();
+
+            $subTheme = $this;
+            $subTheme->name = $params['name'];
+            $subTheme->save();
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            return [
+                'status' => 0,
+                'message' =>'Something went wrong during creating subtheme',
+            ];
+        }
+
+        return [
+            'status' => 1
+        ];
+    }
+
+    public function updateSubTheme($id, $params)
+    {
+        try {
+            $subTheme = $this->find($id);
+            if (!$subTheme) {
+                throw new \Exception("Subtheme not found");
+            }
+
+            DB::beginTransaction();
+            $subTheme->name = $params['name'];
+            $subTheme->save();
+            DB::commit();
+
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            return [
+                'status' => 0,
+                'message' => 'Something went wrong during updating subtheme. Message: ['.$e->getMessage().']',
+            ];
+        }
+
+        return [
+            'status' => 1
+        ];
+    }
+
+    public function deleteSubTheme($id)
+    {
+        try {
+            $subTheme = $this->find($id);
+
+            if (!$subTheme) {
+                return [
+                    'status' => 0,
+                    'message' => 'Subtheme not found',
                 ];
-                array_push($permissions, $permission);
             }
-            $role['permissions'] = $permissions;
-        }
+            $subTheme->delete();
 
-        return $roles;
-    }
-
-    public static function getTheme($id)
-    {
-        $theme = self::find($id);
-
-        if(!$theme) {
-            return 'Theme not found';
-        }
-
-        $permissions = [];
-
-        foreach (RolePermissionConnection::where('role_id', $id)->get() as $permission) {
-            $permissions[] = $permission->module . '.' . $permission->action;
+        } catch (\Exception $e) {
+            return [
+                'status' => 0,
+                'message' => 'Something went wrong during deleting subtheme: ['.$e->getMessage().']',
+            ];
         }
 
         return [
-            'id'            => $theme->id,
-            'name'          => $theme->name,
-            'subject'       => $subject
-
+            'status' => 1
         ];
-    }
-
-    public function addRole($params)
-    {
-
-        try {
-            $role = $this;
-
-            $role->name = $params['name'];
-            $role->description = $params['description'];
-            $role->save();
-        } catch (\Exception $e) {
-            return 'Something went wrong during role creating';
-        }
-
-        $permissions= [];
-
-        try {
-            foreach ($params['permissions'] as $permission) {
-                if($permission != 'all.all' && count(explode('.', $permission)) > 1) {
-                    list($module, $action) = explode('.', $permission);
-
-                    $rolePermissionConnection = new RolePermissionConnection();
-                    $rolePermissionConnection->role_id = $role->id;
-                    $rolePermissionConnection->module = $module;
-                    $rolePermissionConnection->action = $action;
-                    $rolePermissionConnection->save();
-                    $permissions[$permission] = $rolePermissionConnection;
-                }
-            }
-        } catch (\Exception $e) {
-            $role->delete();
-            foreach ($permissions as $permission) {
-                $permission->delete();
-            }
-            return 'Something went wrong during creating connection with role and permission';
-        }
-
-        return [
-          'status' => 1
-        ];
-    }
-
-    public function updateRole($id, $params) {
-        try {
-            $role = $this->find($id);
-
-            if (!$role) {
-                throw new \Exception("Role not found");
-            }
-
-            $role->name = $params['name'];
-            $role->description = $params['description'];
-            $role->save();
-
-            $permissionKeys = array_flip($params['permissions']);
-            $rolePermissions = RolePermissionConnection::where('role_id', $id)->get();
-
-            foreach ($rolePermissions as $rolePermission) {
-                $rolePermissionKey = $rolePermission['module'].'.'.$rolePermission['action'];
-
-                if (in_array($rolePermissionKey, $params['permissions'])) {
-                    unset($permissionKeys[$rolePermissionKey]);
-                } else {
-                    RolePermissionConnection::where('role_id', $id)
-                        ->where('module',  $rolePermission['module'])
-                        ->where('action',  $rolePermission['action'])
-                        ->delete();
-                }
-            }
-
-            foreach (array_flip($permissionKeys) as $newPermission) {
-                list($module, $action) = explode('.', $newPermission);
-                $rolePermissionConnection = new RolePermissionConnection();
-                $rolePermissionConnection->role_id = $id;
-                $rolePermissionConnection->module = $module;
-                $rolePermissionConnection->action = $action;
-                $rolePermissionConnection->save();
-            }
-
-        } catch (\Exception $e) {
-            return $e->getMessage();
-        }
-    }
-
-    public function deleteRole($id)
-    {
-
-            $role = $this->find($id);
-
-            if (!$role) {
-                throw new \Exception("Role not found");
-            }
-            $rolePermissions = RolePermissionConnection::where('role_id', $id);
-
-            try {
-                $role->delete();
-                $rolePermissions->delete();
-            } catch (\Exception $e) {
-                throw new \Exception("Something went wrong during deleting role");
-            }
-
-
     }
 }
