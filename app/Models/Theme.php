@@ -9,7 +9,7 @@ class Theme extends Model
 {
     protected $fillable = ['name', 'description',];
 
-    public static function getThemes()
+    public function getThemes($params = [])
     {
         $themes = self::orderBy('created_at', 'desc')
             ->paginate()

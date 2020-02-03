@@ -14,9 +14,11 @@ class ThemesController extends Controller
 {
     public function index()
     {
-        $themes = Theme::getThemes();
+        $params = Request::only('search', 'sort', 'subject_id');
+        $themeObject = new Theme();
+        $themes = $themeObject->getThemes($params);
 
-        return Inertia::render('Themes/Index', [
+        return Inertia::render('Admin/Themes/Index', [
             'filters' => Request::all('search', 'role', 'trashed'),
             'themes' => $themes,
             ]);
@@ -25,7 +27,7 @@ class ThemesController extends Controller
     public function create()
     {
         $subjects = [];
-        return Inertia::render('Themes/Create', [
+        return Inertia::render('Admin/Themes/Create', [
             'subjects' => $subjects
         ]);
     }
@@ -46,7 +48,7 @@ class ThemesController extends Controller
 
     public function edit($theme)
     {
-        return Inertia::render('Theme/Edit', [
+        return Inertia::render('Admin/Theme/Edit', [
             'user' => [
                 'id' => $theme->id,
                 'name' => $theme->name,
