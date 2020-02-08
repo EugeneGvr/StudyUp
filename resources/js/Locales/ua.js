@@ -14,6 +14,7 @@ export function localeUa() {
         "Users": "Користувачі",
         "Administrators": "Адміністратори",
         "Roles": "Ролі",
+        "Localities": "Адм. ділення",
         //SideBar
 
         "Name": "Назва",

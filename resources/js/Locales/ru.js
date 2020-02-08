@@ -14,6 +14,7 @@ export function localeRu() {
         "Users": "Пользователи",
         "Administrators": "Администраторы",
         "Roles": "Роли",
+        "Localities": "Адм. деление",
         //SideBar
 
         "Name": "Название",

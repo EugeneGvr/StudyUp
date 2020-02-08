@@ -14,6 +14,7 @@ export function localeEn() {
         "Users": "Users",
         "Administrators": "Administrators",
         "Roles": "Roles",
+        "Localities": "Localities",
         //SideBar
 
         "Name": "Name",

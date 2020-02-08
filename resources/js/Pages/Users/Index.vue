@@ -28,7 +28,7 @@
           <th class="px-6 pt-6 pb-4">Email</th>
           <th class="px-6 pt-6 pb-4" colspan="2">Role</th>
         </tr>
-        <tr v-for="user in users" :key="user.id" class="hover:bg-grey-lightest focus-within:bg-grey-lightest">
+        <tr v-for="user in users.data" :key="user.id" class="hover:bg-grey-lightest focus-within:bg-grey-lightest">
           <td class="border-t">
             <inertia-link class="px-6 py-4 flex items-center focus:text-indigo" :href="route('admin.users.edit', user.id)">
               <img v-if="user.photo" class="block w-5 h-5 rounded-full mr-2 -my-2" :src="user.photo">
@@ -52,7 +52,7 @@
             </inertia-link>
           </td>
         </tr>
-        <tr v-if="users.length === 0">
+        <tr v-if="users.data.length === 0">
           <td class="border-t px-6 py-4" colspan="4">No users found.</td>
         </tr>
       </table>
@@ -74,7 +74,7 @@ export default {
     SearchFilter,
   },
   props: {
-    users: Array,
+    users: Object,
     filters: Object,
   },
   data() {
