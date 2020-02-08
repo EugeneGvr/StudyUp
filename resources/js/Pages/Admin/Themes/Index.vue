@@ -47,7 +47,7 @@
                                 <md-icon>delete_outline</md-icon>
                                 <md-tooltip md-direction="top">{{$t('Delete')}}</md-tooltip>
                             </div>
-                            <div class="px-4" tabindex="-1" @click="treeStep(theme)">
+                            <div class="px-4" tabindex="-1" @click="getSubthemes(theme)">
                                 <md-icon>keyboard_arrow_right</md-icon>
                             </div>
                         </div>
@@ -79,7 +79,7 @@
                 </md-dialog-title>
                 <md-dialog-content>
                     <text-input
-                        v-model="this.focusedTheme.name"
+                        v-model="focusedTheme.name"
                         :errors="$page.errors.name"
                         class="pb-8 w-full"
                         :label="$t('Name')"
@@ -148,6 +148,7 @@
                 },
                 newTheme: {
                     name: '',
+                    subject_id: '',
                 },
                 focusedTheme: {
                     id: null,
@@ -185,11 +186,11 @@
             add() {
                 this.$inertia.post(
                     this.route('admin.themes.store'),
-                    this.newLocality
+                    this.newTheme
                 ).then(this.addyModal = false)
             },
             edit() {
-                this.$inertia.post(
+                this.$inertia.put(
                     this.route('admin.themes.update', this.focusedTheme.id),
                     this.focusedTheme
                 ).then(this.editModal = false)

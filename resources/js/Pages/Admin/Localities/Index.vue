@@ -86,7 +86,7 @@
                 <md-dialog-content>
                     <text-input v-model="newLocality.name" :errors="$page.errors.name" class="pb-8 w-full" :label="$t('Name')"/>
                     <select-input
-                        v-model="this.newLocality.type"
+                        v-model="newLocality.type"
                         :errors="$page.errors.type"
                         class="pb-3 w-full" :label="$t('Type')"
                     >

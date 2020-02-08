@@ -25,7 +25,6 @@ class SubjectsController extends Controller
 
     public function store()
     {
-        $v=5;
         $params = Request::validate([
             'title' => ['required', 'max:128'],
             'subThemeId' => ['required', 'max:50'],
