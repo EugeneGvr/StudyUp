@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Subject;
+use App\Theme;
 use App\Http\Controllers\Controller;
 use Inertia\Inertia;
 use Illuminate\Validation\Rule;
@@ -10,35 +10,54 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Redirect;
 
-class SubjectsController extends Controller
+class QuestionsController extends Controller
 {
     public function index()
     {
-        $subjectObject = new Subject();
-        $subjects = $subjectObject->getSubjects();
+        $params = Request::only('search', 'sort', 'subject_id');
+        $themeObject = new Theme();
+        $themes = $themeObject->getThemes($params);
 
-        return Inertia::render('Admin/Subjects/Index', [
+        return Inertia::render('Admin/Themes/Index', [
             'filters' => Request::all('search', 'role', 'trashed'),
-            'subjects' => $subjects,
+            'themes' => $themes,
             ]);
+    }
+
+    public function create()
+    {
+        $subjects = [];
+        return Inertia::render('Admin/Themes/Create', [
+            'subjects' => $subjects
+        ]);
     }
 
     public function store()
     {
-        $v=5;
         $params = Request::validate([
             'title' => ['required', 'max:128'],
             'subThemeId' => ['required', 'max:50'],
             'subjectId' => ['required'],
         ]);
 
-        $subjectObject = new Subject();
-        $subjectObject->addSubject($params);
+        $theme = new Theme;
+//        $theme->addTheme($params);
 
-        return Redirect::route('admin.subjects')->with('success', 'Subject created');
+        return Redirect::route('admin.themes')->with('success', 'Theme created');
     }
 
-    public function update($subject)
+    public function edit($theme)
+    {
+        return Inertia::render('Admin/Theme/Edit', [
+            'user' => [
+                'id' => $theme->id,
+                'name' => $theme->name,
+                'subject_id' => $theme->subject_id,
+            ],
+        ]);
+    }
+
+    public function update($theme)
     {
 //        Request::validate([
 //            'first_name' => ['required', 'max:50'],
@@ -59,13 +78,20 @@ class SubjectsController extends Controller
 //            $user->update(['password' => Request::get('password')]);
 //        }
 
-        return Redirect::route('admin.subjects', $subject)->with('success', 'Subject updated.');
+        return Redirect::route('admin.themes', $theme)->with('success', 'User updated.');
     }
 
-    public function destroy($subject)
+    public function destroy($theme)
     {
 //        $user->delete();
 
-        return Redirect::route('admin.subjects.edit', $subject)->with('success', 'Subject deleted.');
+        return Redirect::route('admin.themes.edit', $theme)->with('success', 'Theme deleted.');
+    }
+
+    public function restore($theme)
+    {
+//        $user->restore();
+
+        return Redirect::route('admin.themes.edit', $theme)->with('success', 'Theme restored.');
     }
 }
