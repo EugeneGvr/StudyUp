@@ -19,7 +19,7 @@ class RolesController extends Controller
 
         $roles = Role::getRoles($params);
 
-        return $this->render('Roles/Index', [
+        return $this->render('Admin/Roles/Index', [
             'filters' => Request::all('search', 'role', 'trashed'),
             'roles' => $roles
         ]);
@@ -29,7 +29,7 @@ class RolesController extends Controller
     {
         $allPermissions = config('permissions');
 
-        return $this->render('Roles/Create', [
+        return $this->render('Admin/Roles/Create', [
             'allPermissions' => $allPermissions
         ]);
     }
@@ -53,7 +53,7 @@ class RolesController extends Controller
         $allPermissions = config('permissions');
         $role = Role::getRole($id);
 
-        return $this->render('Roles/Edit', [
+        return $this->render('Admin/Roles/Edit', [
             'allPermissions' => $allPermissions,
             'role' => $role
         ]);

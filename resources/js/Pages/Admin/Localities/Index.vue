@@ -56,24 +56,21 @@
                             {{ locality.name }}
                         </div>
                     </td>
-                    <td class="border-t w-px flex">
-                        <div class="btn-primary mx-2"  @click="showEditModal(locality)">
-                            <icon name="edit" class="block w-6 h-6 fill-grey" />
+                    <td class="border-t w-px">
+                        <div class="flex">
+                        <div class="pl-4 pr-2" tabindex="-1" @click="showEditModal(locality)">
+                            <md-icon>edit</md-icon>
                             <md-tooltip md-direction="top">{{$t('Edit')}}</md-tooltip>
                         </div>
-                        <div class="btn-primary mx-2" @click="showDeleteModal(locality)">
-                            <icon name="delete_outline" class="block w-6 h-6 fill-grey" />
+                        <div class="pl-2 pr-2" tabindex="-1" @click="showDeleteModal(locality)">
+                            <md-icon>delete_outline</md-icon>
                             <md-tooltip md-direction="top">{{$t('Delete')}}</md-tooltip>
                         </div>
-                        <div v-if="locality.has_children" class="px-4 flex items-center" tabindex="-1" @click="treeStep(locality)">
-                            <icon name="cheveron-right" class="block w-6 h-6 fill-grey"/>
+                        <div v-if="locality.has_children" class="px-4" tabindex="-1" @click="treeStep(locality)">
+                            <md-icon>keyboard_arrow_right</md-icon>
+                        </div>
                         </div>
                     </td>
-<!--                    <td class="border-t w-px">-->
-<!--                        <div v-if="locality.has_children" class="px-4 flex items-center" tabindex="-1" @click="treeStep(locality)">-->
-<!--                            <icon name="cheveron-right" class="block w-6 h-6 fill-grey"/>-->
-<!--                        </div>-->
-<!--                    </td>-->
                 </tr>
                 <tr v-if="localities.data.length === 0">
                     <td class="border-t px-6 py-4" colspan="4">No localities found.</td>

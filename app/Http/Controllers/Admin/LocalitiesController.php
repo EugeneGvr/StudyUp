@@ -19,7 +19,12 @@ class LocalitiesController extends Controller
         $localityObject = new Locality();
         $localitiesData = $localityObject->getLocalities($params, true);
         $currentLocality = $localityObject->getLocality($params['parent_id'] ?? 0);
+<<<<<<< HEAD
         return $this->render('Localities/Index', [
+=======
+
+        return $this->render('Admin/Localities/Index', [
+>>>>>>> c0d894e60ab4d029573b0efc6eeb52f93ab6c6b1
             'types' => config('app')['localities']['types'],
             'filters' => Request::all('search', 'role', 'trashed'),
             'localities' => $localitiesData['localities'],

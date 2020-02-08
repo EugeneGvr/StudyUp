@@ -17,7 +17,7 @@ class AdminsController extends Controller
     {
         $admins = Admin::getAdmins();
 
-        return $this->render('Admins/Index', [
+        return $this->render('Admin/Admins/Index', [
             'filters' => Request::all('search', 'locality', 'first_name', 'last_name', 'email'),
             'admins' => $admins
         ]);
@@ -27,7 +27,7 @@ class AdminsController extends Controller
     {
         $roles = Role::getRoles();
 
-        return $this->render('Admins/Create', [
+        return $this->render('Admin/Admins/Create', [
             'roles' => $roles['data'],
         ]);
     }
@@ -58,7 +58,7 @@ class AdminsController extends Controller
         $roles = Role::getRoles();
         $adminObject = new Admin;
         $admin = $adminObject->getAdmin($id);
-        return $this->render('Admins/Edit', [
+        return $this->render('Admin/Admins/Edit', [
             'admin' => $admin,
             'roles' => $roles['data'],
         ]);
@@ -85,10 +85,31 @@ class AdminsController extends Controller
 
     public function destroy($id)
     {
-        $admin = new Admin();
-        $admin->delete($id);
+        $adminObject = new Admin();
+        $admin = $adminObject->getAdmin($id);
 
-        return Redirect::route('users.edit', $admin)->with('success', 'User deleted.');
+        if (empty($admin)) {
+            $result = [
+                'status' => 'error',
+                'message' => `The administrator is not found`
+            ];
+        } else {
+            if ($admin['id'] ==  0) {
+                $result = [
+                    'status' => 'error',
+                    'message' => `You can't delete yourself`
+                ];
+            } else {
+                $admin->delete($id);
+                $result = [
+                    'status' => 'success',
+                    'message' => `Admin deleted`
+                ];
+            }
+        }
+
+
+        return Redirect::route('users.edit', $admin)->with($result['status'], $result['message']);
     }
 
     public function restore($id)

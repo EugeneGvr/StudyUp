@@ -6,12 +6,20 @@
                     <inertia-link class="text-indigo-light hover:text-indigo-dark" :href="route('admin.admins')">
                         Administrators
                     </inertia-link>
-                    <span class="text-indigo-light font-medium">/</span> {{ form.first_name }} {{ form.last_name }}
+                    <span class="text-indigo-light font-medium">/</span> {{ form.first_name + ' ' + form.last_name }}
                 </h1>
-                <div class="p-3 border-t border-grey-lighter flex justify-end items-center">
-                    <loading-button :loading="sending" class="btn-indigo" type="submit">
-                        Update Administrator
-                    </loading-button>
+                <div class="manage-buttons flex">
+                    <div
+                        class="btn-red mr-2 border-t border-grey-lighter flex justify-end items-center"
+                        @click="deleteModal=true"
+                    >
+                        <span>{{$t('Delete')}}</span>
+                    </div>
+                    <div class="p-3 border-t border-grey-lighter flex justify-end items-center">
+                        <loading-button :loading="sending" class="btn-indigo" type="submit">
+                            {{$t('Update')}}
+                        </loading-button>
+                    </div>
                 </div>
             </div>
             <div class="flex flex-wrap">
@@ -48,6 +56,24 @@
                 </div>
             </div>
         </form>
+        <div class="modals">
+            <md-dialog :md-active.sync="deleteModal">
+                <md-dialog-title>
+                    <span>{{$t('Are you sure you want to delete an administrator')}}</span>
+                    <span class="text-blue">{{admin.first_name + ' ' + admin.last_name }}</span>
+                    <span>?</span>
+                </md-dialog-title>
+                <md-dialog-content>
+                    <span>{{$t('Be careful, if you will delete an administrator, you wont be able to restore it')}}</span>
+                </md-dialog-content>
+                <md-dialog-actions>
+                    <md-button class="md-primary p-2 m-2" @click="deleteModal=false">{{$t('Close')}}</md-button>
+                    <button class="btn-red m-2" tabindex="-1" type="button" @click="destroy">
+                        {{$t('Delete')}}
+                    </button>
+                </md-dialog-actions>
+            </md-dialog>
+        </div>
     </div>
 </template>
 
@@ -79,6 +105,10 @@ export default {
   remember: 'form',
   data() {
     return {
+        //[start] modals variables
+        deleteModal: false,
+        //[end] modals variables
+
       sending: false,
       form: {
           first_name: this.admin.first_name,
@@ -109,9 +139,7 @@ export default {
         ).then(() => this.sending = false)
     },
     destroy() {
-      if (confirm('Are you sure you want to delete this administrator?')) {
         this.$inertia.delete(this.route('admin.admins.destroy', this.admin.id))
-      }
     },
   },
 }

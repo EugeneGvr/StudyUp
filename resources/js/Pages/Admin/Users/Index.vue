@@ -57,6 +57,7 @@
         </tr>
       </table>
     </div>
+      <pagination :links="users.links" />
   </div>
 </template>
 

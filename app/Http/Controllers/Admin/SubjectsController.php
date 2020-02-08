@@ -14,9 +14,10 @@ class SubjectsController extends Controller
 {
     public function index()
     {
-        $subjects = Subject::getSubjects();
+        $subjectObject = new Subject();
+        $subjects = $subjectObject->getSubjects();
 
-        return Inertia::render('Subjects/Index', [
+        return Inertia::render('Admin/Subjects/Index', [
             'filters' => Request::all('search', 'role', 'trashed'),
             'subjects' => $subjects,
             ]);
@@ -26,7 +27,7 @@ class SubjectsController extends Controller
     {
         $subjects = Subject::getSubjects();
 
-        return Inertia::render('Subjects/Create', [
+        return Inertia::render('Admin/Subjects/Create', [
             'subjects' => $subjects
         ]);
     }
@@ -47,7 +48,7 @@ class SubjectsController extends Controller
 
     public function edit($subject)
     {
-        return Inertia::render('Subjects/Edit', [
+        return Inertia::render('Admin/Subjects/Edit', [
             'user' => [
                 'id' => $subject->id,
                 'name' => $subject->name,
@@ -90,6 +91,6 @@ class SubjectsController extends Controller
     {
 //        $user->restore();
 
-        return Redirect::route('admin.subjects.edit', $subkect)->with('success', 'Subject restored.');
+        return Redirect::route('admin.subjects.edit', $subject)->with('success', 'Subject restored.');
     }
 }
