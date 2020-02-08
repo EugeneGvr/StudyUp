@@ -36,8 +36,8 @@ class LocalitiesController extends Controller
             'parent_id' => ['required', 'integer', 'min:0'],
         ]);
 
-        $role = new Locality();
-        $role->addLocality($params);
+        $localitiesObject = new Locality();
+        $localitiesObject->addLocality($params);
 
         return Redirect::route('admin.localities')->with('success', 'Locality created.');
     }

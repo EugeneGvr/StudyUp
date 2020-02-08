@@ -236,7 +236,7 @@ export default {
             this.focusedLocality = locality;
         },
         addLocality() {
-            this.$inertia.put(
+            this.$inertia.post(
                 this.route('admin.localities.store'),
                 this.newLocality
             ).then(this.addLocalityModal = false)

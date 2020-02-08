@@ -15,6 +15,7 @@
                     <span>{{$t('Add Subject')}}</span>
                 </div>
             </div>
+
         </div>
         <div class="mb-6 font-bold text-md flex">
             <div
@@ -193,8 +194,9 @@ export default {
             this.focusedSubject = subject;
         },
         add() {
-            this.$inertia.put(
-                this.route('admin.subjects.create'),
+            console.log('ok');
+            this.$inertia.post(
+                this.route('admin.subjects.store'),
                 this.newSubject
             ).then(this.addModal = false)
         },
