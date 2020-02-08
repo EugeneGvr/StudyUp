@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Subject;
 use App\Theme;
 use App\Http\Controllers\Controller;
 use Inertia\Inertia;
@@ -15,29 +16,31 @@ class ThemesController extends Controller
     public function index()
     {
         $params = Request::only('search', 'sort', 'subject_id');
+
+        $subjectObject = new Subject();
+        $currentSubject = $subjectObject->getSubject($params['subject_id']);
+        $subjects = $subjectObject->getSubjects();
+
         $themeObject = new Theme();
         $themes = $themeObject->getThemes($params);
 
-        return Inertia::render('Admin/Themes/Index', [
+        $result = [
             'filters' => Request::all('search', 'role', 'trashed'),
             'themes' => $themes,
-            ]);
-    }
+            'subjects' => $subjects,
+        ];
 
-    public function create()
-    {
-        $subjects = [];
-        return Inertia::render('Admin/Themes/Create', [
-            'subjects' => $subjects
-        ]);
+        if (!empty($subject)) {
+            $result['current_subject'] = $currentSubject;
+        }
+
+        return Inertia::render('Admin/Themes/Index', $result);
     }
 
     public function store()
     {
         $params = Request::validate([
-            'title' => ['required', 'max:128'],
-            'subThemeId' => ['required', 'max:50'],
-            'subjectId' => ['required'],
+            'name' => ['required', 'max:128'],
         ]);
 
         $theme = new Theme;

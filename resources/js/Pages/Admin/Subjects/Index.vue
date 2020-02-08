@@ -144,8 +144,8 @@
                     name: '',
                 },
                 focusedSubject: {
-                    id: null,
-                    name: null,
+                    id: 0,
+                    name: '',
                 },
             }
         },
@@ -180,7 +180,7 @@
                 this.$inertia.post(
                     this.route('admin.subjects.store'),
                     this.newSubject
-                ).then(this.addyModal = false)
+                ).then(this.addModal = false)
             },
             edit() {
                 this.$inertia.put(

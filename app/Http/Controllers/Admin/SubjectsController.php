@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Locality;
 use App\Subject;
 use App\Http\Controllers\Controller;
 use Inertia\Inertia;
@@ -26,9 +27,7 @@ class SubjectsController extends Controller
     public function store()
     {
         $params = Request::validate([
-            'title' => ['required', 'max:128'],
-            'subThemeId' => ['required', 'max:50'],
-            'subjectId' => ['required'],
+            'name' => ['required', 'max:128'],
         ]);
 
         $subjectObject = new Subject();
@@ -37,34 +36,27 @@ class SubjectsController extends Controller
         return Redirect::route('admin.subjects')->with('success', 'Subject created');
     }
 
-    public function update($subject)
+    public function update($id)
     {
-//        Request::validate([
-//            'first_name' => ['required', 'max:50'],
-//            'last_name' => ['required', 'max:50'],
-//            'email' => ['required', 'max:50', 'email', Rule::unique('users')->ignore($user->id)],
-//            'password' => ['nullable'],
-//            'owner' => ['required', 'boolean'],
-//            'photo' => ['nullable', 'image'],
-//        ]);
-//
-//        $user->update(Request::only('first_name', 'last_name', 'email', 'owner'));
-//
-//        if (Request::file('photo')) {
-//            $user->update(['photo_path' => Request::file('photo')->store('users')]);
-//        }
-//
-//        if (Request::get('password')) {
-//            $user->update(['password' => Request::get('password')]);
-//        }
+        $params = Request::validate([
+            'name' => ['required', 'max:128'],
+        ]);
 
-        return Redirect::route('admin.subjects', $subject)->with('success', 'Subject updated.');
+        $subjectObject = new Subject();
+        $subjectObject->updateSubject($id, $params);
+
+        return Redirect::route('admin.subjects')->with('success', 'Subject updated.');
     }
 
-    public function destroy($subject)
+    public function destroy($id)
     {
-//        $user->delete();
+        try {
+            $subjectObject = new Subject();
+            $subjectObject->deleteSubject($id);
+        } catch (\Exception $e) {
+            return Redirect::back()->with('error', $e->getMessage());
+        }
 
-        return Redirect::route('admin.subjects.edit', $subject)->with('success', 'Subject deleted.');
+        return Redirect::route('admin.subjects')->with('success', 'Subject deleted.');
     }
 }
