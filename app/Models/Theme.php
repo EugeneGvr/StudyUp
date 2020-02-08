@@ -12,9 +12,20 @@ class Theme extends Model
 
     public function getThemes($params = [])
     {
-        $themes = $this->orderBy('created_at', 'desc')
+        $themes = $this->where($params);
+        $themes = $themes
+            ->select(['themes.id AS id', 'themes.name AS name', 'subjects.name AS subject'])
+            ->join('subjects', 'themes.subject_id', '=', 'subjects.id')
+            ->orderBy('themes.created_at', 'desc')
             ->paginate()
-            ->only('id', 'name', 'subject_id')
+            ->transform(function ($theme) {
+
+                return [
+                    'id' => $theme->id,
+                    'name' => $theme->name,
+                    'subject' => $theme->subject,
+                ];
+            })
             ->toArray();
 
         return $themes;

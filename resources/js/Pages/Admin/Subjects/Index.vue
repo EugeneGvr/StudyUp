@@ -73,7 +73,7 @@
                 </md-dialog-title>
                 <md-dialog-content>
                     <text-input
-                        v-model="this.focusedSubject.name"
+                        v-model="focusedSubject.name"
                         :errors="$page.errors.name"
                         class="pb-8 w-full"
                         :label="$t('Name')"
@@ -144,8 +144,8 @@
                     name: '',
                 },
                 focusedSubject: {
-                    id: null,
-                    name: null,
+                    id: 0,
+                    name: '',
                 },
             }
         },
@@ -177,10 +177,10 @@
                 this.focusedSubject = subject;
             },
             add() {
-                this.$inertia.put(
+                this.$inertia.post(
                     this.route('admin.subjects.store'),
-                    this.newLocality
-                ).then(this.addyModal = false)
+                    this.newSubject
+                ).then(this.addModal = false)
             },
             edit() {
                 this.$inertia.put(

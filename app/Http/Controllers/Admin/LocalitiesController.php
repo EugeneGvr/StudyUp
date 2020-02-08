@@ -19,12 +19,8 @@ class LocalitiesController extends Controller
         $localityObject = new Locality();
         $localitiesData = $localityObject->getLocalities($params, true);
         $currentLocality = $localityObject->getLocality($params['parent_id'] ?? 0);
-<<<<<<< HEAD
-        return $this->render('Localities/Index', [
-=======
 
         return $this->render('Admin/Localities/Index', [
->>>>>>> c0d894e60ab4d029573b0efc6eeb52f93ab6c6b1
             'types' => config('app')['localities']['types'],
             'filters' => Request::all('search', 'role', 'trashed'),
             'localities' => $localitiesData['localities'],
@@ -52,8 +48,8 @@ class LocalitiesController extends Controller
             'name' => ['required', 'max:50'],
         ]);
 
-        $locality = new Locality();
-        $locality->updateLocality($id, $params);
+        $localityObject = new Locality();
+        $localityObject->updateLocality($id, $params);
 
         return Redirect::route('admin.localities')->with('success', 'Locality updated.');
     }
@@ -61,8 +57,8 @@ class LocalitiesController extends Controller
     public function destroy($id)
     {
         try {
-            $role = new Locality();
-            $role->deleteLocality($id);
+            $localityObject = new Locality();
+            $localityObject->deleteLocality($id);
         } catch (\Exception $e) {
             return Redirect::back()->with('error', $e->getMessage());
         }

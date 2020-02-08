@@ -97,9 +97,12 @@ class Subject extends Model
                     'message' => 'Subject not found',
                 ];
             }
+            DB::beginTransaction();
             $subject->delete();
+            DB::commit();
 
         } catch (\Exception $e) {
+            DB::rollback();
             return [
                 'status' => 0,
                 'message' => 'Something went wrong during deleting subject: ['.$e->getMessage().']',
