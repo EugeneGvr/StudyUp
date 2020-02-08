@@ -14,7 +14,8 @@ class SubjectsController extends Controller
 {
     public function index()
     {
-        $subjects = Subject::getSubjects();
+        $subjectObject = new Subject();
+        $subjects = $subjectObject->getSubjects();
 
         return Inertia::render('Admin/Subjects/Index', [
             'filters' => Request::all('search', 'role', 'trashed'),
