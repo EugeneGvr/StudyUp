@@ -46,7 +46,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
     Route::group(['prefix' => 'subthemes'], function () {
         Route::get('/')->name('admin.subthemes')->uses('SubthemesController@index')->middleware('remember', 'auth:web-admin');
         Route::get('/create')->name('admin.subthemes.create')->uses('SubthemesController@create')->middleware('auth:web-admin');
-        Route::post('/')->name('admin.themes.store')->uses('SubthemesController@store')->middleware('auth:web-admin');
+        Route::post('/')->name('admin.subthemes.store')->uses('SubthemesController@store')->middleware('auth:web-admin');
         Route::get('/{user}/edit')->name('admin.subthemes.edit')->uses('SubthemesController@edit')->middleware('auth:web-admin');
         Route::put('/{user}')->name('admin.subthemes.update')->uses('SubthemesController@update')->middleware('auth:web-admin');
         Route::delete('/{user}')->name('admin.subthemes.destroy')->uses('SubthemesController@destroy')->middleware('auth:web-admin');

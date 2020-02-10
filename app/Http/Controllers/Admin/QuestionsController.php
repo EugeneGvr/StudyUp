@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Questions;
+use App\Subject;
 use App\Theme;
+use App\SubTheme;
 use App\Http\Controllers\Controller;
 use Inertia\Inertia;
 use Illuminate\Validation\Rule;
@@ -15,83 +18,77 @@ class QuestionsController extends Controller
     public function index()
     {
         $params = Request::only('search', 'sort', 'subject_id');
+
+        $subjectObject = new Subject();
+        $subjects = $subjectObject->getSubjects();
+
         $themeObject = new Theme();
+        $currentTheme = $themeObject->getTheme($params['theme_id']);
         $themes = $themeObject->getThemes($params);
 
-        return Inertia::render('Admin/Themes/Index', [
-            'filters' => Request::all('search', 'role', 'trashed'),
-            'themes' => $themes,
-            ]);
-    }
+        $subThemeObject = new SubTheme();
+        $currentSubTheme = $subThemeObject->getSubTheme($params['subTheme_id']);
+        $subThemes = $subThemeObject->getSubThemes($params);
 
-    public function create()
-    {
-        $subjects = [];
-        return Inertia::render('Admin/Themes/Create', [
-            'subjects' => $subjects
-        ]);
+        $questionObject = new Questions();
+        $questions = $questionObject->getQuestions($params);
+
+        $result = [
+            'filters' => Request::all('search', 'role', 'trashed'),
+            'questions' => $questions,
+            'sub_themes' => $subThemes,
+            'themes' => $themes,
+            'subjects' => $subjects,
+        ];
+
+        if (!empty($currentTheme)) {
+            $result['current_theme'] = $currentTheme;
+        }
+        if (!empty($currentSubTheme)) {
+            $result['current_sub_theme'] = $currentSubTheme;
+        }
+
+        return Inertia::render('Admin/Questions/Index', $result);
     }
 
     public function store()
     {
         $params = Request::validate([
-            'title' => ['required', 'max:128'],
-            'subThemeId' => ['required', 'max:50'],
-            'subjectId' => ['required'],
+            'name' => ['required', 'max:128'],
+            'theme_id' => ['required', 'integer', 'min:0'],
+            'sub_theme_id' => ['required', 'integer', 'min:0'],
         ]);
 
-        $theme = new Theme;
-//        $theme->addTheme($params);
+        $questionObject = new Questions();
+        $questionObject->addQuestion($params);
 
-        return Redirect::route('admin.themes')->with('success', 'Theme created');
+
+        return Redirect::route('admin.questions')->with('success', 'Question created');
     }
 
-    public function edit($theme)
+    public function update($id)
     {
-        return Inertia::render('Admin/Theme/Edit', [
-            'user' => [
-                'id' => $theme->id,
-                'name' => $theme->name,
-                'subject_id' => $theme->subject_id,
-            ],
+        $params = Request::validate([
+            'name' => ['required', 'max:128'],
+            'theme_id' => ['required', 'integer', 'min:0'],
+            'sub_theme_id' => ['required', 'integer', 'min:0'],
         ]);
+
+        $questionObject = new Questions();
+        $questionObject->updateQuestion($id, $params);
+
+        return Redirect::route('admin.questions')->with('success', 'Question updated.');
     }
 
-    public function update($theme)
+    public function destroy($id)
     {
-//        Request::validate([
-//            'first_name' => ['required', 'max:50'],
-//            'last_name' => ['required', 'max:50'],
-//            'email' => ['required', 'max:50', 'email', Rule::unique('users')->ignore($user->id)],
-//            'password' => ['nullable'],
-//            'owner' => ['required', 'boolean'],
-//            'photo' => ['nullable', 'image'],
-//        ]);
-//
-//        $user->update(Request::only('first_name', 'last_name', 'email', 'owner'));
-//
-//        if (Request::file('photo')) {
-//            $user->update(['photo_path' => Request::file('photo')->store('users')]);
-//        }
-//
-//        if (Request::get('password')) {
-//            $user->update(['password' => Request::get('password')]);
-//        }
+        try {
+            $questionObject = new Questions();
+            $questionObject->deleteQuestion($id);
+        } catch (\Exception $e) {
+            return Redirect::back()->with('error', $e->getMessage());
+        }
 
-        return Redirect::route('admin.themes', $theme)->with('success', 'User updated.');
-    }
-
-    public function destroy($theme)
-    {
-//        $user->delete();
-
-        return Redirect::route('admin.themes.edit', $theme)->with('success', 'Theme deleted.');
-    }
-
-    public function restore($theme)
-    {
-//        $user->restore();
-
-        return Redirect::route('admin.themes.edit', $theme)->with('success', 'Theme restored.');
+        return Redirect::route('admin.questions')->with('success', 'Question deleted.');
     }
 }

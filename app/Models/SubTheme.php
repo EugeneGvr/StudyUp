@@ -33,9 +33,10 @@ class SubTheme extends Model
         }
 
         return [
-            'status'    => 1,
-            'id'        => $subTheme->id,
-            'name'      => $subTheme->name,
+            'status'     => 1,
+            'id'         => $subTheme->id,
+            'name'       => $subTheme->name,
+            'theme_id' => $subTheme->theme_id,
         ];
     }
 

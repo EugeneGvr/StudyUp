@@ -33,19 +33,17 @@ class Theme extends Model
 
     public function getTheme($id)
     {
-        $theme = $this->find($id);
+        $theme = self::find($id);
 
         if(!$theme) {
-            return [
-                'status'    => 0,
-                'message'   => 'Theme not found',
-            ];
+            return 'Theme not found';
         }
 
         return [
-            'status'    => 1,
-            'id'        => $theme->id,
-            'name'      => $theme->name,
+            'status'     => 1,
+            'id'         => $theme->id,
+            'name'       => $theme->name,
+            'subject_id' => $theme->subject_id,
         ];
     }
 
@@ -56,6 +54,7 @@ class Theme extends Model
 
             $theme = $this;
             $theme->name = $params['name'];
+            $theme->subject_id = $params['subject_id'];
             $theme->save();
 
             DB::commit();
@@ -83,6 +82,7 @@ class Theme extends Model
 
             DB::beginTransaction();
             $theme->name = $params['name'];
+            $theme->subject_id = $params['subject_id'];
             $theme->save();
             DB::commit();
 
@@ -111,9 +111,13 @@ class Theme extends Model
                     'message' => 'Theme not found',
                 ];
             }
+            DB::beginTransaction();
             $theme->delete();
+            DB::commit();
 
         } catch (\Exception $e) {
+            DB::rollback();
+
             return [
                 'status' => 0,
                 'message' => 'Something went wrong during deleting theme: ['.$e->getMessage().']',

@@ -30,7 +30,7 @@ class ThemesController extends Controller
             'subjects' => $subjects,
         ];
 
-        if (!empty($subject)) {
+        if (!empty($currentSubject)) {
             $result['current_subject'] = $currentSubject;
         }
 
@@ -41,60 +41,38 @@ class ThemesController extends Controller
     {
         $params = Request::validate([
             'name' => ['required', 'max:128'],
+            'subject_id' => ['required', 'integer', 'min:0'],
         ]);
 
-        $theme = new Theme;
-//        $theme->addTheme($params);
+        $themeObject = new Theme;
+        $themeObject->addTheme($params);
 
         return Redirect::route('admin.themes')->with('success', 'Theme created');
     }
 
-    public function edit($theme)
+    public function update($id)
     {
-        return Inertia::render('Admin/Theme/Edit', [
-            'user' => [
-                'id' => $theme->id,
-                'name' => $theme->name,
-                'subject_id' => $theme->subject_id,
-            ],
+        $params = Request::validate([
+            'name' => ['required', 'max:128'],
+            'subject_id' => ['required', 'integer', 'min:0'],
         ]);
+
+        $themeObject = new Theme();
+        $themeObject->updateTheme($id, $params);
+
+
+        return Redirect::route('admin.themes')->with('success', 'Theme updated.');
     }
 
-    public function update($theme)
+    public function destroy($id)
     {
-//        Request::validate([
-//            'first_name' => ['required', 'max:50'],
-//            'last_name' => ['required', 'max:50'],
-//            'email' => ['required', 'max:50', 'email', Rule::unique('users')->ignore($user->id)],
-//            'password' => ['nullable'],
-//            'owner' => ['required', 'boolean'],
-//            'photo' => ['nullable', 'image'],
-//        ]);
-//
-//        $user->update(Request::only('first_name', 'last_name', 'email', 'owner'));
-//
-//        if (Request::file('photo')) {
-//            $user->update(['photo_path' => Request::file('photo')->store('users')]);
-//        }
-//
-//        if (Request::get('password')) {
-//            $user->update(['password' => Request::get('password')]);
-//        }
+        try {
+            $themeObject = new Theme();
+            $themeObject->deleteTheme($id);
+        } catch (\Exception $e) {
+            return Redirect::back()->with('error', $e->getMessage());
+        }
 
-        return Redirect::route('admin.themes', $theme)->with('success', 'User updated.');
-    }
-
-    public function destroy($theme)
-    {
-//        $user->delete();
-
-        return Redirect::route('admin.themes.edit', $theme)->with('success', 'Theme deleted.');
-    }
-
-    public function restore($theme)
-    {
-//        $user->restore();
-
-        return Redirect::route('admin.themes.edit', $theme)->with('success', 'Theme restored.');
+        return Redirect::route('admin.themes')->with('success', 'Theme deleted.');
     }
 }

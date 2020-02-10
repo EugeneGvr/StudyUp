@@ -20,7 +20,7 @@ class Subject extends Model
         return $subjects;
     }
 
-    public static function getSubject($id)
+    public function getSubject($id)
     {
         $subject = self::find($id);
 
@@ -103,6 +103,7 @@ class Subject extends Model
 
         } catch (\Exception $e) {
             DB::rollback();
+
             return [
                 'status' => 0,
                 'message' => 'Something went wrong during deleting subject: ['.$e->getMessage().']',
