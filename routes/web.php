@@ -110,4 +110,4 @@ Route::post('login')->name('login.attempt')->uses('Auth\LoginController@login')-
 Route::post('logout')->name('logout')->uses('Auth\LoginController@logout');
 
 // Dashboard
-Route::get('/')->name('dashboard')->uses('DashboardController')->middleware('auth:web');
+//Route::get('/')->name('admin.dashboard')->uses('DashboardController')->middleware('auth:web');

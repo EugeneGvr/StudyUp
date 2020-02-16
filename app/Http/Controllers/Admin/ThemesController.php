@@ -18,7 +18,6 @@ class ThemesController extends Controller
         $params = Request::only('search', 'sort', 'subject_id');
 
         $subjectObject = new Subject();
-        $currentSubject = $subjectObject->getSubject($params['subject_id']);
         $subjects = $subjectObject->getSubjects();
 
         $themeObject = new Theme();
@@ -30,8 +29,8 @@ class ThemesController extends Controller
             'subjects' => $subjects,
         ];
 
-        if (!empty($currentSubject)) {
-            $result['current_subject'] = $currentSubject;
+        if (!empty($params['subject_id'])) {
+            $result['current_subject'] = $subjectObject->getSubject($params['subject_id']);
         }
 
         return Inertia::render('Admin/Themes/Index', $result);
