@@ -10,11 +10,26 @@ class Questions extends Model
 {
     protected $fillable = ['name', 'description',];
 
-    public function getQuestions()
+    public function getQuestions($params = [])
     {
-        $questions = $this->orderBy('created_at', 'desc')
+        $questions = $this->where($params);
+        $questions = $questions
+            ->select(['questions.id AS id', 'questions.question_text AS text', 'sub_themes.name AS subtheme', 'themes.name AS theme', 'subjects.name AS subject'])
+            ->join('sub_themes', 'questions.sub_theme_id', '=', 'sub_themes.id')
+            ->join('themes', 'sub_themes.theme_id', '=', 'themes.id')
+            ->join('subjects', 'themes.subject_id', '=', 'subjects.id')
+            ->orderBy('questions.created_at', 'desc')
             ->paginate()
-            ->only('id', 'name')
+            ->transform(function ($question) {
+
+                return [
+                    'id' => $question->id,
+                    'text' => $question->text,
+                    'subtheme' => $question->subtheme,
+                    'theme' => $question->theme,
+                    'subject' => $question->subject,
+                ];
+            })
             ->toArray();
 
         return $questions;
@@ -34,7 +49,8 @@ class Questions extends Model
         return [
             'status'    => 1,
             'id'        => $question->id,
-            'name'      => $question->name,
+            'text'      => $question->question_text,
+            'subtheme_id'   => $question->sub_theme_id,
         ];
     }
 

@@ -21,10 +21,11 @@
                 <tr class="text-left font-bold">
                     <th class="px-6 pt-6 pb-4">{{$t('Name')}}</th>
                     <th class="px-6 pt-6 pb-4">{{$t('Theme')}}</th>
+                    <th class="px-6 pt-6 pb-4">{{$t('Subject')}}</th>
                     <th class="px-6 pt-6 pb-4"></th>
                 </tr>
                 <tr
-                    v-for="subtheme in subthemes.data" :key="subtheme.id"
+                    v-for="subtheme in sub_themes.data" :key="subtheme.id"
                     class="hover:bg-grey-lightest focus-within:bg-grey-lightest"
                 >
                     <td class="border-t" @click="getQuestions(subtheme)">
@@ -34,7 +35,12 @@
                     </td>
                     <td class="border-t" @click="getQuestions(subtheme)">
                         <div class="px-6 py-4 flex items-center focus:text-indigo">
-                            {{ subtheme.theme_id }}
+                            {{ subtheme.theme }}
+                        </div>
+                    </td>
+                    <td class="border-t" @click="getQuestions(subtheme)">
+                        <div class="px-6 py-4 flex items-center focus:text-indigo">
+                            {{ subtheme.subject }}
                         </div>
                     </td>
                     <td class="border-t w-px">
@@ -53,12 +59,12 @@
                         </div>
                     </td>
                 </tr>
-                <tr v-if="subthemes.data.length === 0">
+                <tr v-if="sub_themes.data.length === 0">
                     <td class="border-t px-6 py-4" colspan="4">No subthemes found.</td>
                 </tr>
             </table>
         </div>
-        <pagination :links="subthemes.links"/>
+        <pagination :links="sub_themes.links"/>
         <div class="modals">
             <md-dialog :md-active.sync="addModal">
                 <md-dialog-title>
@@ -66,6 +72,15 @@
                 </md-dialog-title>
                 <md-dialog-content>
                     <text-input v-model="newSubtheme.name" :errors="$page.errors.name" class="pb-8 w-full" :label="$t('Name')"/>
+                    <select-input
+                        v-model="newSubtheme.theme_id"
+                        :errors="$page.errors.theme_id"
+                        class="pb-3 w-full" :label="$t('Theme')"
+                    >
+                        <md-option v-for="theme in themes.data" :key="theme.id" :value="theme.id">
+                            {{theme.name}}
+                        </md-option>
+                    </select-input>
                 </md-dialog-content>
                 <md-dialog-actions>
                     <md-button class="md-primary p-2 m-2" @click="addModal=false">{{$t('Close')}}</md-button>
@@ -79,7 +94,7 @@
                 </md-dialog-title>
                 <md-dialog-content>
                     <text-input
-                        v-model="focusedSubheme.name"
+                        v-model="focusedSubtheme.name"
                         :errors="$page.errors.name"
                         class="pb-8 w-full"
                         :label="$t('Name')"
@@ -131,8 +146,10 @@
             TextInput,
         },
         props: {
-            subthemes: Object,
+            sub_themes: Object,
             filters: Object,
+            themes: Object,
+            subjects: Object,
         },
         data() {
             return {
@@ -148,6 +165,7 @@
                 },
                 newSubtheme: {
                     name: '',
+                    theme_id: '',
                 },
                 focusedSubtheme: {
                     id: null,
