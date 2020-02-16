@@ -23,11 +23,9 @@ class QuestionsController extends Controller
         $subjects = $subjectObject->getSubjects();
 
         $themeObject = new Theme();
-        $currentTheme = $themeObject->getTheme($params['theme_id']);
         $themes = $themeObject->getThemes($params);
 
         $subThemeObject = new SubTheme();
-        $currentSubTheme = $subThemeObject->getSubTheme($params['subTheme_id']);
         $subThemes = $subThemeObject->getSubThemes($params);
 
         $questionObject = new Questions();
@@ -41,11 +39,11 @@ class QuestionsController extends Controller
             'subjects' => $subjects,
         ];
 
-        if (!empty($currentTheme)) {
-            $result['current_theme'] = $currentTheme;
+        if (!empty($params['theme_id'])) {
+            $result['current_theme'] = $themeObject->getTheme($params['theme_id']);;
         }
-        if (!empty($currentSubTheme)) {
-            $result['current_sub_theme'] = $currentSubTheme;
+        if (!empty($params['subTheme_id'])) {
+            $result['current_sub_theme'] = $subThemeObject->getSubTheme($params['subTheme_id']);
         }
 
         return Inertia::render('Admin/Questions/Index', $result);

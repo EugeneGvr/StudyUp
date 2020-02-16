@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Redirect;
 
-class SubThemesController extends Controller
+class SubthemesController extends Controller
 {
     public function index()
     {
@@ -22,7 +22,6 @@ class SubThemesController extends Controller
         $subjects = $subjectObject->getSubjects();
 
         $themeObject = new Theme();
-        $currentTheme = $themeObject->getTheme($params['theme_id']);
         $themes = $themeObject->getThemes($params);
 
         $subThemeObject = new SubTheme();
@@ -35,11 +34,11 @@ class SubThemesController extends Controller
             'subjects' => $subjects,
         ];
 
-        if (!empty($currentTheme)) {
-            $result['current_theme'] = $currentTheme;
+        if (!empty($params['theme_id'])) {
+            $result['current_theme'] = $themeObject->getTheme($params['theme_id']);
         }
 
-        return Inertia::render('Admin/SubThemes/Index', $result);
+        return Inertia::render('Admin/Subthemes/Index', $result);
     }
 
     public function store()
