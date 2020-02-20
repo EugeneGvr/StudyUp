@@ -1,6 +1,6 @@
 <template>
     <div class="overflow-hidden">
-        <h1 class="mb-8 font-bold text-3xl">{{$t('Themes')}}</h1>
+        <h1 class="mb-8 font-bold text-3xl">{{$t('Questions')}}</h1>
         <div class="mb-6 flex justify-between items-center">
             <search-filter v-model="form.search" class="w-full max-w-sm mr-4" @reset="reset">
                 <label class="block text-grey-darkest">Trashed:</label>
@@ -12,83 +12,95 @@
             </search-filter>
             <div class="manage-buttons flex">
                 <div class="btn-blue mr-2" @click="showAddModal()">
-                    <span>{{$t('Add Theme')}}</span>
+                    <span>{{$t('Add Question')}}</span>
                 </div>
             </div>
         </div>
         <div class="bg-white rounded shadow overflow-x-auto">
             <table class=" table-module w-full whitespace-no-wrap">
                 <tr class="text-left font-bold">
-                    <th class="px-6 pt-6 pb-4">{{$t('Name')}}</th>
+                    <th class="px-6 pt-6 pb-4">{{$t('Text')}}</th>
+                    <th class="px-6 pt-6 pb-4">{{$t('Subtheme')}}</th>
+                    <th class="px-6 pt-6 pb-4">{{$t('Theme')}}</th>
                     <th class="px-6 pt-6 pb-4">{{$t('Subject')}}</th>
                     <th class="px-6 pt-6 pb-4"></th>
                 </tr>
                 <tr
-                    v-for="theme in themes.data" :key="theme.id"
+                    v-for="question in questions.data" :key="question.id"
                     class="hover:bg-grey-lightest focus-within:bg-grey-lightest"
                 >
-                    <td class="border-t" @click="getSubthemes(theme)">
+                    <td class="border-t">
                         <div class="px-6 py-4 flex items-center focus:text-indigo">
-                            {{ theme.name }}
+                            {{ question.text }}
                         </div>
                     </td>
-                    <td class="border-t" @click="getSubthemes(theme)">
+                    <td class="border-t">
                         <div class="px-6 py-4 flex items-center focus:text-indigo">
-                            {{ theme.subject }}
+                            {{ question.subtheme }}
+                        </div>
+                    </td>
+                    <td class="border-t">
+                        <div class="px-6 py-4 flex items-center focus:text-indigo">
+                            {{ question.theme }}
+                        </div>
+                    </td>
+                    <td class="border-t">
+                        <div class="px-6 py-4 flex items-center focus:text-indigo">
+                            {{ question.subject }}
                         </div>
                     </td>
                     <td class="border-t w-px">
                         <div class="flex">
-                            <div class="pl-4 pr-2" tabindex="-1" @click="showEditModal(theme)">
+                            <div class="pl-4 pr-2" tabindex="-1" @click="showEditModal(question)">
                                 <md-icon>edit</md-icon>
                                 <md-tooltip md-direction="top">{{$t('Edit')}}</md-tooltip>
                             </div>
-                            <div class="pl-2 pr-2" tabindex="-1" @click="showDeleteModal(theme)">
+                            <div class="pl-2 pr-2" tabindex="-1" @click="showDeleteModal(question)">
                                 <md-icon>delete_outline</md-icon>
                                 <md-tooltip md-direction="top">{{$t('Delete')}}</md-tooltip>
                             </div>
-                            <div class="px-4" tabindex="-1" @click="getSubthemes(theme)">
+                            <div class="px-4" tabindex="-1">
                                 <md-icon>keyboard_arrow_right</md-icon>
                             </div>
                         </div>
                     </td>
                 </tr>
-                <tr v-if="themes.data.length === 0">
-                    <td class="border-t px-6 py-4" colspan="4">No themes found.</td>
+                <tr v-if="questions.data.length === 0">
+                    <td class="border-t px-6 py-4" colspan="4">No questions found.</td>
                 </tr>
             </table>
         </div>
-        <pagination :links="themes.links"/>
+        <pagination :links="sub_themes.links"/>
         <div class="modals">
             <md-dialog :md-active.sync="addModal">
                 <md-dialog-title>
-                    <span>{{$t('Add new Theme')}}</span>
+                    <span>{{$t('Add new Subtheme')}}</span>
                 </md-dialog-title>
-                <md-dialog-content>
-                    <text-input v-model="newTheme.name" :errors="$page.errors.name" class="pb-8 w-full" :label="$t('Name')"/>
+                <!--<md-dialog-content>
+                    <text-input v-model="newSubtheme.name" :errors="$page.errors.name" class="pb-8 w-full" :label="$t('Name')"/>
                     <select-input
-                        v-model="newTheme.subject_id"
-                        :errors="$page.errors.subject_id"
-                        class="pb-3 w-full" :label="$t('Subject')"
+                        v-model="newSubtheme.theme_id"
+                        :errors="$page.errors.theme_id"
+                        class="pb-3 w-full" :label="$t('Theme')"
                     >
-                        <md-option v-for="subject in subjects.data" :key="subject.id" :value="subject.id">
-                            {{subject.name}}
+                        <md-option v-for="theme in themes.data" :key="theme.id" :value="theme.id">
+                            {{theme.name}}
                         </md-option>
                     </select-input>
                 </md-dialog-content>
                 <md-dialog-actions>
                     <md-button class="md-primary p-2 m-2" @click="addModal=false">{{$t('Close')}}</md-button>
                     <button class="btn-blue m-2" tabindex="-1" type="button" @click="add">{{$t('Add')}}</button>
-                </md-dialog-actions>
+                </md-dialog-actions>-->
             </md-dialog>
 
             <md-dialog :md-active.sync="editModal">
                 <md-dialog-title>
-                    <span>{{$t('Edit Theme')}}</span>
+                    <span>{{$t('Edit Question')}}</span>
                 </md-dialog-title>
                 <md-dialog-content>
                     <text-input
-                        v-model="focusedTheme.name"
+                        v-model="focusedQuestion.name"
                         :errors="$page.errors.name"
                         class="pb-8 w-full"
                         :label="$t('Name')"
@@ -103,7 +115,7 @@
             <md-dialog :md-active.sync="deleteModal">
                 <md-dialog-title>
                     <span>Are you sure you want to delete locality</span>
-                    <span class="text-blue">{{focusedTheme.name}}</span>
+                    <span class="text-blue">{{focusedQuestion.name}}</span>
                     <span>?</span>
                 </md-dialog-title>
                 <md-dialog-content>
@@ -111,7 +123,7 @@
                 </md-dialog-content>
                 <md-dialog-actions>
                     <md-button class="md-primary p-2 m-2" @click="deleteModal=false">Close</md-button>
-                    <button class="btn-red m-2" tabindex="-1" type="button" @click="destroy(focusedTheme.id)">
+                    <button class="btn-red m-2" tabindex="-1" type="button" @click="destroy(focusedQuestion.id)">
                         Delete
                     </button>
                 </md-dialog-actions>
@@ -130,7 +142,7 @@
     import SearchFilter from '@/Shared/SearchFilter'
 
     export default {
-        metaInfo: {title: 'Themes'},
+        metaInfo: {title: 'Questions'},
         layout: (h, page) => h(Layout, [page]),
         components: {
             Icon,
@@ -140,10 +152,11 @@
             TextInput,
         },
         props: {
+            questions: Object,
+            sub_themes: Object,
+            filters: Object,
             themes: Object,
             subjects: Object,
-            current_subject: Object,
-            filters: Object,
         },
         data() {
             return {
@@ -157,11 +170,11 @@
                     search: this.filters.search,
                     trashed: this.filters.trashed,
                 },
-                newTheme: {
+                newQuestion: {
                     name: '',
-                    subject_id: '',
+                    subtheme_id: '',
                 },
-                focusedTheme: {
+                focusedQuestion: {
                     id: null,
                     name: null,
                 },
@@ -171,44 +184,41 @@
             form: {
                 handler: _.throttle(function () {
                     let query = _.pickBy(this.form)
-                    this.$inertia.replace(this.route('admin.subjects', Object.keys(query).length ? query : {remember: 'forget'}))
+                    this.$inertia.replace(this.route('admin.subthemes', Object.keys(query).length ? query : {remember: 'forget'}))
                 }, 150),
                 deep: true,
             },
         },
         methods: {
-            getSubthemes(theme) {
-                this.$inertia.replace(this.route('admin.subthemes', {theme_id: theme.id}))
-            },
             reset() {
                 this.form = _.mapValues(this.form, () => null)
             },
-            showEditModal(theme) {
+            showEditModal(question) {
                 this.editModal = true;
-                this.focusedTheme = theme;
+                this.focusedQuestion = question;
             },
             showAddModal() {
                 this.addModal = true;
             },
-            showDeleteModal(theme) {
+            showDeleteModal(question) {
                 this.deleteModal = true;
-                this.focusedTheme = theme;
+                this.focusedQuestion = question;
             },
             add() {
                 this.$inertia.post(
-                    this.route('admin.themes.store'),
-                    this.newTheme
+                    this.route('admin.questions.store'),
+                    this.newSubtheme
                 ).then(this.addyModal = false)
             },
             edit() {
                 this.$inertia.put(
-                    this.route('admin.themes.update', this.focusedTheme.id),
-                    this.focusedTheme
+                    this.route('admin.questions.update', this.focusedQuestion.id),
+                    this.focusedQuestion
                 ).then(this.editModal = false)
             },
             destroy(id) {
                 this.$inertia.delete(
-                    this.route('admin.themes.destroy', id)
+                    this.route('admin.question.destroy', id)
                 ).then(this.deleteModal = false)
             },
         },

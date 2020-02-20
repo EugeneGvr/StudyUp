@@ -25,10 +25,10 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
         Route::get('/')->name('admin.subjects')->uses('SubjectsController@index')->middleware('remember', 'auth:web-admin');
         Route::get('/create')->name('admin.subjects.create')->uses('SubjectsController@create')->middleware('auth:web-admin');
         Route::post('/')->name('admin.subjects.store')->uses('SubjectsController@store')->middleware('auth:web-admin');
-        Route::get('/{user}/edit')->name('admin.subjects.edit')->uses('SubjectsController@edit')->middleware('auth:web-admin');
-        Route::put('/{user}')->name('admin.subjects.update')->uses('SubjectsController@update')->middleware('auth:web-admin');
-        Route::delete('/{user}')->name('admin.subjects.destroy')->uses('SubjectsController@destroy')->middleware('auth:web-admin');
-        Route::put('/{user}/restore')->name('admin.subjects.restore')->uses('SubjectsController@restore')->middleware('auth:web-admin');
+        Route::get('/{subject}/edit')->name('admin.subjects.edit')->uses('SubjectsController@edit')->middleware('auth:web-admin');
+        Route::put('/{subject}')->name('admin.subjects.update')->uses('SubjectsController@update')->middleware('auth:web-admin');
+        Route::delete('/{subject}')->name('admin.subjects.destroy')->uses('SubjectsController@destroy')->middleware('auth:web-admin');
+        Route::put('/{subject}/restore')->name('admin.subjects.restore')->uses('SubjectsController@restore')->middleware('auth:web-admin');
     });
 
     // Themes
@@ -36,10 +36,10 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
         Route::get('/')->name('admin.themes')->uses('ThemesController@index')->middleware('remember', 'auth:web-admin');
         Route::get('/create')->name('admin.themes.create')->uses('ThemesController@create')->middleware('auth:web-admin');
         Route::post('/')->name('admin.themes.store')->uses('ThemesController@store')->middleware('auth:web-admin');
-        Route::get('/{user}/edit')->name('admin.themes.edit')->uses('ThemesController@edit')->middleware('auth:web-admin');
-        Route::put('/{user}')->name('admin.themes.update')->uses('ThemesController@update')->middleware('auth:web-admin');
-        Route::delete('/{user}')->name('admin.themes.destroy')->uses('ThemesController@destroy')->middleware('auth:web-admin');
-        Route::put('/{user}/restore')->name('admin.themes.restore')->uses('ThemesController@restore')->middleware('auth:web-admin');
+        Route::get('/{theme}/edit')->name('admin.themes.edit')->uses('ThemesController@edit')->middleware('auth:web-admin');
+        Route::put('/{theme}')->name('admin.themes.update')->uses('ThemesController@update')->middleware('auth:web-admin');
+        Route::delete('/{theme}')->name('admin.themes.destroy')->uses('ThemesController@destroy')->middleware('auth:web-admin');
+        Route::put('/{theme}/restore')->name('admin.themes.restore')->uses('ThemesController@restore')->middleware('auth:web-admin');
     });
 
     // Subthemes
@@ -47,10 +47,10 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
         Route::get('/')->name('admin.subthemes')->uses('SubthemesController@index')->middleware('remember', 'auth:web-admin');
         Route::get('/create')->name('admin.subthemes.create')->uses('SubthemesController@create')->middleware('auth:web-admin');
         Route::post('/')->name('admin.subthemes.store')->uses('SubthemesController@store')->middleware('auth:web-admin');
-        Route::get('/{user}/edit')->name('admin.subthemes.edit')->uses('SubthemesController@edit')->middleware('auth:web-admin');
-        Route::put('/{user}')->name('admin.subthemes.update')->uses('SubthemesController@update')->middleware('auth:web-admin');
-        Route::delete('/{user}')->name('admin.subthemes.destroy')->uses('SubthemesController@destroy')->middleware('auth:web-admin');
-        Route::put('/{user}/restore')->name('admin.subthemes.restore')->uses('SubthemesController@restore')->middleware('auth:web-admin');
+        Route::get('/{subtheme}/edit')->name('admin.subthemes.edit')->uses('SubthemesController@edit')->middleware('auth:web-admin');
+        Route::put('/{subtheme}')->name('admin.subthemes.update')->uses('SubthemesController@update')->middleware('auth:web-admin');
+        Route::delete('/{subtheme}')->name('admin.subthemes.destroy')->uses('SubthemesController@destroy')->middleware('auth:web-admin');
+        Route::put('/{subtheme}/restore')->name('admin.subthemes.restore')->uses('SubthemesController@restore')->middleware('auth:web-admin');
     });
 
     // Questions

@@ -48,10 +48,10 @@ class SubthemesController extends Controller
             'theme_id' => ['required', 'integer', 'min:0'],
         ]);
 
-        $theme = new Theme;
-        $theme->addTheme($params);
+        $subTheme = new subTheme();
+        $subTheme->addSubTheme($params);
 
-        return Redirect::route('admin.themes')->with('success', 'Theme created');
+        return Redirect::route('admin.subthemes')->with('success', 'Subtheme created');
     }
 
     public function update($id)
