@@ -5,7 +5,7 @@
             <div class="w-full max-w-sm">
                 <form class="bg-white rounded-lg shadow-lg overflow-hidden" @submit.prevent="submit">
                     <div class="px-10 py-12">
-                        <h1 class="text-center font-light text-md">Log in into administrator panel</h1>
+                        <h1 class="text-center font-light text-md">Log in</h1>
                         <div class="mx-auto mt-6 w-24 border-b-2"/>
                         <text-input v-model="form.email" :errors="$page.errors.email" class="mt-10" label="Email"
                                     type="email" autofocus autocapitalize="off"/>
@@ -54,7 +54,7 @@
         methods: {
             submit() {
                 this.sending = true
-                this.$inertia.post(this.route('admin.login.attempt'), {
+                this.$inertia.post(this.route('login.attempt'), {
                     email: this.form.email,
                     password: this.form.password,
                     remember: this.form.remember,

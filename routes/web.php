@@ -110,4 +110,19 @@ Route::post('login')->name('login.attempt')->uses('Auth\LoginController@login')-
 Route::post('logout')->name('logout')->uses('Auth\LoginController@logout');
 
 // Dashboard
-//Route::get('/')->name('admin.dashboard')->uses('DashboardController')->middleware('auth:web');
+Route::get('/')->name('dashboard')->uses('DashboardController')->middleware('auth:web');
+
+// Cabinet
+Route::get('/cabinet')->name('cabinet')->uses('CabinetController@index')->middleware('auth:web');
+
+// Subjects
+Route::group(['prefix' => 'subjects'], function () {
+    Route::get('/')->name('subjects')->uses('SubjectsController@index')->middleware('remember', 'auth:web');
+    Route::get('/{subject}')->name('subjects.show')->uses('SubjectsController@show')->middleware('auth:web');
+    Route::get('/{subject}/test')->name('subjects.test')->uses('SubjectsController@test')->middleware('auth:web');
+});
+
+// Api routes
+Route::group(['prefix' => 'api/v1', 'namespace' => 'API'], function () {
+    Route::get('/test')->name('subjects.show')->uses('SubjectsController@show')->middleware('auth:web');
+});
