@@ -34,7 +34,7 @@ class LoginController extends Controller
      */
     protected $redirectTo = '/';
 
-    public function showLoginForm()
+    public function showForm()
     {
         return $this->render('Auth/Login');
     }
