@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\StringGenerator;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use League\Glide\Server;
@@ -92,17 +93,19 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
             $params['password'] = $this->generateString();
         }
 
+        $verificationLink = $this->generateString(18, false);
+
         DB::beginTransaction();
         try {
             $user = $this;
 
-            $user->first_name  = $params['first_name'];
-            $user->last_name   = $params['last_name'];
-            $user->email       = $params['email'];
-            $user->password    = Hash::make($params['password']);
-            if (empty($params['phone'])) {
-                $user->phone    = $params['phone'];
-            }
+            $user->first_name = $params['first_name'];
+            $user->last_name = $params['last_name'];
+            $user->username = $params['username'];
+            $user->email = $params['email'];
+            $user->email_verification_link = $verificationLink;
+            $user->city_id = $params['city_id'];
+            $user->password = Hash::make($params['password']);
             $user->save();
 
             $user->photo_path = !empty($params['photo']) ?
@@ -115,10 +118,11 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
             //send mail to the user email
             $to_name = $user->first_name;
-            $to_email = 'velikiy300@gmail.com';
-            $data = array('name'=>$user->first_name.' '.$user->last_name, "body" => "Test mail");
+            $to_email = $user->email;
+            $verificationLink = 'verify/'.$verificationLink;
+            $data = array('name'=>$user->first_name.' '.$user->last_name, "body" => "Test mail ".$verificationLink);
 
-            Mail::send('emails.mail', $data, function($message) use ($to_name, $to_email) {
+            Mail::send('emails.mail', $data, function($message) use ($to_name, $to_email, $verificationLink) {
                 $message->to($to_email, $to_name)
                     ->subject('Welcome');
                 $message->from('studyup200@gmail.com','Study Up');
@@ -174,6 +178,41 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
         return [
             'status' => 1
+        ];
+    }
+
+    public function resetPassword($data)
+    {
+        if (Hash::make($data['current']) == Auth::user()->getAuthPassword()) {
+            $id = Auth::user()->getAuthIdentifier();
+            $user = $this->find($id);
+            if (!$user) {
+                throw new \Exception("User not found");
+            }
+
+            try {
+                DB::beginTransaction();
+                $user->first_name  = Hash::make($data['new']);
+                $user->save();
+
+                DB::commit();
+            } catch (\Exception $e) {
+                DB::rollback();
+
+                return [
+                    'status' => 0,
+                    'message' =>'Something went wrong during reseting password. Message: ['.$e->getMessage().']',
+                ];
+            }
+
+            return [
+                'status' => 1
+            ];
+        }
+
+        return [
+            'status' => 0,
+            'message' => 'Invalid current password. Please, try again!'
         ];
     }
 }

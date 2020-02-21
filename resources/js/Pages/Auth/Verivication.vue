@@ -5,10 +5,7 @@
             <div class="w-full max-w-sm">
                 <form class="bg-white rounded-lg shadow-lg overflow-hidden" @submit.prevent="submit">
                     <div class="px-10 py-12">
-                        <h1 class="text-center font-light text-md">{{$t('Log in')}}</h1>
-                        <inertia-link class="btn-indigo" :href="route('register')">
-                            <h1 class="text-center font-light text-md">{{$t('Register')}}</h1>
-                        </inertia-link>
+                        <h1 class="text-center font-light text-md">Log in</h1>
                         <div class="mx-auto mt-6 w-24 border-b-2"/>
                         <text-input v-model="form.email" :errors="$page.errors.email" class="mt-10" label="Email"
                                     type="email" autofocus autocapitalize="off"/>

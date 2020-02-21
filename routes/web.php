@@ -105,9 +105,17 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
 });
 
 // Auth
-Route::get('login')->name('login')->uses('Auth\LoginController@showLoginForm')->middleware('guest:web');
+Route::get('login')->name('login')->uses('Auth\LoginController@showForm')->middleware('guest:web');
 Route::post('login')->name('login.attempt')->uses('Auth\LoginController@login')->middleware('guest:web');
 Route::post('logout')->name('logout')->uses('Auth\LoginController@logout');
+
+Route::get('register')->name('register')->uses('Auth\RegisterController@showForm');
+Route::post('register')->name('register.attempt')->uses('Auth\RegisterController@create');
+
+Route::get('verify/{verificationLink}')->name('verify')->uses('Auth\VerificationController@verify');
+
+Route::get('reset')->name('reset')->uses('Auth\ResetPasswordController@showForm');
+Route::post('reset')->name('reset.attempt')->uses('Auth\ResetPasswordController@reset');
 
 // Dashboard
 Route::get('/')->name('dashboard')->uses('DashboardController')->middleware('auth:web');
@@ -124,5 +132,6 @@ Route::group(['prefix' => 'subjects'], function () {
 
 // Api routes
 Route::group(['prefix' => 'api/v1', 'namespace' => 'API'], function () {
-    Route::get('/test')->name('subjects.show')->uses('SubjectsController@show')->middleware('auth:web');
+    Route::get('/localities/{id}')->uses('LocalitiesController@show');
+    Route::get('/test')->name('subjects.show')->uses('SubjectsController@show');
 });
