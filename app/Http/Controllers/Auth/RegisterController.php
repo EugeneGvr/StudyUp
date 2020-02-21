@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
 use App\Http\Controllers\Controller;
+use App\Subject;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -41,9 +42,16 @@ class RegisterController extends Controller
         $this->middleware('guest');
     }
 
-    public function showForm()
+    public function showRegistrationForm()
     {
-        return $this->render('Auth/Register');
+        $subjectObject = new Subject();
+        $subjects = $subjectObject->getSubjects();
+
+        $result = [
+            'subjects' => $subjects,
+        ];
+
+        return $this->render('Auth/Register', $result);
     }
 
     /**
