@@ -53,7 +53,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
         Route::put('/{subtheme}/restore')->name('admin.subthemes.restore')->uses('SubthemesController@restore')->middleware('auth:web-admin');
     });
 
-    // Questions
+    // Question
     Route::group(['prefix' => 'questions'], function () {
         Route::get('/')->name('admin.questions')->uses('QuestionsController@index')->middleware('remember', 'auth:web-admin');
         Route::get('/create')->name('admin.questions.create')->uses('QuestionsController@create')->middleware('auth:web-admin');

@@ -27,6 +27,8 @@ return [
     ],
     //localities types
 
+    'user_statuses' => ['registrated', 'verificated', 'blocked'],
+
     'characters' => 'abcdefghijklmnopqrstuvwxyz',
     'numbers'   => '0123456789',
 
