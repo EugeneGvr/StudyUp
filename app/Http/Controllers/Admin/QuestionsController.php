@@ -33,8 +33,8 @@ class QuestionsController extends Controller
     public function create()
     {
         $subjectObject = new Subject();
-        $subjects = $subjectObject->getSubjects();
-
+        $subjects = $subjectObject->getSubjects(false);
+error_log(print_r($subjects,1));
         $result = [
             'subjects' => $subjects,
             'answer_types' => config('app')['answer_types']
