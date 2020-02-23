@@ -11,8 +11,8 @@
                 </select>
             </search-filter>
             <div class="manage-buttons flex">
-                <inertia-link class="btn-indigo" :href="route('admin.questions.create')">
-                    <span>{{$t('Add Administrator')}}</span>
+                <inertia-link class="btn-blue mr-2" :href="route('admin.questions.create')">
+                    <span>{{$t('Add Question')}}</span>
                 </inertia-link>
             </div>
         </div>
@@ -70,7 +70,7 @@
                 </tr>
             </table>
         </div>
-        <pagination :links="sub_themes.links"/>
+        <pagination :links="questions.links"/>
     </div>
 </template>
 

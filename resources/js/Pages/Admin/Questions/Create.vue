@@ -18,6 +18,7 @@
                 </md-option>
             </select-input>
             <select-input
+                v-if="form.subject_id !== null"
                 v-model="form.theme_id"
                 :errors="$page.errors.theme_id"
                 class="pb-3 w-full" :label="$t('Theme')"
