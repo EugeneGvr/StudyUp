@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Subject;
-use App\SubTheme;
-use App\Theme;
+use App\Models\Subject;
+use App\Models\SubTheme;
+use App\Models\Theme;
 use App\Http\Controllers\Controller;
 use Inertia\Inertia;
 use Illuminate\Validation\Rule;

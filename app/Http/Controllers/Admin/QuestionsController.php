@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Question;
-use App\Subject;
-use App\Theme;
-use App\SubTheme;
+use App\Models\Question;
+use App\Models\Subject;
+use App\Models\Theme;
+use App\Models\SubTheme;
 use App\Http\Controllers\Controller;
 use Inertia\Inertia;
 use Illuminate\Validation\Rule;
@@ -27,7 +27,7 @@ class QuestionsController extends Controller
             'questions' => $questions,
         ];
 
-        return Inertia::render('Admin/Question/Index', $result);
+        return Inertia::render('Admin/Questions/Index', $result);
     }
 
     public function create()
