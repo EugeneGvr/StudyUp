@@ -7,14 +7,43 @@
     <div class="bg-white rounded shadow overflow-hidden max-w-lg">
       <form @submit.prevent="submit">
         <div class="p-8 -mr-6 -mb-8 flex flex-wrap">
-          <text-input v-model="form.first_name" :errors="$page.errors.first_name" class="pr-6 pb-8 w-full lg:w-1/2" label="First name" />
-          <text-input v-model="form.last_name" :errors="$page.errors.last_name" class="pr-6 pb-8 w-full lg:w-1/2" label="Last name" />
-          <text-input v-model="form.email" :errors="$page.errors.email" class="pr-6 pb-8 w-full lg:w-1/2" label="Email" />
-          <text-input v-model="form.password" :errors="$page.errors.password" class="pr-6 pb-8 w-full lg:w-1/2" type="password" autocomplete="new-password" label="Password" />
-          <select-input v-model="form.owner" :errors="$page.errors.owner" class="pr-6 pb-8 w-full lg:w-1/2" label="Owner">
-            <option :value="true">Yes</option>
-            <option :value="false">No</option>
-          </select-input>
+          <text-input v-model="form.text" :errors="$page.errors.text" class="pr-6 pb-8 w-full lg:w-1/2" :label="$t('Text')" />
+            <select-input
+                v-model="form.subject_id"
+                :errors="$page.errors.theme_id"
+                class="pb-3 w-full" :label="$t('Subject')"
+            >
+                <md-option v-for="subject in subjects.data" :key="subject.id" :value="subject.id">
+                    {{subject.name}}
+                </md-option>
+            </select-input>
+            <select-input
+                v-model="form.theme_id"
+                :errors="$page.errors.theme_id"
+                class="pb-3 w-full" :label="$t('Theme')"
+            >
+                <md-option v-for="theme in themes.data" :key="theme.id" :value="theme.id">
+                    {{theme.name}}
+                </md-option>
+            </select-input>
+            <select-input
+                v-model="form.subtheme_id"
+                :errors="$page.errors.subtheme_id"
+                class="pb-3 w-full" :label="$t('Subtheme')"
+            >
+                <md-option v-for="subtheme in subthemes.data" :key="subtheme.id" :value="subtheme.id">
+                    {{subtheme.name}}
+                </md-option>
+            </select-input>
+            <select-input
+                v-model="form.type"
+                :errors="$page.errors.type"
+                class="pb-3 w-full" :label="$t('Type')"
+            >
+                <md-option v-for="(type, type_key) in types" :key="type_key" :value="type_key">
+                    {{type}}
+                </md-option>
+            </select-input>
           <file-input v-model="form.photo" :errors="$page.errors.photo" class="pr-6 pb-8 w-full lg:w-1/2" type="file" accept="image/*" label="Photo" />
         </div>
         <div class="px-8 py-4 bg-grey-lightest border-t border-grey-lighter flex justify-end items-center">

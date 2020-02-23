@@ -11,9 +11,9 @@
                 </select>
             </search-filter>
             <div class="manage-buttons flex">
-                <div class="btn-blue mr-2" @click="showAddModal()">
-                    <span>{{$t('Add Question')}}</span>
-                </div>
+                <inertia-link class="btn-indigo" :href="route('admin.questions.create')">
+                    <span>{{$t('Add Administrator')}}</span>
+                </inertia-link>
             </div>
         </div>
         <div class="bg-white rounded shadow overflow-x-auto">
