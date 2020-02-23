@@ -9,20 +9,21 @@
         <div class="bg-white rounded shadow overflow-hidden max-w-lg">
             <form @submit.prevent="submit">
                 <div class="p-8 -mr-6 -mb-8 flex flex-wrap">
-                    <text-input v-model="form.text" :errors="$page.errors.text" class="pr-6 pb-8 w-full lg:w-1/2"
+                    <text-input v-model="text" :errors="$page.errors.text" class="pr-6 pb-8 w-full lg:w-1/2"
                                 :label="$t('Text')"/>
                     <select-input
-                        v-model="form.subject_id"
+                        v-on:change="getThemes()"
+                        v-model="subject_id"
                         :errors="$page.errors.theme_id"
                         class="pb-3 w-full" :label="$t('Subject')"
                     >
-                        <md-option v-for="subject in subjects.data" :key="subject.id" :value="subject.id">
+                        <md-option v-for="subject in subjects" :key="subject.id" :value="subject.id">
                             {{subject.name}}
                         </md-option>
                     </select-input>
                     <select-input
-                        v-if="form.subject_id !== null"
-                        v-model="form.theme_id"
+                        v-if="subject_id !== null"
+                        v-model="theme_id"
                         :errors="$page.errors.theme_id"
                         class="pb-3 w-full" :label="$t('Theme')"
                     >
@@ -31,8 +32,8 @@
                         </md-option>
                     </select-input>
                     <select-input
-                        v-if="form.theme_id !== null"
-                        v-model="form.subtheme_id"
+                        v-if="theme_id !== null"
+                        v-model="subtheme_id"
                         :errors="$page.errors.subtheme_id"
                         class="pb-3 w-full" :label="$t('Subtheme')"
                     >
@@ -41,7 +42,7 @@
                         </md-option>
                     </select-input>
                     <select-input
-                        v-model="form.answer_type"
+                        v-model="answer_type"
                         :errors="$page.errors.answer_type"
                         class="pb-3 w-full" :label="$t('Type')"
                     >
@@ -49,7 +50,7 @@
                             {{type}}
                         </md-option>
                     </select-input>
-                    <file-input v-model="form.photo" :errors="$page.errors.photo" class="pr-6 pb-8 w-full lg:w-1/2"
+                    <file-input v-model="photo" :errors="$page.errors.photo" class="pr-6 pb-8 w-full lg:w-1/2"
                                 type="file" accept="image/*" label="Photo"/>
                 </div>
                 <div class="px-8 py-4 bg-grey-lightest border-t border-grey-lighter flex justify-end items-center">
@@ -68,7 +69,7 @@
     import FileInput from '@/Shared/FileInput'
 
     export default {
-        metaInfo: {title: 'Create User'},
+        metaInfo: {title: 'Create Question'},
         layout: (h, page) => h(Layout, [page]),
         components: {
             LoadingButton,
@@ -77,26 +78,33 @@
             FileInput,
         },
         props: {
-            subjects: Object,
+            subjects: Array,
             answer_types: Object,
         },
-        remember: 'form',
         data() {
             return {
                 themes: Object,
                 subthemes: Object,
                 sending: false,
-                form: {
-                    text: null,
-                    subject_id: null,
-                    theme_id: null,
-                    subtheme_id: null,
-                    answer_type: null,
-                },
+                //form variables
+                text: null,
+                subject_id: null,
+                theme_id: null,
+                subtheme_id: null,
+                answer_type: null,
+                photo: null,
+                //form variables
             }
         },
+        watch: {
+            subject_id() {
+                console.log("======================================================");
+                const response = this.$inertia.post(this.route('api.v1.themes', this.subject_id));
+                console.log(response);
+            },
+        },
         methods: {
-            submit() {
+            /*submit() {
                 this.sending = true
 
                 var data = new FormData()
@@ -109,14 +117,15 @@
 
                 this.$inertia.post(this.route('admin.users.store'), data)
                     .then(() => this.sending = false)
-            },
+            },*/
 
             getThemes() {
-                const response = this.$inertia.post(this.route('api.v1.themes'), this.form.subject_id);
+                console.log('================================================================');
+                //const response = this.$inertia.post(this.route('api.v1.themes'), this.form.subject_id);
             },
 
             getSubthemes() {
-                const response = this.$inertia.post(this.route('api.v1.subthemes'), this.form.theme_id);
+                const response = this.$inertia.post(this.route('api.v1.subthemes'), this.theme_id);
             },
         },
     }
