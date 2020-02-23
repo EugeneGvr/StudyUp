@@ -35,24 +35,10 @@ class QuestionsController extends Controller
         $subjectObject = new Subject();
         $subjects = $subjectObject->getSubjects();
 
-        $themeObject = new Theme();
-        $themes = $themeObject->getThemes($params);
-
-        $subThemeObject = new SubTheme();
-        $subThemes = $subThemeObject->getSubThemes($params);
-
         $result = [
-            'sub_themes' => $subThemes,
-            'themes' => $themes,
             'subjects' => $subjects,
+            'answer_types' => config('app')['answer_types']
         ];
-
-        if (!empty($params['theme_id'])) {
-            $result['current_theme'] = $themeObject->getTheme($params['theme_id']);;
-        }
-        if (!empty($params['subTheme_id'])) {
-            $result['current_sub_theme'] = $subThemeObject->getSubTheme($params['subTheme_id']);
-        }
 
         return $this->render('Admin/Question/Create', $result);
     }
