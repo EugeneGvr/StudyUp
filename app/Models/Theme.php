@@ -17,7 +17,7 @@ class Theme extends Model
             ->select(['themes.id AS id', 'themes.name AS name', 'subjects.name AS subject'])
             ->join('subjects', 'themes.subject_id', '=', 'subjects.id')
             ->orderBy('themes.created_at', 'desc');
-        $themes = $paginate ? $themes->paginate() : $themes->find();
+        $themes = $paginate ? $themes->paginate() : $themes->get();
         $themes = $themes->transform(function ($theme) {
             return [
                 'id' => $theme->id,
