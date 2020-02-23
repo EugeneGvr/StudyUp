@@ -40,7 +40,7 @@ class QuestionsController extends Controller
             'answer_types' => config('app')['answer_types']
         ];
 
-        return $this->render('Admin/Question/Create', $result);
+        return $this->render('Admin/Questions/Create', $result);
     }
 
     public function store()
@@ -67,7 +67,7 @@ class QuestionsController extends Controller
             'question' => $question,
         ];
 
-        return $this->render('Admin/Question/Edit', $result);
+        return $this->render('Admin/Questions/Edit', $result);
     }
 
     public function update($id)
