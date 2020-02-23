@@ -10,25 +10,24 @@ class SubTheme extends Model
 {
     protected $fillable = ['name', 'description',];
 
-    public function getSubThemes($params = [])
+    public function getSubThemes($params = [], $paginate = true)
     {
         $subThemes = $this->where($params);
         $subThemes = $subThemes
             ->select(['sub_themes.id AS id', 'sub_themes.name AS name', 'themes.name AS theme', 'subjects.name AS subject'])
             ->join('themes', 'sub_themes.theme_id', '=', 'themes.id')
             ->join('subjects', 'themes.subject_id', '=', 'subjects.id')
-            ->orderBy('sub_themes.created_at', 'desc')
-            ->paginate()
-            ->transform(function ($subTheme) {
-
-                return [
-                    'id' => $subTheme->id,
-                    'name' => $subTheme->name,
-                    'theme' => $subTheme->theme,
-                    'subject' => $subTheme->subject,
-                ];
-            })
-            ->toArray();
+            ->orderBy('sub_themes.created_at', 'desc');
+        $subThemes = $paginate ? $subThemes->paginate() : $subThemes->find();
+        $subThemes = $subThemes->transform(function ($subTheme) {
+            return [
+                'id' => $subTheme->id,
+                'name' => $subTheme->name,
+                'theme' => $subTheme->theme,
+                'subject' => $subTheme->subject,
+            ];
+        })
+        ->toArray();
 
         return $subThemes;
     }

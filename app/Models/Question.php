@@ -6,7 +6,7 @@ use App\RolePermissionConnection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
-class Questions extends Model
+class Question extends Model
 {
     protected $fillable = ['name', 'description',];
 

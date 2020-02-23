@@ -53,7 +53,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
         Route::put('/{subtheme}/restore')->name('admin.subthemes.restore')->uses('SubthemesController@restore')->middleware('auth:web-admin');
     });
 
-    // Questions
+    // Question
     Route::group(['prefix' => 'questions'], function () {
         Route::get('/')->name('admin.questions')->uses('QuestionsController@index')->middleware('remember', 'auth:web-admin');
         Route::get('/create')->name('admin.questions.create')->uses('QuestionsController@create')->middleware('auth:web-admin');
@@ -109,7 +109,7 @@ Route::get('login')->name('login')->uses('Auth\LoginController@showForm')->middl
 Route::post('login')->name('login.attempt')->uses('Auth\LoginController@login')->middleware('guest:web');
 Route::post('logout')->name('logout')->uses('Auth\LoginController@logout');
 
-Route::get('register')->name('register')->uses('Auth\RegisterController@showForm');
+Route::get('register')->name('register')->uses('Auth\RegisterController@showRegistrationForm');
 Route::post('register')->name('register.attempt')->uses('Auth\RegisterController@create');
 
 Route::get('verify/{verificationLink}')->name('verify')->uses('Auth\VerificationController@verify');
@@ -132,6 +132,8 @@ Route::group(['prefix' => 'subjects'], function () {
 
 // Api routes
 Route::group(['prefix' => 'api/v1', 'namespace' => 'API'], function () {
-    Route::get('/localities/{id}')->uses('LocalitiesController@show');
+    Route::get('/localities/{parent_id}')->uses('LocalitiesController@index');
+    Route::get('/themes/{subject_id}')->uses('ThemesController@index');
+    Route::get('/sub_theme/{theme_id}')->uses('SubthemesController@index');
     Route::get('/test')->name('subjects.show')->uses('SubjectsController@show');
 });

@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 class Locality extends Model
 {
-    public function getLocalities($params = [], $childrenCheck = false)
+    public function getLocalities($params = [], $childrenCheck = false, $paginate = true)
     {
         if (empty($params))
         {
@@ -16,8 +16,8 @@ class Locality extends Model
 //        $localities = self::sort(!empty($params['sort']) ? $params['sort'] : 'date');
 //        $localities = self::search($localities, !empty($params['search']) ? $params['search'] : null);
         $localities = $this->where($params);
-        $localities = $localities->paginate()
-            ->transform(function ($locality) {
+        $localities = $paginate ? $localities->paginate() : $localities->find();
+        $localities = $localities->transform(function ($locality) {
                 return [
                     'id' => $locality->id,
                     'name' => $locality->name,
