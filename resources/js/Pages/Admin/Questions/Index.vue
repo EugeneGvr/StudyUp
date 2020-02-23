@@ -71,64 +71,6 @@
             </table>
         </div>
         <pagination :links="sub_themes.links"/>
-        <div class="modals">
-            <md-dialog :md-active.sync="addModal">
-                <md-dialog-title>
-                    <span>{{$t('Add new Subtheme')}}</span>
-                </md-dialog-title>
-                <!--<md-dialog-content>
-                    <text-input v-model="newSubtheme.name" :errors="$page.errors.name" class="pb-8 w-full" :label="$t('Name')"/>
-                    <select-input
-                        v-model="newSubtheme.theme_id"
-                        :errors="$page.errors.theme_id"
-                        class="pb-3 w-full" :label="$t('Theme')"
-                    >
-                        <md-option v-for="theme in themes.data" :key="theme.id" :value="theme.id">
-                            {{theme.name}}
-                        </md-option>
-                    </select-input>
-                </md-dialog-content>
-                <md-dialog-actions>
-                    <md-button class="md-primary p-2 m-2" @click="addModal=false">{{$t('Close')}}</md-button>
-                    <button class="btn-blue m-2" tabindex="-1" type="button" @click="add">{{$t('Add')}}</button>
-                </md-dialog-actions>-->
-            </md-dialog>
-
-            <md-dialog :md-active.sync="editModal">
-                <md-dialog-title>
-                    <span>{{$t('Edit Question')}}</span>
-                </md-dialog-title>
-                <md-dialog-content>
-                    <text-input
-                        v-model="focusedQuestion.name"
-                        :errors="$page.errors.name"
-                        class="pb-8 w-full"
-                        :label="$t('Name')"
-                    />
-                </md-dialog-content>
-                <md-dialog-actions>
-                    <md-button class="md-primary p-2 m-2" @click="editModal=false">{{$t('Close')}}</md-button>
-                    <button class="btn-blue m-2" tabindex="-1" type="button" @click="edit">{{$t('Edit')}}</button>
-                </md-dialog-actions>
-            </md-dialog>
-
-            <md-dialog :md-active.sync="deleteModal">
-                <md-dialog-title>
-                    <span>Are you sure you want to delete locality</span>
-                    <span class="text-blue">{{focusedQuestion.name}}</span>
-                    <span>?</span>
-                </md-dialog-title>
-                <md-dialog-content>
-                    <span>This action will drop locality and all users who have this locality will get default value</span>
-                </md-dialog-content>
-                <md-dialog-actions>
-                    <md-button class="md-primary p-2 m-2" @click="deleteModal=false">Close</md-button>
-                    <button class="btn-red m-2" tabindex="-1" type="button" @click="destroy(focusedQuestion.id)">
-                        Delete
-                    </button>
-                </md-dialog-actions>
-            </md-dialog>
-        </div>
     </div>
 </template>
 
