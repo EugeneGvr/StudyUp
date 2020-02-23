@@ -70,7 +70,7 @@
                 </tr>
             </table>
         </div>
-        <pagination :links="sub_themes.links"/>
+        <pagination :links="questions.links"/>
     </div>
 </template>
 

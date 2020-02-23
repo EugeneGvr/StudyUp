@@ -28,7 +28,12 @@ return [
     //localities types
 
     'user_statuses' => ['registrated', 'verificated', 'blocked'],
-
+    'answer_types' => [
+        'single' => 'Single answer',
+        'multi' => 'Multiple answer',
+        'input' => 'Input corrent answer',
+        'correlation' => 'Correlation answer',
+    ],
     'characters' => 'abcdefghijklmnopqrstuvwxyz',
     'numbers'   => '0123456789',
 
