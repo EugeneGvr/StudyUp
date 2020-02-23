@@ -20,9 +20,9 @@ class DatabaseSeeder extends Seeder {
         $adminsTableSeeder = new AdminsTableSeeder();
         $adminsTableSeeder->run();
 
-//        //run Users seed
-//        $usersTableSeeder = new UsersTableSeeder();
-//        $usersTableSeeder->run();
+        //run Users seed
+        $usersTableSeeder = new UsersTableSeeder();
+        $usersTableSeeder->run();
 
         //run Localities seed
         $localitiesTableSeeder = new LocalitiesTableSeeder();
