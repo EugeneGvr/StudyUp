@@ -27,7 +27,7 @@
                         :errors="$page.errors.theme_id"
                         class="pb-3 w-full" :label="$t('Theme')"
                     >
-                        <md-option v-for="theme in themes.data" :key="theme.id" :value="theme.id">
+                        <md-option v-for="theme in themes" :key="theme.id" :value="theme.id">
                             {{theme.name}}
                         </md-option>
                     </select-input>
@@ -67,6 +67,7 @@
     import SelectInput from '@/Shared/SelectInput'
     import TextInput from '@/Shared/TextInput'
     import FileInput from '@/Shared/FileInput'
+    import axios from 'axios'
 
     export default {
         metaInfo: {title: 'Create Question'},
@@ -98,9 +99,13 @@
         },
         watch: {
             subject_id() {
-                console.log("======================================================");
-                const response = this.$inertia.post(this.route('api.v1.themes', this.subject_id));
-                console.log(response);
+                axios.get(this.route('api.v1.themes', this.subject_id))
+                    .then(response => {
+                        this.themes = response.data;
+                    })
+                    .catch(e => {
+                        this.errors.push(e)
+                    })
             },
         },
         methods: {
