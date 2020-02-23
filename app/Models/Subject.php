@@ -10,12 +10,16 @@ class Subject extends Model
 {
     protected $fillable = ['name', 'description',];
 
-    public function getSubjects()
+    public function getSubjects($paginate = true)
     {
-        $subjects = $this->orderBy('created_at', 'desc')
-            ->paginate()
-            ->only('id', 'name')
-            ->toArray();
+        $subjects = $this->orderBy('created_at', 'desc');
+        $subjects = $paginate ? $subjects->paginate() : $subjects->get();
+        $subjects = $subjects->transform(function ($subject) {
+            return [
+                'id' => $subject->id,
+                'name' => $subject->name,
+            ];
+        })->toArray();
 
         return $subjects;
     }
