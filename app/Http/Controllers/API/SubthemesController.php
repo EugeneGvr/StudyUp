@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\API;
 
 
-use App\SubTheme;
+use App\Models\SubTheme;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Request;
 

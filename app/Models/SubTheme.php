@@ -18,7 +18,7 @@ class SubTheme extends Model
             ->join('themes', 'sub_themes.theme_id', '=', 'themes.id')
             ->join('subjects', 'themes.subject_id', '=', 'subjects.id')
             ->orderBy('sub_themes.created_at', 'desc');
-        $subThemes = $paginate ? $subThemes->paginate() : $subThemes->find();
+        $subThemes = $paginate ? $subThemes->paginate() : $subThemes->get();
         $subThemes = $subThemes->transform(function ($subTheme) {
             return [
                 'id' => $subTheme->id,
