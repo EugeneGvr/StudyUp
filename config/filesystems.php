@@ -79,6 +79,9 @@ return [
         ],
         'users' => [
             'path' => 'users/avatar'
+        ],
+        'questions' => [
+            'path' => 'questions/avatar'
         ]
     ],
 ];

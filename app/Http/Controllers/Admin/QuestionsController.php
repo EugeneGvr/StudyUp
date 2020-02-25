@@ -46,9 +46,11 @@ error_log(print_r($subjects,1));
     public function store()
     {
         $params = Request::validate([
-            'name' => ['required', 'max:128'],
-            'theme_id' => ['required', 'integer', 'min:0'],
-            'sub_theme_id' => ['required', 'integer', 'min:0'],
+            'text' => ['required', 'max:512'],
+            'subtheme_id'   => ['required', 'integer', 'min:0'],
+            'answer_type'   => ['required'],
+            'answers'       => ['required'],
+            'photo'         => ['nullable', 'image'],
         ]);
 
         $questionObject = new Question();

@@ -127,6 +127,61 @@
                         </td>
                     </tr>
                 </table>
+                <table
+                    v-if="answer_type=='correlation'"
+                    class=" table-module w-full whitespace-no-wrap"
+                >
+                    <tr class="text-left font-bold">
+                        <th class="px-6 pt-6 pb-4">{{$t('Answer')}}</th>
+                        <th class="px-6 pt-6 pb-4">{{$t('Answer')}}</th>
+                        <th class="px-6 pt-6 pb-4"></th>
+                    </tr>
+                    <tr
+                        v-for="(answers_element, answer_key) in answers" :key="answer_key"
+                        class="hover:bg-grey-lightest focus-within:bg-grey-lightest"
+                    >
+                        <td class="border-t">
+                            <div class="px-6 py-4 flex items-center focus:text-indigo">
+                                {{answers_element.text1}}
+                            </div>
+                        </td>
+                        <td class="border-t">
+                            <div class="px-6 py-4 flex items-center focus:text-indigo">
+                                {{answers_element.text2}}
+                            </div>
+                        </td>
+                        <td class="border-t">
+                            <div class="btn-red mr-2" @click="deleteAnswer(answer_key)">
+                                <span>{{$t('Delete')}}</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="hover:bg-grey-lightest focus-within:bg-grey-lightest">
+                        <td class="border-t">
+                            <div class="px-6 py-4 flex items-center focus:text-indigo">
+                                <text-input
+                                    v-model="answer_corr.text1"
+                                    class="pr-6 pb-8 w-full lg:w-full"
+                                    :label="$t('Answer')"
+                                />
+                            </div>
+                        </td>
+                        <td class="border-t">
+                            <div class="px-6 py-4 flex items-center focus:text-indigo">
+                                <text-input
+                                    v-model="answer_corr.text2"
+                                    class="pr-6 pb-8 w-full lg:w-full"
+                                    :label="$t('Answer')"
+                                />
+                            </div>
+                        </td>
+                        <td class="border-t">
+                            <div class="btn-blue mr-2" @click="addAnswer()">
+                                <span>{{$t('Add')}}</span>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
             </div>
         </form>
     </div>
@@ -160,6 +215,10 @@
                 themes: null,
                 subthemes: null,
                 answer: '',
+                answer_corr: {
+                    text1 : '',
+                    text2 : '',
+                },
                 sending: false,
                 //form variables
                 text: null,
@@ -197,18 +256,20 @@
                 this.sending = true
 
                 var data = new FormData()
-                data.append('text', this.form.first_name || '')
-                data.append('last_name', this.form.last_name || '')
-                data.append('email', this.form.email || '')
-                data.append('password', this.form.password || '')
-                data.append('owner', this.form.owner ? '1' : '0')
-                data.append('photo', this.form.photo || '')
+                data.append('text', this.text || '')
+                data.append('subtheme_id', this.subtheme_id || '')
+                data.append('answer_type', this.answer_type || '')
+                data.append('answers', this.answers || [])
+                data.append('photo', this.photo || '')
 
-                this.$inertia.post(this.route('admin.users.store'), data)
+                this.$inertia.post(this.route('admin.questions.store'), data)
                     .then(() => this.sending = false)
             },
             addAnswer() {
-                this.answers.push({'correct': false, 'text':this.answer});
+                const answer_element = this.answer_type === 'correlation' ?
+                    {'text1': this.answer_corr.text1, 'text2': this.answer_corr.text2} :
+                    {'correct': false, 'text':this.answer};
+                this.answers.push(answer_element);
                 this.answer.correct = false;
                 this.answer.text = '';
             },

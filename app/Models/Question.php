@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\RolePermissionConnection;
+use Illuminate\Database\Connection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
@@ -56,13 +57,55 @@ class Question extends Model
 
     public function addQuestion($params)
     {
+        $avatarConfig = config('filesystems')['avatars'];
         try {
             DB::beginTransaction();
 
-            $question = $this;
-            $question->name = $params['name'];
-            $question->save();
+            $questionObject = $this;
+            $questionObject->text = $params['text'];
+            $questionObject->subtheme_id = $params['subtheme_id'];
+            $questionObject->answer_type = $params['answer_type'];
+            $questionObject->save();
 
+            $questionObject->photo_path = !empty($params['photo']) ?
+                $this->uploadFile($params['photo'], $questionObject->id, $avatarConfig['questions']['path']) :
+                null;
+            $questionObject->save();
+
+            foreach ($params['answers'] as $answer) {
+                if ($questionObject->answer_type == 'correlation') {
+                    if (!empty($answer['text']) && !empty($answer['correct'])) {
+                        $answerObject = new Answer();
+                        $answer_id = $answerObject->addAnswer([
+                            'text' => $answer['text']
+                        ]);
+
+                        $connectionObject = new AnswerQuestionConnections();
+                        $connectionObject->addConnection([
+                            'question_id' => $questionObject->id,
+                            'answer_id' => $answer_id,
+                            'correct' => $answer['correct']
+                        ]);
+                    }
+                } else {
+                    if (!empty($answer['text1']) && !empty($answer['text2'])) {
+                        $answerObject = new Answer();
+                        $answer1_id = $answerObject->addAnswer([
+                            'text' => $answer['text1']
+                        ]);
+                        $answer2_id = $answerObject->addAnswer([
+                            'text' => $answer['text2']
+                        ]);
+
+                        $connection = new AnswerCorrelationQuestionConnections();
+                        $connection->addConnection([
+                            'question_id' => $questionObject->id,
+                            'answer1_id' => $answer1_id,
+                            'answer2_id' => $answer2_id,
+                        ]);
+                    }
+                }
+            }
             DB::commit();
         } catch (\Exception $e) {
             DB::rollback();
@@ -80,15 +123,62 @@ class Question extends Model
 
     public function updateQuestion($id, $params)
     {
+        $avatarConfig = config('filesystems')['avatars'];
         try {
-            $question = $this->find($id);
-            if (!$question) {
+            $questionObject = $this->find($id);
+            if (!$questionObject) {
                 throw new \Exception("Question not found");
             }
 
             DB::beginTransaction();
-            $question->name = $params['name'];
-            $question->save();
+            $questionObject->text = $params['text'];
+            $questionObject->subtheme_id = $params['subtheme_id'];
+            $questionObject->answer_type = $params['answer_type'];
+            $questionObject->save();
+            $questionObject->save();
+
+            if (!empty($params['photo'])) {
+                if (!empty($questionObject->photo_path)) {
+                    $this->deleteFile($questionObject->photo_path);
+                }
+                $questionObject->photo_path = $this->uploadFile($params['photo'], $id, $avatarConfig['admins']['path']);
+            }
+            $questionObject->save();
+
+            foreach ($params['answers'] as $answer) {
+                if ($questionObject->answer_type == 'correlation') {
+                    if (!empty($answer['text']) && !empty($answer['correct'])) {
+                        $answerObject = new Answer();
+                        $answer_id = $answerObject->addAnswer([
+                            'text' => $answer['text']
+                        ]);
+
+                        $connectionObject = new AnswerQuestionConnections();
+                        $connectionObject->addConnection([
+                            'question_id' => $questionObject->id,
+                            'answer_id' => $answer_id,
+                            'correct' => $answer['correct']
+                        ]);
+                    }
+                } else {
+                    if (!empty($answer['text1']) && !empty($answer['text2'])) {
+                        $answerObject = new Answer();
+                        $answer1_id = $answerObject->addAnswer([
+                            'text' => $answer['text1']
+                        ]);
+                        $answer2_id = $answerObject->addAnswer([
+                            'text' => $answer['text2']
+                        ]);
+
+                        $connection = new AnswerCorrelationQuestionConnections();
+                        $connection->addConnection([
+                            'question_id' => $questionObject->id,
+                            'answer1_id' => $answer1_id,
+                            'answer2_id' => $answer2_id,
+                        ]);
+                    }
+                }
+            }
             DB::commit();
 
         } catch (\Exception $e) {
@@ -108,17 +198,24 @@ class Question extends Model
     public function deleteQuestion($id)
     {
         try {
-            $question = $this->find($id);
+            $questionObject = $this->find($id);
 
-            if (!$question) {
+            if (!$questionObject) {
                 return [
                     'status' => 0,
                     'message' => 'Question not found',
                 ];
             }
-            $question->delete();
+
+            $answerIds = //array_column();
+            DB::beginTransaction();
+            $questionObject->delete();
+
+            DB::commit();
 
         } catch (\Exception $e) {
+            DB::rollback();
+
             return [
                 'status' => 0,
                 'message' => 'Something went wrong during deleting question: ['.$e->getMessage().']',
