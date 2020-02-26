@@ -36,7 +36,7 @@
                     </td>
                     <td class="border-t">
                         <div class="px-6 py-4 flex items-center focus:text-indigo">
-                            {{ question.subtheme }}
+                            {{ question.sub_theme }}
                         </div>
                     </td>
                     <td class="border-t">

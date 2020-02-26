@@ -15,18 +15,17 @@ class Question extends Model
     {
         $questions = $this->where($params);
         $questions = $questions
-            ->select(['questions.id AS id', 'questions.question_text AS text', 'sub_themes.name AS subtheme', 'themes.name AS theme', 'subjects.name AS subject'])
+            ->select(['questions.id AS id', 'questions.question_text AS text', 'sub_themes.name AS sub_theme', 'themes.name AS theme', 'subjects.name AS subject'])
             ->join('sub_themes', 'questions.sub_theme_id', '=', 'sub_themes.id')
             ->join('themes', 'sub_themes.theme_id', '=', 'themes.id')
             ->join('subjects', 'themes.subject_id', '=', 'subjects.id')
             ->orderBy('questions.created_at', 'desc')
             ->paginate()
             ->transform(function ($question) {
-
                 return [
                     'id' => $question->id,
                     'text' => $question->text,
-                    'subtheme' => $question->subtheme,
+                    'sub_theme' => $question->sub_theme,
                     'theme' => $question->theme,
                     'subject' => $question->subject,
                 ];
@@ -51,7 +50,7 @@ class Question extends Model
             'status'    => 1,
             'id'        => $question->id,
             'text'      => $question->question_text,
-            'subtheme_id'   => $question->sub_theme_id,
+            'sub_theme_id'   => $question->sub_theme_id,
         ];
     }
 
@@ -60,10 +59,11 @@ class Question extends Model
         $avatarConfig = config('filesystems')['avatars'];
         try {
             DB::beginTransaction();
-
+            error_log('hello there');
             $questionObject = $this;
             $questionObject->text = $params['text'];
-            $questionObject->subtheme_id = $params['subtheme_id'];
+            $questionObject->sub_theme_id = $params['sub_theme_id'];
+//            $questionObject->level_id = $params['level_id'];
             $questionObject->answer_type = $params['answer_type'];
             $questionObject->save();
 
@@ -72,44 +72,44 @@ class Question extends Model
                 null;
             $questionObject->save();
 
-            foreach ($params['answers'] as $answer) {
-                if ($questionObject->answer_type == 'correlation') {
-                    if (!empty($answer['text']) && !empty($answer['correct'])) {
-                        $answerObject = new Answer();
-                        $answer_id = $answerObject->addAnswer([
-                            'text' => $answer['text']
-                        ]);
-
-                        $connectionObject = new AnswerQuestionConnections();
-                        $connectionObject->addConnection([
-                            'question_id' => $questionObject->id,
-                            'answer_id' => $answer_id,
-                            'correct' => $answer['correct']
-                        ]);
-                    }
-                } else {
-                    if (!empty($answer['text1']) && !empty($answer['text2'])) {
-                        $answerObject = new Answer();
-                        $answer1_id = $answerObject->addAnswer([
-                            'text' => $answer['text1']
-                        ]);
-                        $answer2_id = $answerObject->addAnswer([
-                            'text' => $answer['text2']
-                        ]);
-
-                        $connection = new AnswerCorrelationQuestionConnections();
-                        $connection->addConnection([
-                            'question_id' => $questionObject->id,
-                            'answer1_id' => $answer1_id,
-                            'answer2_id' => $answer2_id,
-                        ]);
-                    }
-                }
-            }
+//            foreach ($params['answers'] as $answer) {
+//                if ($questionObject->answer_type == 'correlation') {
+//                    if (!empty($answer['text']) && !empty($answer['correct'])) {
+//                        $answerObject = new Answer();
+//                        $answer_id = $answerObject->addAnswer([
+//                            'text' => $answer['text']
+//                        ]);
+//
+//                        $connectionObject = new AnswerQuestionConnections();
+//                        $connectionObject->addConnection([
+//                            'question_id' => $questionObject->id,
+//                            'answer_id' => $answer_id,
+//                            'correct' => $answer['correct']
+//                        ]);
+//                    }
+//                } else {
+//                    if (!empty($answer['text1']) && !empty($answer['text2'])) {
+//                        $answerObject = new Answer();
+//                        $answer1_id = $answerObject->addAnswer([
+//                            'text' => $answer['text1']
+//                        ]);
+//                        $answer2_id = $answerObject->addAnswer([
+//                            'text' => $answer['text2']
+//                        ]);
+//
+//                        $connection = new AnswerCorrelationQuestionConnections();
+//                        $connection->addConnection([
+//                            'question_id' => $questionObject->id,
+//                            'answer1_id' => $answer1_id,
+//                            'answer2_id' => $answer2_id,
+//                        ]);
+//                    }
+//                }
+//            }
             DB::commit();
+
         } catch (\Exception $e) {
             DB::rollback();
-
             return [
                 'status' => 0,
                 'message' =>'Something went wrong during creating question',

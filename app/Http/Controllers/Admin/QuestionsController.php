@@ -34,7 +34,7 @@ class QuestionsController extends Controller
     {
         $subjectObject = new Subject();
         $subjects = $subjectObject->getSubjects(false);
-error_log(print_r($subjects,1));
+
         $result = [
             'subjects' => $subjects,
             'answer_types' => config('app')['answer_types']
@@ -55,7 +55,6 @@ error_log(print_r($subjects,1));
 
         $questionObject = new Question();
         $questionObject->addQuestion($params);
-
 
         return Redirect::route('admin.questions')->with('success', 'Question created');
     }

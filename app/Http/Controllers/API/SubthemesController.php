@@ -9,9 +9,11 @@ use Illuminate\Support\Facades\Request;
 
 class SubthemesController extends Controller
 {
-    public function index()
+    public function index($id)
     {
-        $params = Request::only('theme_id');
+        $params = [
+            'theme_id' => $id,
+        ];
 
         $subThemeObject = new SubTheme();
         $subThemes = $subThemeObject->getSubThemes($params, false);

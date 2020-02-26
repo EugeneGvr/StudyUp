@@ -253,7 +253,7 @@
         },
         methods: {
             submit() {
-                this.sending = true
+                this.sending = true;
 
                 var data = new FormData()
                 data.append('text', this.text || '')

@@ -9,9 +9,11 @@ use Illuminate\Support\Facades\Request;
 
 class ThemesController extends Controller
 {
-    public function index()
+    public function index($id)
     {
-        $params = Request::only('subject_id');
+        $params = [
+            'subject_id' => $id,
+        ];
 
         $themeObject = new Theme();
         $themes = $themeObject->getThemes($params, false);
