@@ -34,7 +34,7 @@ class QuestionsController extends Controller
     {
         $subjectObject = new Subject();
         $subjects = $subjectObject->getSubjects(false);
-error_log(print_r($subjects,1));
+
         $result = [
             'subjects' => $subjects,
             'answer_types' => config('app')['answer_types']
@@ -46,14 +46,15 @@ error_log(print_r($subjects,1));
     public function store()
     {
         $params = Request::validate([
-            'name' => ['required', 'max:128'],
-            'theme_id' => ['required', 'integer', 'min:0'],
-            'sub_theme_id' => ['required', 'integer', 'min:0'],
+            'text' => ['required', 'max:512'],
+            'subtheme_id'   => ['required', 'integer', 'min:0'],
+            'answer_type'   => ['required'],
+            'answers'       => ['required'],
+            'photo'         => ['nullable', 'image'],
         ]);
 
         $questionObject = new Question();
         $questionObject->addQuestion($params);
-
 
         return Redirect::route('admin.questions')->with('success', 'Question created');
     }

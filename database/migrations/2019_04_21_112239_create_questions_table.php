@@ -15,11 +15,10 @@ class CreateQuestionsTable extends Migration
     {
         Schema::create('questions', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('question_text');
+            $table->string('text');
             $table->integer('sub_theme_id')->nullable();
-            $table->integer('theme_id')->nullable();
-            $table->integer('level_id');
-            $table->integer('type_id');
+            $table->integer('level_id')->default(1);
+            $table->enum('answer_type', array_keys(config('app')['answer_types']));
             $table->timestamps();
         });
     }

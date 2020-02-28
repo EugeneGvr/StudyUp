@@ -12,9 +12,11 @@ use Illuminate\Support\Facades\Redirect;
 
 class LocalitiesController extends Controller
 {
-    public function index()
+    public function index($id)
     {
-        $params = Request::only('parent_id');
+        $params = [
+            'parent_id' => $id
+        ];
         $localityObject = new Locality();
         $localitiesData = $localityObject->getLocalities($params, false, false);
 

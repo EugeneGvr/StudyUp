@@ -12,6 +12,7 @@ class Theme extends Model
 
     public function getThemes($params = [], $paginate = true)
     {
+//        error_log(print_r($params,1));
         $themes = $this->where($params);
         $themes = $themes
             ->select(['themes.id AS id', 'themes.name AS name', 'subjects.name AS subject'])

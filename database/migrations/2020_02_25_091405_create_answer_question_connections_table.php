@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class CreateAnswerQuestionsTable extends Migration
+class CreateAnswerQuestionConnectionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateAnswerQuestionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('answer_questions', function (Blueprint $table) {
+        Schema::create('answer_question_connections', function (Blueprint $table) {
             $table->integer('question_id');
             $table->integer('answer_id');
-            $table->boolean('result');
+            $table->boolean('correct');
         });
     }
 
@@ -27,6 +27,6 @@ class CreateAnswerQuestionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('answer_questions');
+        Schema::dropIfExists('answer_question_connections');
     }
 }
