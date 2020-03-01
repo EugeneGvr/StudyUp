@@ -277,7 +277,6 @@
                 data.append('answer_type', this.answer_type || '')
                 data.append('answers', this.answers || [])
                 data.append('photo', this.photo || '')
-
                 this.$inertia.post(this.route('admin.questions.store'), data)
                     .then(() => this.sending = false)
             },

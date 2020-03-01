@@ -17,8 +17,9 @@ class CreateQuestionsTable extends Migration
             $table->bigIncrements('id');
             $table->string('text');
             $table->integer('sub_theme_id')->nullable();
-            $table->integer('level_id')->default(1);
+            $table->integer('level')->default(1);
             $table->enum('answer_type', array_keys(config('app')['answer_types']));
+            $table->string('photo_path', 100)->nullable();
             $table->timestamps();
         });
     }
