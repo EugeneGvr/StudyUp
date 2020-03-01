@@ -11,7 +11,7 @@
                 </select>
             </search-filter>
             <div class="manage-buttons flex">
-                <inertia-link class="btn-blue mr-2" :href="route('admin.questions.create')">
+                <inertia-link class="btn-blue mr-2" style="text-decoration: none;color: white" :href="route('admin.questions.create')">
                     <span>{{$t('Add Question')}}</span>
                 </inertia-link>
             </div>

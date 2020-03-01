@@ -10,7 +10,7 @@
           <option value="only">Only Trashed</option>
         </select>
       </search-filter>
-      <inertia-link class="btn-blue" :href="route('admin.roles.create')">
+      <inertia-link class="btn-blue mr-2" style="text-decoration: none;color: white" :href="route('admin.roles.create')">
         <span>{{$t('Add Role')}}</span>
       </inertia-link>
     </div>

@@ -87,12 +87,16 @@
                     <span>{{$t('Edit Theme')}}</span>
                 </md-dialog-title>
                 <md-dialog-content>
-                    <text-input
-                        v-model="focusedTheme.name"
-                        :errors="$page.errors.name"
-                        class="pb-8 w-full"
-                        :label="$t('Name')"
-                    />
+                    <text-input v-model="focusedTheme.name" :errors="$page.errors.name" class="pb-8 w-full" :label="$t('Name')"/>
+                    <select-input
+                        v-model="focusedTheme.subject_id"
+                        :errors="$page.errors.subject_id"
+                        class="pb-3 w-full" :label="$t('Subject')"
+                    >
+                        <md-option v-for="subject in subjects.data" :key="subject.id" :value="subject.id">
+                            {{subject.name}}
+                        </md-option>
+                    </select-input>
                 </md-dialog-content>
                 <md-dialog-actions>
                     <md-button class="md-primary p-2 m-2" @click="editModal=false">{{$t('Close')}}</md-button>
@@ -102,12 +106,12 @@
 
             <md-dialog :md-active.sync="deleteModal">
                 <md-dialog-title>
-                    <span>Are you sure you want to delete locality</span>
+                    <span>Are you sure you want to delete theme</span>
                     <span class="text-blue">{{focusedTheme.name}}</span>
                     <span>?</span>
                 </md-dialog-title>
                 <md-dialog-content>
-                    <span>This action will drop locality and all users who have this locality will get default value</span>
+                    <span>This action will drop theme</span>
                 </md-dialog-content>
                 <md-dialog-actions>
                     <md-button class="md-primary p-2 m-2" @click="deleteModal=false">Close</md-button>
@@ -185,7 +189,8 @@
             },
             showEditModal(theme) {
                 this.editModal = true;
-                this.focusedTheme = theme;
+                this.focusedTheme = {...theme};
+                console.log(theme);
             },
             showAddModal() {
                 this.addModal = true;

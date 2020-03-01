@@ -16,7 +16,7 @@
           <option value="only">Only Trashed</option>
         </select>
       </search-filter>
-      <inertia-link class="btn-indigo" :href="route('admin.users.create')">
+      <inertia-link class="btn-indigo" style="text-decoration: none;color: white" :href="route('admin.users.create')">
         <span>Create</span>
         <span class="hidden md:inline">User</span>
       </inertia-link>

@@ -11,7 +11,7 @@
                     <option value="only">Only Trashed</option>
                 </select>
             </search-filter>
-            <inertia-link class="btn-indigo" :href="route('admin.admins.create')">
+            <inertia-link class="btn-indigo" style="text-decoration: none;color: white" :href="route('admin.admins.create')">
                 <span>{{$t('Add Administrator')}}</span>
             </inertia-link>
         </div>

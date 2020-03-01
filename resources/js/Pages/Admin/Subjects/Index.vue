@@ -87,12 +87,12 @@
 
             <md-dialog :md-active.sync="deleteModal">
                 <md-dialog-title>
-                    <span>Are you sure you want to delete locality</span>
+                    <span>Are you sure you want to delete subject</span>
                     <span class="text-blue">{{focusedSubject.name}}</span>
                     <span>?</span>
                 </md-dialog-title>
                 <md-dialog-content>
-                    <span>This action will drop locality and all users who have this locality will get default value</span>
+                    <span>This action will drop subject</span>
                 </md-dialog-content>
                 <md-dialog-actions>
                     <md-button class="md-primary p-2 m-2" @click="deleteModal=false">Close</md-button>
@@ -167,7 +167,7 @@
             },
             showEditModal(subject) {
                 this.editModal = true;
-                this.focusedSubject = subject;
+                this.focusedSubject = {...subject};
             },
             showAddModal() {
                 this.addModal = true;

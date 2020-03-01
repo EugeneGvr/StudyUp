@@ -10,7 +10,7 @@
                 </h1>
                 <div class="p-3 border-t border-grey-lighter flex justify-end items-center">
                     <loading-button :loading="sending" class="btn-indigo" type="submit">
-                        Add Administrator
+                        Add Question
                     </loading-button>
                 </div>
             </div>
