@@ -34,7 +34,7 @@
                     </td>
                     <td class="border-t" @click="getSubthemes(theme)">
                         <div class="px-6 py-4 flex items-center focus:text-indigo">
-                            {{ theme.subject }}
+                            {{ theme.subject_name }}
                         </div>
                     </td>
                     <td class="border-t w-px">
@@ -190,9 +190,10 @@
             showEditModal(theme) {
                 this.editModal = true;
                 this.focusedTheme = {...theme};
-                console.log(theme);
             },
             showAddModal() {
+                this.newTheme.name = '';
+                this.newTheme.subject_id = null;
                 this.addModal = true;
             },
             showDeleteModal(theme) {
@@ -203,7 +204,7 @@
                 this.$inertia.post(
                     this.route('admin.themes.store'),
                     this.newTheme
-                ).then(this.addyModal = false)
+                ).then(this.addModal = false)
             },
             edit() {
                 this.$inertia.put(

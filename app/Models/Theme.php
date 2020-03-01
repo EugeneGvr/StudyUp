@@ -27,8 +27,8 @@ class Theme extends Model
             return [
                 'id' => $theme->id,
                 'name' => $theme->name,
-                'subject_id' => $theme,
-                'subject' => $theme->subject,
+                'subject_id' => $theme->subject_id,
+                'subject_name' => $theme->subject_name,
             ];
         })->toArray();
 

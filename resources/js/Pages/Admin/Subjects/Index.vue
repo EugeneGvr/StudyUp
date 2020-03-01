@@ -170,6 +170,7 @@
                 this.focusedSubject = {...subject};
             },
             showAddModal() {
+                this.newSubject.name = '';
                 this.addModal = true;
             },
             showDeleteModal(subject) {

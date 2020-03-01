@@ -47,6 +47,7 @@
                                 {{subtheme.name}}
                             </md-option>
                         </select-input>
+                        <text-input type="number" min="1" max="10" v-model="level" :errors="$page.errors.level" class="pb-2 w-full" :label="$t('Level')"/>
                         <select-input
                             v-model="answer_type"
                             :errors="$page.errors.answer_type"
@@ -65,7 +66,7 @@
                     </div>
                 </div>
             </div>
-            <div class="flex bg-white rounded shadow p-12 m-2 overflow-hidden max-w-lg">
+            <div v-if="answer_type != null" class="flex bg-white rounded shadow p-12 m-2 overflow-hidden w-full">
                 <text-input
                     v-if="answer_type=='input'"
                     v-model="answer"
@@ -86,15 +87,17 @@
                         v-for="(answers_element, answer_key) in answers" :key="answer_key"
                         class="hover:bg-grey-lightest focus-within:bg-grey-lightest"
                     >
-                        <td class="border-t">
-                            <md-checkbox v-if="answer_type=='multi'" class="md-primary mr-2"
+                        <td v-if="answer_type=='multi'" class="border-t">
+                            <md-checkbox class="md-primary mr-2"
                                          v-model="answers_element.correct"
                                          :value= "true"
                                          :ref="answer_key"
                             ></md-checkbox>
-                            <md-radio v-if="answer_type=='single'" class="md-primary mr-2"
-                                         v-model="answers_element.correct"
-                                         :value= "true"
+                        </td>
+                        <td v-if="answer_type=='single'" class="border-t">
+                            <md-radio class="md-primary mr-2"
+                                         v-model="correct_id"
+                                         :value= "answer_key"
                                          :ref="answer_key"
                             ></md-radio>
                         </td>
@@ -228,11 +231,15 @@
                 answer_type: null,
                 photo: null,
                 answers: [],
+                correct_id: null,
+                level: null,
                 //form variables
             }
         },
         watch: {
             subject_id() {
+                this.themes = null;
+                this.theme_id = null;
                 axios.get(this.route('api.v1.themes', this.subject_id))
                     .then(response => {
                         this.themes = response.data;
@@ -242,6 +249,8 @@
                     })
             },
             theme_id() {
+                this.subthemes = null;
+                this.subtheme_id = null;
                 axios.get(this.route('api.v1.subthemes', this.theme_id))
                     .then(response => {
                         this.subthemes = response.data;
@@ -255,9 +264,16 @@
             submit() {
                 this.sending = true;
 
+                if (this.answer_type === 'single') {
+                    for (let key in this.answers) {
+                        if (this.correct_id == key) this.answers[key].correct = true;
+                    }
+                }
+                console.log(this.answers);
                 var data = new FormData()
                 data.append('text', this.text || '')
                 data.append('subtheme_id', this.subtheme_id || '')
+                data.append('level', this.level || '')
                 data.append('answer_type', this.answer_type || '')
                 data.append('answers', this.answers || [])
                 data.append('photo', this.photo || '')
@@ -266,12 +282,12 @@
                     .then(() => this.sending = false)
             },
             addAnswer() {
-                const answer_element = this.answer_type === 'correlation' ?
+                let answer_element;
+                answer_element = this.answer_type === 'correlation' ?
                     {'text1': this.answer_corr.text1, 'text2': this.answer_corr.text2} :
                     {'correct': false, 'text':this.answer};
                 this.answers.push(answer_element);
-                this.answer.correct = false;
-                this.answer.text = '';
+                this.answer = '';
             },
             deleteAnswer(answer_key) {
                 this.answers.splice(answer_key, 1);
