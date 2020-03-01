@@ -12,10 +12,14 @@ class Theme extends Model
 
     public function getThemes($params = [], $paginate = true)
     {
-//        error_log(print_r($params,1));
         $themes = $this->where($params);
         $themes = $themes
-            ->select(['themes.id AS id', 'themes.name AS name', 'subjects.name AS subject'])
+            ->select([
+                'themes.id AS id',
+                'themes.name AS name',
+                'themes.subject_id AS subject_id',
+                'subjects.name AS subject_name'
+            ])
             ->join('subjects', 'themes.subject_id', '=', 'subjects.id')
             ->orderBy('themes.created_at', 'desc');
         $themes = $paginate ? $themes->paginate() : $themes->get();
@@ -23,6 +27,7 @@ class Theme extends Model
             return [
                 'id' => $theme->id,
                 'name' => $theme->name,
+                'subject_id' => $theme,
                 'subject' => $theme->subject,
             ];
         })->toArray();

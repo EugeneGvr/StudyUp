@@ -22,7 +22,7 @@ class ThemesController extends Controller
 
         $themeObject = new Theme();
         $themes = $themeObject->getThemes($params);
-
+        
         $result = [
             'filters' => Request::all('search', 'role', 'trashed'),
             'themes' => $themes,
