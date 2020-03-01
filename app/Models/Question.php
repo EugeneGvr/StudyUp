@@ -15,7 +15,7 @@ class Question extends Model
     {
         $questions = $this->where($params);
         $questions = $questions
-            ->select(['questions.id AS id', 'questions.question_text AS text', 'sub_themes.name AS sub_theme', 'themes.name AS theme', 'subjects.name AS subject'])
+            ->select(['questions.id AS id', 'questions.text AS text', 'sub_themes.name AS sub_theme', 'themes.name AS theme', 'subjects.name AS subject'])
             ->join('sub_themes', 'questions.sub_theme_id', '=', 'sub_themes.id')
             ->join('themes', 'sub_themes.theme_id', '=', 'themes.id')
             ->join('subjects', 'themes.subject_id', '=', 'subjects.id')
@@ -59,11 +59,11 @@ class Question extends Model
         $avatarConfig = config('filesystems')['avatars'];
         try {
             DB::beginTransaction();
-            error_log('hello there');
+
             $questionObject = $this;
             $questionObject->text = $params['text'];
-            $questionObject->sub_theme_id = $params['sub_theme_id'];
-//            $questionObject->level_id = $params['level_id'];
+            $questionObject->sub_theme_id = $params['subtheme_id'];
+            $questionObject->level = $params['level'];
             $questionObject->answer_type = $params['answer_type'];
             $questionObject->save();
 
@@ -73,6 +73,7 @@ class Question extends Model
             $questionObject->save();
 
 //            foreach ($params['answers'] as $answer) {
+//
 //                if ($questionObject->answer_type == 'correlation') {
 //                    if (!empty($answer['text']) && !empty($answer['correct'])) {
 //                        $answerObject = new Answer();

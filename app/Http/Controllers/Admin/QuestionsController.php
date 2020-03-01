@@ -48,6 +48,7 @@ class QuestionsController extends Controller
         $params = Request::validate([
             'text' => ['required', 'max:512'],
             'subtheme_id'   => ['required', 'integer', 'min:0'],
+            'level'         => ['required', 'integer', 'min:1', 'max:10'],
             'answer_type'   => ['required'],
             'answers'       => ['required'],
             'photo'         => ['nullable', 'image'],
