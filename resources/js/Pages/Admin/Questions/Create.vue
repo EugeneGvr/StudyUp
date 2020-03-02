@@ -269,19 +269,19 @@
                         if (this.correct_id == key) this.answers[key].correct = true;
                     }
                 }
-                console.log(this.answers);
-                var data = new FormData()
-                data.append('text', this.text || '')
-                data.append('subtheme_id', this.subtheme_id || '')
-                data.append('level', this.level || '')
-                data.append('answer_type', this.answer_type || '')
-                data.append('answers', this.answers || [])
-                data.append('photo', this.photo || '')
-                this.$inertia.post(this.route('admin.questions.store'), data)
+                const form = {
+                    'text': this.text,
+                    'subtheme_id': this.subtheme_id,
+                    'level': this.level,
+                    'answer_type': this.answer_type,
+                    'answers': this.answers,
+                    'photo': this.photo,
+                };
+                this.$inertia.post(this.route('admin.questions.store'), form)
                     .then(() => this.sending = false)
             },
             addAnswer() {
-                let answer_element;
+                let answer_element=[];
                 answer_element = this.answer_type === 'correlation' ?
                     {'text1': this.answer_corr.text1, 'text2': this.answer_corr.text2} :
                     {'correct': false, 'text':this.answer};

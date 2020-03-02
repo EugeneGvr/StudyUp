@@ -72,41 +72,45 @@ class Question extends Model
                 null;
             $questionObject->save();
 
-//            foreach ($params['answers'] as $answer) {
-//
-//                if ($questionObject->answer_type == 'correlation') {
-//                    if (!empty($answer['text']) && !empty($answer['correct'])) {
-//                        $answerObject = new Answer();
-//                        $answer_id = $answerObject->addAnswer([
-//                            'text' => $answer['text']
-//                        ]);
-//
-//                        $connectionObject = new AnswerQuestionConnections();
-//                        $connectionObject->addConnection([
-//                            'question_id' => $questionObject->id,
-//                            'answer_id' => $answer_id,
-//                            'correct' => $answer['correct']
-//                        ]);
-//                    }
-//                } else {
-//                    if (!empty($answer['text1']) && !empty($answer['text2'])) {
-//                        $answerObject = new Answer();
-//                        $answer1_id = $answerObject->addAnswer([
-//                            'text' => $answer['text1']
-//                        ]);
-//                        $answer2_id = $answerObject->addAnswer([
-//                            'text' => $answer['text2']
-//                        ]);
-//
-//                        $connection = new AnswerCorrelationQuestionConnections();
-//                        $connection->addConnection([
-//                            'question_id' => $questionObject->id,
-//                            'answer1_id' => $answer1_id,
-//                            'answer2_id' => $answer2_id,
-//                        ]);
-//                    }
-//                }
-//            }
+            foreach ($params['answers'] as $answer) {
+
+                if ($questionObject->answer_type != 'correlation') {
+                    if (!empty($answer['text'])) {
+                        $answerObject = new Answer();
+                        $answerResponse = $answerObject->addAnswer([
+                            'text' => $answer['text']
+                        ]);
+                        if (!empty($answerResponse) && $answerResponse['status']) {
+                            $connectionObject = new AnswerQuestionConnections();
+                            $connectionObject->addConnection([
+                                'question_id' => $questionObject->id,
+                                'answer_id' => $answerResponse['answer_id'],
+                                'correct' => $answer['correct']
+                            ]);
+                        }
+                        else {
+                            throw new \Exception("Answer not found");
+                        }
+                    }
+                } else {
+                    if (!empty($answer['text1']) && !empty($answer['text2'])) {
+                        $answerObject = new Answer();
+                        $answer1_id = $answerObject->addAnswer([
+                            'text' => $answer['text1']
+                        ]);
+                        $answer2_id = $answerObject->addAnswer([
+                            'text' => $answer['text2']
+                        ]);
+
+                        $connection = new AnswerCorrelationQuestionConnections();
+                        $connection->addConnection([
+                            'question_id' => $questionObject->id,
+                            'answer1_id' => $answer1_id,
+                            'answer2_id' => $answer2_id,
+                        ]);
+                    }
+                }
+            }
             DB::commit();
 
         } catch (\Exception $e) {
