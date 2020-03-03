@@ -51,16 +51,13 @@
                     </td>
                     <td class="border-t w-px">
                         <div class="flex">
-                            <div class="pl-4 pr-2" tabindex="-1" @click="showEditModal(question)">
+                            <a class="pl-4 pr-2" :href="route('admin.questions.edit', question.id)" tabindex="-1">
                                 <md-icon>edit</md-icon>
                                 <md-tooltip md-direction="top">{{$t('Edit')}}</md-tooltip>
-                            </div>
+                            </a>
                             <div class="pl-2 pr-2" tabindex="-1" @click="showDeleteModal(question)">
                                 <md-icon>delete_outline</md-icon>
                                 <md-tooltip md-direction="top">{{$t('Delete')}}</md-tooltip>
-                            </div>
-                            <div class="px-4" tabindex="-1">
-                                <md-icon>keyboard_arrow_right</md-icon>
                             </div>
                         </div>
                     </td>

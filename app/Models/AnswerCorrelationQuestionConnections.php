@@ -7,11 +7,10 @@ use Illuminate\Support\Facades\DB;
 
 class AnswerCorrelationQuestionConnections extends Model
 {
-    public function getConnections($params = [])
+    public static function getConnections($params = [])
     {
-        $connections = $this->where($params);
+        $connections = self::where($params);
         $connections = $connections
-            ->orderBy('created_at', 'desc')
             ->get()
             ->transform(function ($connection) {
                 return [

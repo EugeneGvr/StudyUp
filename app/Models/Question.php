@@ -24,7 +24,9 @@ class Question extends Model
             ->transform(function ($question) {
                 return [
                     'id' => $question->id,
-                    'text' => $question->text,
+                    'text' => strlen($question->text) > 30 ?
+                        sprintf('%s...', mb_substr($question->text, 0, 30)) :
+                        $question->text,
                     'sub_theme' => $question->sub_theme,
                     'theme' => $question->theme,
                     'subject' => $question->subject,
@@ -37,21 +39,52 @@ class Question extends Model
 
     public function getQuestion($id)
     {
-        $question = $this->find($id);
+        try {
+            $question = $this->find($id);
+            if (!$question) {
+                throw new \Exception("Question not found");
+            }
+            $subthemeObject = new SubTheme();
+            $subtheme = $subthemeObject->find($question->sub_theme_id);
+            if (!$subtheme) {
+                throw new \Exception("Subtheme of current question not found");
+            }
 
-        if(!$question) {
+            $themeObject = new Theme();
+            $theme = $themeObject->find($subtheme->theme_id);
+            if (!$theme) {
+                throw new \Exception("Theme of current question not found");
+            }
+
+            $answers = Answer::getAnswersByQuestionId($question->id, $question->answer_type);
+
+            $photoPath = $this->getFilePublicUrl(
+                $question->photo_path,
+                config('filesystems')['questions']['path']
+            );
+
+            $result = [
+                'id' => $question->id,
+                'text' => $question->question_text,
+                'subtheme_id' => $question->sub_theme_id,
+                'theme_id' => $theme->id,
+                'subject_id' => $subject->id,
+                'level' => $question->level,
+                'answer_type' => $question->answer_type,
+                'answers' => $answers,
+                'photo' => $photoPath,
+            ];
+
             return [
-                'status'    => 0,
-                'message'   => 'Question not found',
+                'status' => 1,
+                'question' => $result,
+            ];
+        } catch (\Exception $e) {
+            return [
+                'status' => 0,
+                'message' => $e->getMessage(),
             ];
         }
-
-        return [
-            'status'    => 1,
-            'id'        => $question->id,
-            'text'      => $question->question_text,
-            'sub_theme_id'   => $question->sub_theme_id,
-        ];
     }
 
     public function addQuestion($params)
@@ -73,23 +106,22 @@ class Question extends Model
             $questionObject->save();
 
             foreach ($params['answers'] as $answer) {
-
                 if ($questionObject->answer_type != 'correlation') {
                     if (!empty($answer['text'])) {
                         $answerObject = new Answer();
                         $answerResponse = $answerObject->addAnswer([
                             'text' => $answer['text']
                         ]);
-                        if (!empty($answerResponse) && $answerResponse['status']) {
+                        if (!empty($answerResponse['status']) && $answerResponse['status'] == 1) {
                             $connectionObject = new AnswerQuestionConnections();
                             $connectionObject->addConnection([
                                 'question_id' => $questionObject->id,
                                 'answer_id' => $answerResponse['answer_id'],
-                                'correct' => $answer['correct']
+                                'correct' => $answer['correct'] ?? 0
                             ]);
                         }
                         else {
-                            throw new \Exception("Answer not found");
+                            throw new \Exception("Creating of answer was failed");
                         }
                     }
                 } else {

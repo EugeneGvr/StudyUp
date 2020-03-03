@@ -7,11 +7,10 @@ use Illuminate\Support\Facades\DB;
 
 class AnswerQuestionConnections extends Model
 {
-    public function getConnections($params = [])
+    public static function getConnections($params = [])
     {
-        $connections = $this->where($params);
+        $connections = self::where($params);
         $connections = $connections
-            ->orderBy('created_at', 'desc')
             ->get()
             ->transform(function ($connection) {
                 return [
@@ -39,16 +38,7 @@ class AnswerQuestionConnections extends Model
             DB::commit();
         } catch (\Exception $e) {
             DB::rollback();
-
-            return [
-                'status' => 0,
-                'message' =>'Something went wrong during creating connection',
-            ];
         }
-
-        return [
-            'status' => 1
-        ];
     }
 
     public function deleteConnection($params)
@@ -70,9 +60,5 @@ class AnswerQuestionConnections extends Model
                 'message' => 'Something went wrong during deleting connection: ['.$e->getMessage().']',
             ];
         }
-
-        return [
-            'status' => 1
-        ];
     }
 }

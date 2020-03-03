@@ -71,9 +71,9 @@ class Locality extends Model
             $locality->parent_id = $params['parent_id'];
             $locality->type = $params['type'];
             //delete after new migration
-            $locality->code = '000000';
-            $locality->center = false;
-            $locality->save();
+//            $locality->code = '000000';
+//            $locality->center = false;
+//            $locality->save();
 
             DB::commit();
         } catch (\Exception $e) {

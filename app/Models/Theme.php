@@ -61,6 +61,11 @@ class Theme extends Model
             $theme->subject_id = $params['subject_id'];
             $theme->save();
 
+            $subTheme = new SubTheme();
+            $subTheme->name = $params['name'];
+            $subTheme->theme_id = $theme->id;
+            $subTheme->save();
+
             DB::commit();
         } catch (\Exception $e) {
             DB::rollback();

@@ -60,16 +60,18 @@ class QuestionsController extends Controller
         return Redirect::route('admin.questions')->with('success', 'Question created');
     }
 
-    public function show($id)
+    public function edit($id)
     {
         $questionObject = new Question();
-        $question = $questionObject->getQuestion($id);
+        $data = $questionObject->getQuestion($id);
 
-        $result = [
-            'question' => $question,
-        ];
+        if(!empty($data['status']) || $data['status'] == 1) {
+            return $this->render('Admin/Questions/Edit', [
+                'question' => $data['question']
+            ]);
+        }
 
-        return $this->render('Admin/Questions/Edit', $result);
+        return Redirect::route('admin.questions')->with('error', $data['message']);
     }
 
     public function update($id)

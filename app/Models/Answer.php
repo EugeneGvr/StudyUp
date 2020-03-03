@@ -7,9 +7,34 @@ use Illuminate\Support\Facades\DB;
 
 class Answer extends Model
 {
-    public function getAnswers($params = [])
+    public static function getAnswers($params = [])
     {
-        $answers = $this->where($params);
+        $answers = self::where($params);
+        $answers = $answers
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->transform(function ($answer) {
+                return [
+                    'id' => $answer->id,
+                    'text' => $answer->text,
+                ];
+            })
+            ->toArray();
+
+        return $answers;
+    }
+
+    public static function getAnswersByQuestionId($questionId, $answerType)
+    {
+        if ($answerType != 'correlation') {
+            $answers = AnswerQuestionConnections::getConnections(['question_id' => $questionId]);
+            error_log(print_r($answers,1));die;
+        } else {
+            $answers = AnswerCorrelationQuestionConnections::getConnections(['question_id' => $questionId]);
+        }
+
+
+        $answers = self::where($params);
         $answers = $answers
             ->orderBy('created_at', 'desc')
             ->get()
