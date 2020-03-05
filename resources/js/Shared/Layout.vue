@@ -3,19 +3,13 @@
     <portal-target name="dropdown" slim />
     <div class="flex flex-col">
       <div class="h-screen flex flex-col" @click="hideDropdownMenus">
-        <div class="md:flex">
-          <div class="bg-black md:flex-no-shrink md:w-64 px-6 py-4 flex items-center justify-between md:justify-center">
+        <div class="bg-white border-r border-b md:flex">
+          <div class="md:flex-no-shrink md:w-64 px-6 py-4 flex items-center justify-between md:justify-center">
             <inertia-link class="mt-1" href="/">
-              <logo-a-i class="fill-white" width="120" height="28" />
+              <logo width="40" height="40" />
             </inertia-link>
-            <dropdown class="md:hidden" placement="bottom-end">
-              <svg class="fill-white w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" /></svg>
-              <div slot="dropdown" class="mt-2 px-8 py-4 shadow-lg bg-indigo-darker rounded">
-                <main-menu :url="url()" />
-              </div>
-            </dropdown>
           </div>
-          <div class="bg-white border-b w-full p-4 md:py-0 md:px-12 text-sm md:text-base flex justify-between items-center">
+          <div class="w-full p-4 md:py-0 md:px-12 text-sm md:text-base flex justify-between items-center">
               <localization :locales="$page.locales" :default="$page.defaultLocale"></localization>
             <dropdown class="mt-1" placement="bottom-end">
               <div class="flex items-center cursor-pointer select-none group">
@@ -34,7 +28,6 @@
           </div>
         </div>
         <div class="flex flex-grow overflow-hidden">
-          <main-menu :url="url()" class="bg-black flex-no-shrink w-64 p-12 hidden md:block overflow-y-auto" />
           <div class="w-full overflow-hidden px-4 py-8 md:p-12 overflow-y-auto" scroll-region>
             <flash-messages />
             <slot />
@@ -49,7 +42,7 @@
 import Dropdown from '@/Shared/Dropdown'
 import FlashMessages from '@/Shared/FlashMessages'
 import Icon from '@/Shared/Icon'
-import LogoAI from '@/Shared/LogoAI'
+import Logo from '@/Shared/LogoUI'
 import MainMenu from '@/Shared/MainMenu'
 import Localization from '@/Shared/Localization'
 
@@ -58,7 +51,7 @@ export default {
     Dropdown,
     FlashMessages,
     Icon,
-    LogoAI,
+    Logo,
     MainMenu,
     Localization,
   },

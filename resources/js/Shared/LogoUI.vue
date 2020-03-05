@@ -1,7 +1,6 @@
 <template>
     <div>
-        <logo class="inline-block  fill-white" height="40"/>
-        <div class="inline-block mx-auto text-white text-5xl">StudyUp</div>
+        <logo class="inline-block  fill-black" height="40"/>
     </div>
 </template>
 
