@@ -3,33 +3,33 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
-use Illuminate\Support\Facades\Auth;
 
 class Authenticate extends Middleware
 {
-//    /**
-//     * Handle an incoming request.
-//     *
-//     * @param  \Illuminate\Http\Request  $request
-//     * @param  \Closure  $next
-//     * @param  string|null  $guard
-//     * @return mixed
-//     */
-//    public function handle($request, Closure $next, $guard = null)
-//    {
-//        if (!Auth::guard($guard)->check()) {
-//            return redirect()->route($guard == 'web-admin' ? 'admin.login' : 'login');
-//        }
-//
-//        return $next($request);
-//    }
+    protected $guard;
+    /**
+     * Handle an unauthenticated user.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  array  $guards
+     * @return void
+     *
+     * @throws \Illuminate\Auth\AuthenticationException
+     */
+    protected function unauthenticated($request, array $guards)
+    {
+        $this->guard = $guards[0];
 
+        throw new AuthenticationException(
+            'Unauthenticated.', $guards, $this->redirectTo($request)
+        );
+    }
     protected function redirectTo($request)
     {
-
-        if (! $request->expectsJson()) {
-            return route('admin.login');
+        if (!$request->expectsJson()) {
+            return route($this->guard == 'web-admin' ? 'admin.login' : 'login');
         }
     }
 }

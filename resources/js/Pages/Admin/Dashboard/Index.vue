@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import Layout from '@/Shared/Layout'
+import Layout from '@/Shared/AdminLayout'
 
 export default {
   metaInfo: { title: 'Dashboard' },

@@ -20,7 +20,7 @@ class UsersTableSeeder extends Seeder
             'last_name'     => 'Havrylov',
             'username'      => 'eugene_gvr',
             'email'         => 'link6596@gmail.com',
-            'password'      =>  Hash::make('ubuntu123'),
+            'password'      => Hash::make('ubuntu123'),
             'city_id'       => 11831
 
         ]);

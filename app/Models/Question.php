@@ -40,37 +40,42 @@ class Question extends Model
     public function getQuestion($id)
     {
         try {
-            $question = $this->find($id);
+            $question = $this
+                ->select([
+                    'questions.id AS id',
+                    'questions.text AS text',
+                    'sub_themes.id AS subtheme_id',
+                    'themes.id AS theme_id',
+                    'subjects.id AS subject_id',
+                    'questions.level',
+                    'questions.answer_type',
+                    'questions.photo_path',
+                ])
+                ->join('sub_themes', 'questions.sub_theme_id', '=', 'sub_themes.id')
+                ->join('themes', 'sub_themes.theme_id', '=', 'themes.id')
+                ->join('subjects', 'themes.subject_id', '=', 'subjects.id')
+                ->find($id)
+                ->toArray();
+
             if (!$question) {
                 throw new \Exception("Question not found");
             }
-            $subthemeObject = new SubTheme();
-            $subtheme = $subthemeObject->find($question->sub_theme_id);
-            if (!$subtheme) {
-                throw new \Exception("Subtheme of current question not found");
-            }
 
-            $themeObject = new Theme();
-            $theme = $themeObject->find($subtheme->theme_id);
-            if (!$theme) {
-                throw new \Exception("Theme of current question not found");
-            }
-
-            $answers = Answer::getAnswersByQuestionId($question->id, $question->answer_type);
+            $answers = Answer::getAnswersByQuestionId($question['id'], $question['answer_type']);
 
             $photoPath = $this->getFilePublicUrl(
-                $question->photo_path,
+                $question['photo_path'],
                 config('filesystems')['questions']['path']
             );
 
             $result = [
-                'id' => $question->id,
-                'text' => $question->question_text,
-                'subtheme_id' => $question->sub_theme_id,
-                'theme_id' => $theme->id,
-                'subject_id' => $subject->id,
-                'level' => $question->level,
-                'answer_type' => $question->answer_type,
+                'id' => $question['id'],
+                'text' => $question['text'],
+                'subtheme_id' => $question['subtheme_id'],
+                'theme_id' => $question['theme_id'],
+                'subject_id' => $question['subject_id'],
+                'level' => $question['level'],
+                'answer_type' => $question['answer_type'],
                 'answers' => $answers,
                 'photo' => $photoPath,
             ];
@@ -126,11 +131,12 @@ class Question extends Model
                     }
                 } else {
                     if (!empty($answer['text1']) && !empty($answer['text2'])) {
-                        $answerObject = new Answer();
-                        $answer1_id = $answerObject->addAnswer([
+                        $answer1Object = new Answer();
+                        $answer1_id = $answer1Object->addAnswer([
                             'text' => $answer['text1']
                         ]);
-                        $answer2_id = $answerObject->addAnswer([
+                        $answer2Object = new Answer();
+                        $answer2_id = $answer2Object->addAnswer([
                             'text' => $answer['text2']
                         ]);
 
@@ -147,15 +153,8 @@ class Question extends Model
 
         } catch (\Exception $e) {
             DB::rollback();
-            return [
-                'status' => 0,
-                'message' =>'Something went wrong during creating question',
-            ];
+            throw new \Exception($e->getMessage());
         }
-
-        return [
-            'status' => 1
-        ];
     }
 
     public function updateQuestion($id, $params)
@@ -169,9 +168,9 @@ class Question extends Model
 
             DB::beginTransaction();
             $questionObject->text = $params['text'];
-            $questionObject->subtheme_id = $params['subtheme_id'];
+            $questionObject->sub_theme_id = $params['subtheme_id'];
+            $questionObject->level = $params['level'];
             $questionObject->answer_type = $params['answer_type'];
-            $questionObject->save();
             $questionObject->save();
 
             if (!empty($params['photo'])) {
@@ -236,31 +235,22 @@ class Question extends Model
     {
         try {
             $questionObject = $this->find($id);
-
+            $answerObject = new Answer();
             if (!$questionObject) {
-                return [
-                    'status' => 0,
-                    'message' => 'Question not found',
-                ];
+                throw new \Exception("Question not found");
             }
-
-            $answerIds = //array_column();
             DB::beginTransaction();
+
+            $answers = Answer::getAnswersByQuestionId($questionObject->id, $questionObject->answer_type);
+            $answerIds = array_column($answers,'Id');
+
+            $answerObject->deleteAnswer($answerIds);
             $questionObject->delete();
 
             DB::commit();
-
         } catch (\Exception $e) {
             DB::rollback();
-
-            return [
-                'status' => 0,
-                'message' => 'Something went wrong during deleting question: ['.$e->getMessage().']',
-            ];
+            throw new \Exception("Something went wrong during deleting question: [".$e->getMessage()."]");
         }
-
-        return [
-            'status' => 1
-        ];
     }
 }

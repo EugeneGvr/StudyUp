@@ -27,29 +27,30 @@ class Answer extends Model
     public static function getAnswersByQuestionId($questionId, $answerType)
     {
         if ($answerType != 'correlation') {
-            $answers = AnswerQuestionConnections::getConnections(['question_id' => $questionId]);
-            error_log(print_r($answers,1));die;
+            $answers = AnswerQuestionConnections::select([
+                    'answers.text AS text',
+                    'answer_question_connections.correct AS correct',
+                ])
+                ->join('answers', 'answer_question_connections.answer_id', '=', 'answers.id')
+                ->where(['question_id' => $questionId])
+                ->get()
+                ->toArray();
         } else {
-            $answers = AnswerCorrelationQuestionConnections::getConnections(['question_id' => $questionId]);
+            $answers = AnswerCorrelationQuestionConnections::select([
+                'answer1.text as text1',
+                'answer2.text as text2',
+            ])
+                ->join('answers as answer1', 'answer_correlation_question_connections.answer1_id', '=', 'answer1.id')
+                ->join('answers as answer2', 'answer_correlation_question_connections.answer2_id', '=', 'answer2.id')
+                ->where(['question_id' => $questionId])
+                ->get()
+                ->toArray();
         }
-
-
-        $answers = self::where($params);
-        $answers = $answers
-            ->orderBy('created_at', 'desc')
-            ->get()
-            ->transform(function ($answer) {
-                return [
-                    'id' => $answer->id,
-                    'text' => $answer->text,
-                ];
-            })
-            ->toArray();
 
         return $answers;
     }
 
-    public function addAnswer($params)
+    public function addAnswer($params) : int
     {
         try {
             DB::beginTransaction();
@@ -61,17 +62,11 @@ class Answer extends Model
             DB::commit();
         } catch (\Exception $e) {
             DB::rollback();
+            throw new \Exception("Something went wrong during creating answer");
 
-            return [
-                'status' => 0,
-                'message' =>'Something went wrong during creating answer',
-            ];
         }
 
-        return [
-            'answer_id' => $answer->id,
-            'status' => 1
-        ];
+        return $answer->id;
     }
 
     public function updateAnswers($id, $params)
@@ -101,28 +96,18 @@ class Answer extends Model
         ];
     }
 
-    public function deleteAnswer($params)
+    public function deleteAnswer($id)
     {
         try {
-            $answer = $this->where($params);
-
+            $answer = $this->find($id);
             if (!$answer) {
-                return [
-                    'status' => 0,
-                    'message' => 'Answer not found',
-                ];
+                throw new \Exception("Answer not found");
             }
+
             $answer->delete();
 
         } catch (\Exception $e) {
-            return [
-                'status' => 0,
-                'message' => 'Something went wrong during deleting answer: ['.$e->getMessage().']',
-            ];
+            throw new \Exception("Something went wrong during deleting answer: [".$e->getMessage()."]");
         }
-
-        return [
-            'status' => 1
-        ];
     }
 }

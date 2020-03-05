@@ -20,24 +20,20 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 {
     use SoftDeletes, Authenticatable, Authorizable, StringGenerator;
 
-    protected $casts = [
-        'owner' => 'boolean',
+    protected $fillable = [
+        'first_name', 'last_name', 'email', 'photo', 'password',
     ];
 
-    public function account()
-    {
-        return $this->belongsTo(Account::class);
-    }
 
-    public function getNameAttribute()
-    {
-        return $this->first_name.' '.$this->last_name;
-    }
-
-    public function setPasswordAttribute($password)
-    {
-        $this->attributes['password'] = Hash::make($password);
-    }
+//    public function getNameAttribute()
+//    {
+//        return $this->first_name.' '.$this->last_name;
+//    }
+//
+//    public function setPasswordAttribute($password)
+//    {
+//        $this->attributes['password'] = Hash::make($password);
+//    }
 
     public function photoUrl(array $attributes)
     {

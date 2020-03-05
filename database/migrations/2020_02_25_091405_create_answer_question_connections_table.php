@@ -17,6 +17,7 @@ class CreateAnswerQuestionConnectionsTable extends Migration
             $table->integer('question_id');
             $table->integer('answer_id');
             $table->boolean('correct');
+            $table->timestamps();
         });
     }
 

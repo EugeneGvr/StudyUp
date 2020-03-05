@@ -79,7 +79,7 @@
 
 <script>
 import Icon from '@/Shared/Icon'
-import Layout from '@/Shared/Layout'
+import Layout from '@/Shared/AdminLayout'
 import LoadingButton from '@/Shared/LoadingButton'
 import SelectInput from '@/Shared/SelectInput'
 import TextInput from '@/Shared/TextInput'

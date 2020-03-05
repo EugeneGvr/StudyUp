@@ -78,7 +78,7 @@
 </template>
 
 <script>
-import Layout from '@/Shared/Layout'
+import Layout from '@/Shared/AdminLayout'
 import LoadingButton from '@/Shared/LoadingButton'
 import TextInput from '@/Shared/TextInput'
 import TextareaInput from '@/Shared/TextareaInput'

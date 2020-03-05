@@ -17,6 +17,7 @@ class CreateAnswerCorrelationQuestionConnectionsTable extends Migration
             $table->integer('question_id');
             $table->integer('answer1_id');
             $table->integer('answer2_id');
+            $table->timestamps();
         });
     }
 
