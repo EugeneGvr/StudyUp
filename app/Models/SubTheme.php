@@ -14,7 +14,14 @@ class SubTheme extends Model
     {
         $subThemes = $this->where($params);
         $subThemes = $subThemes
-            ->select(['sub_themes.id AS id', 'sub_themes.name AS name', 'themes.name AS theme', 'subjects.name AS subject'])
+            ->select([
+                'sub_themes.id AS id',
+                'sub_themes.name AS name',
+                'sub_themes.theme_id AS theme_id',
+                'themes.name AS theme_name',
+                'themes.subject_id AS subject_id',
+                'subjects.name AS subject_name'
+            ])
             ->join('themes', 'sub_themes.theme_id', '=', 'themes.id')
             ->join('subjects', 'themes.subject_id', '=', 'subjects.id')
             ->orderBy('sub_themes.created_at', 'desc');
@@ -23,8 +30,10 @@ class SubTheme extends Model
             return [
                 'id' => $subTheme->id,
                 'name' => $subTheme->name,
-                'theme' => $subTheme->theme,
-                'subject' => $subTheme->subject,
+                'theme_id' => $subTheme->theme_id,
+                'theme_name' => $subTheme->theme_name,
+                'subject_id' => $subTheme->subject_id,
+                'subject_name' => $subTheme->subject_name,
             ];
         })
         ->toArray();
@@ -86,6 +95,7 @@ class SubTheme extends Model
 
             DB::beginTransaction();
             $subTheme->name = $params['name'];
+            $subTheme->theme_id = $params['theme_id'];
             $subTheme->save();
             DB::commit();
 

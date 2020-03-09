@@ -35,12 +35,12 @@
                     </td>
                     <td class="border-t" @click="getQuestions(subtheme)">
                         <div class="px-6 py-4 flex items-center focus:text-indigo">
-                            {{ subtheme.theme }}
+                            {{ subtheme.theme_name }}
                         </div>
                     </td>
                     <td class="border-t" @click="getQuestions(subtheme)">
                         <div class="px-6 py-4 flex items-center focus:text-indigo">
-                            {{ subtheme.subject }}
+                            {{ subtheme.subject_name }}
                         </div>
                     </td>
                     <td class="border-t w-px">
@@ -73,11 +73,21 @@
                 <md-dialog-content>
                     <text-input v-model="newSubtheme.name" :errors="$page.errors.name" class="pb-8 w-full" :label="$t('Name')"/>
                     <select-input
+                        v-model="subject_id"
+                        :errors="$page.errors.subject_id"
+                        class="pb-3 w-full" :label="$t('Subject')"
+                    >
+                        <md-option v-for="subject in subjects.data" :key="subject.id" :value="subject.id">
+                            {{subject.name}}
+                        </md-option>
+                    </select-input>
+                    <select-input
+                        v-if="themes !== null"
                         v-model="newSubtheme.theme_id"
                         :errors="$page.errors.theme_id"
                         class="pb-3 w-full" :label="$t('Theme')"
                     >
-                        <md-option v-for="theme in themes.data" :key="theme.id" :value="theme.id">
+                        <md-option v-for="theme in themes" :key="theme.id" :value="theme.id">
                             {{theme.name}}
                         </md-option>
                     </select-input>
@@ -99,6 +109,25 @@
                         class="pb-8 w-full"
                         :label="$t('Name')"
                     />
+                    <select-input
+                        v-model="subject_id"
+                        :errors="$page.errors.subject_id"
+                        class="pb-3 w-full" :label="$t('Subject')"
+                    >
+                        <md-option v-for="subject in subjects.data" :key="subject.id" :value="subject.id">
+                            {{subject.name}}
+                        </md-option>
+                    </select-input>
+                    <select-input
+                        v-if="themes !== null"
+                        v-model="focusedSubtheme.theme_id"
+                        :errors="$page.errors.theme_id"
+                        class="pb-3 w-full" :label="$t('Theme')"
+                    >
+                        <md-option v-for="theme in themes" :key="theme.id" :value="theme.id">
+                            {{theme.name}}
+                        </md-option>
+                    </select-input>
                 </md-dialog-content>
                 <md-dialog-actions>
                     <md-button class="md-primary p-2 m-2" @click="editModal=false">{{$t('Close')}}</md-button>
@@ -108,12 +137,12 @@
 
             <md-dialog :md-active.sync="deleteModal">
                 <md-dialog-title>
-                    <span>Are you sure you want to delete locality</span>
+                    <span>Are you sure you want to delete dubtheme</span>
                     <span class="text-blue">{{focusedSubtheme.name}}</span>
                     <span>?</span>
                 </md-dialog-title>
                 <md-dialog-content>
-                    <span>This action will drop locality and all users who have this locality will get default value</span>
+                    <span>This action will drop subtheme</span>
                 </md-dialog-content>
                 <md-dialog-actions>
                     <md-button class="md-primary p-2 m-2" @click="deleteModal=false">Close</md-button>
@@ -134,6 +163,7 @@
     import SelectInput from '@/Shared/SelectInput'
     import Pagination from '@/Shared/Pagination'
     import SearchFilter from '@/Shared/SearchFilter'
+    import axios from "axios";
 
     export default {
         metaInfo: {title: 'Subthemes'},
@@ -148,7 +178,6 @@
         props: {
             sub_themes: Object,
             filters: Object,
-            themes: Object,
             subjects: Object,
         },
         data() {
@@ -167,6 +196,8 @@
                     name: '',
                     theme_id: '',
                 },
+                subject_id: null,
+                themes: null,
                 focusedSubtheme: {
                     id: null,
                     name: null,
@@ -174,6 +205,19 @@
             }
         },
         watch: {
+            subject_id() {
+                this.themes = null;
+                this.theme_id = null;
+                if(this.subject_id !== null) {
+                    axios.get(this.route('api.v1.themes', this.subject_id))
+                        .then(response => {
+                            this.themes = response.data;
+                        })
+                        .catch(e => {
+                            this.errors.push(e)
+                        })
+                }
+            },
             form: {
                 handler: _.throttle(function () {
                     let query = _.pickBy(this.form)
@@ -191,9 +235,13 @@
             },
             showEditModal(subtheme) {
                 this.editModal = true;
-                this.focusedSubtheme = subtheme;
+                this.subject_id = subtheme.subject_id;
+                this.focusedSubtheme = {...subtheme};
             },
             showAddModal() {
+                this.newSubtheme.name = '';
+                this.newSubtheme.theme_id = null;
+                this.subject_id = null;
                 this.addModal = true;
             },
             showDeleteModal(subtheme) {
