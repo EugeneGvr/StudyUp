@@ -37,6 +37,28 @@ class Question extends Model
         return $questions;
     }
 
+    public function getQuestionIdsForTest($id, $selector)
+    {
+        $selectorId = $selector.'_id';
+        $questions = $this
+            ->select(['questions.id AS id', 'themes.id AS theme_id', 'subjects.id AS subject_id'])
+            ->join('sub_themes', 'questions.sub_theme_id', '=', 'sub_themes.id')
+            ->join('themes', 'sub_themes.theme_id', '=', 'themes.id')
+            ->join('subjects', 'themes.subject_id', '=', 'subjects.id')
+            ->where([ $selectorId => $id])
+            ->get()
+            ->transform(function ($question) {
+                return [
+                    'id' => $question->id,
+                    'theme_id' => $question->theme_id,
+                    'subject_id' => $question->subject_id,
+                ];
+            })
+            ->toArray();
+
+        return $questions;
+    }
+
     public function getQuestion($id)
     {
         try {
@@ -60,7 +82,7 @@ class Question extends Model
             if (!$question) {
                 throw new \Exception("Question not found");
             }
-
+$v=config('filesystems')['questions']['path'];
             $answers = Answer::getAnswersByQuestionId($question['id'], $question['answer_type']);
 
             $photoPath = $this->getFilePublicUrl(
@@ -117,17 +139,12 @@ class Question extends Model
                         $answerResponse = $answerObject->addAnswer([
                             'text' => $answer['text']
                         ]);
-                        if (!empty($answerResponse['status']) && $answerResponse['status'] == 1) {
-                            $connectionObject = new AnswerQuestionConnections();
-                            $connectionObject->addConnection([
-                                'question_id' => $questionObject->id,
-                                'answer_id' => $answerResponse['answer_id'],
-                                'correct' => $answer['correct'] ?? 0
-                            ]);
-                        }
-                        else {
-                            throw new \Exception("Creating of answer was failed");
-                        }
+                        $connectionObject = new AnswerQuestionConnections();
+                        $connectionObject->addConnection([
+                            'question_id' => $questionObject->id,
+                            'answer_id' => $answerResponse['answer_id'],
+                            'correct' => $answer['correct'] ?? 0
+                        ]);
                     }
                 } else {
                     if (!empty($answer['text1']) && !empty($answer['text2'])) {

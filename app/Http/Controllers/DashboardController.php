@@ -11,10 +11,10 @@ class DashboardController extends Controller
     public function __invoke()
     {
         $subjectObject = new Subject();
-        $localities = $subjectObject->getSubjects([], false);
+        $subjects = $subjectObject->getSubjects(false, 'asc');
 
         return $this->render('Dashboard/Index', [
-            'subjects' => $localities,
+            'subjects' => $subjects,
         ]);
     }
 }

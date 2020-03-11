@@ -119,21 +119,22 @@ Route::post('reset')->name('reset.attempt')->uses('Auth\ResetPasswordController@
 
 // Dashboard
 Route::get('/')->name('dashboard')->uses('DashboardController')->middleware('auth:web');
+Route::get('/{id}')->name('test')->uses('TestController')->middleware('auth:web');
 
 // Cabinet
 Route::get('/cabinet')->name('cabinet')->uses('CabinetController@index')->middleware('auth:web');
 
 // Subjects
-Route::group(['prefix' => 'subjects'], function () {
-    Route::get('/')->name('subjects')->uses('SubjectsController@index')->middleware('remember', 'auth:web');
-    Route::get('/{subject}')->name('subjects.show')->uses('SubjectsController@show')->middleware('auth:web');
-    Route::get('/{subject}/test')->name('subjects.test')->uses('SubjectsController@test')->middleware('auth:web');
-});
+//Route::group(['prefix' => 'subjects'], function () {
+//    Route::get('/')->name('subjects')->uses('SubjectsController@index')->middleware('remember', 'auth:web');
+//    Route::get('/{subject}')->name('subjects.show')->uses('SubjectsController@show')->middleware('auth:web');
+//    Route::get('/{subject}/test')->name('subjects.test')->uses('SubjectsController@test')->middleware('auth:web');
+//});
 
 // Api routes
 Route::group(['prefix' => 'api/v1', 'namespace' => 'API'], function () {
     Route::get('/localities/{parent_id}')->name('api.v1.localities')->uses('LocalitiesController@index');
     Route::get('/themes/{subject_id}')->name('api.v1.themes')->uses('ThemesController@index');
     Route::get('/subtheme/{theme_id}')->name('api.v1.subthemes')->uses('SubthemesController@index');
-    Route::get('/test')->name('subjects.show')->name('test')->uses('SubjectsController@show');
+    Route::post('/test')->name('api.v1.test')->uses('TestController@create');
 });
