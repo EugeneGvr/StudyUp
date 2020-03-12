@@ -136,5 +136,6 @@ Route::group(['prefix' => 'api/v1', 'namespace' => 'API'], function () {
     Route::get('/localities/{parent_id}')->name('api.v1.localities')->uses('LocalitiesController@index');
     Route::get('/themes/{subject_id}')->name('api.v1.themes')->uses('ThemesController@index');
     Route::get('/subtheme/{theme_id}')->name('api.v1.subthemes')->uses('SubthemesController@index');
-    Route::post('/test')->name('api.v1.test')->uses('TestController@create');
+    Route::post('/get-question')->name('api.v1.get-question')->uses('TestController@getQuestion');
+    Route::post('/answer-question')->name('api.v1.answer-question')->uses('TestController@answerQuestion');
 });

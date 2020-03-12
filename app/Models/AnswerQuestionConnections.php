@@ -38,6 +38,8 @@ class AnswerQuestionConnections extends Model
             DB::commit();
         } catch (\Exception $e) {
             DB::rollback();
+
+            throw new \Exception($e->getMessage());
         }
     }
 

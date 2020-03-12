@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\Models\RolePermissionConnection;
 use Illuminate\Database\Connection;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Model;
 use Illuminate\Support\Facades\DB;
 
 class Question extends Model
@@ -82,12 +82,12 @@ class Question extends Model
             if (!$question) {
                 throw new \Exception("Question not found");
             }
-$v=config('filesystems')['questions']['path'];
+
             $answers = Answer::getAnswersByQuestionId($question['id'], $question['answer_type']);
 
             $photoPath = $this->getFilePublicUrl(
                 $question['photo_path'],
-                config('filesystems')['questions']['path']
+                config('filesystems')['avatars']['questions']['path']
             );
 
             $result = [
@@ -101,17 +101,11 @@ $v=config('filesystems')['questions']['path'];
                 'answers' => $answers,
                 'photo' => $photoPath,
             ];
-
-            return [
-                'status' => 1,
-                'question' => $result,
-            ];
         } catch (\Exception $e) {
-            return [
-                'status' => 0,
-                'message' => $e->getMessage(),
-            ];
+            throw new \Exception($e->getMessage());
         }
+
+        return $result;
     }
 
     public function addQuestion($params)
@@ -136,13 +130,13 @@ $v=config('filesystems')['questions']['path'];
                 if ($questionObject->answer_type != 'correlation') {
                     if (!empty($answer['text'])) {
                         $answerObject = new Answer();
-                        $answerResponse = $answerObject->addAnswer([
+                        $answerId = $answerObject->addAnswer([
                             'text' => $answer['text']
                         ]);
                         $connectionObject = new AnswerQuestionConnections();
                         $connectionObject->addConnection([
                             'question_id' => $questionObject->id,
-                            'answer_id' => $answerResponse['answer_id'],
+                            'answer_id' => $answerId,
                             'correct' => $answer['correct'] ?? 0
                         ]);
                     }

@@ -6,7 +6,7 @@ use App\Models\Question;
 
 trait TestGenerator
 {
-    public function getQuestion($params = [])
+    public function generateQuestion($params = [])
     {
         $questionObject = new Question();
         if(!empty($params['id']) && !empty($params['field'])) {
@@ -14,8 +14,8 @@ trait TestGenerator
         } else {
             throw new \Exception("Not all needed data available");
         }
-$v = rand(0, count($questions)-1);
-        $questionId = $questions[$v]['id'];
+
+        $questionId = $questions[rand(0, count($questions)-1)]['id'];
         $question = $questionObject->getQuestion($questionId);
 
         return $question;

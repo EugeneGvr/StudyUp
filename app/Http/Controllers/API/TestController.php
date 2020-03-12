@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Auth;
 class TestController extends Controller
 {
     use TestGenerator;
-    public function create()
+    public function getQuestion()
     {
         $rules = [
             'field' => ['required'],
@@ -24,8 +24,13 @@ class TestController extends Controller
         $params = Request::validate($rules);
         $params['userId'] = Auth::id();
 
-        $this->getQuestion($params);
+        $question = $this->generateQuestion($params);
 
-        return 'ok';
+        return $question;
+    }
+
+    public function answerQuestion()
+    {
+        return 'hihih';
     }
 }
