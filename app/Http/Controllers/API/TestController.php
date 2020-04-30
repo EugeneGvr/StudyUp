@@ -31,6 +31,15 @@ class TestController extends Controller
 
     public function answerQuestion()
     {
-        return 'hihih';
+        $rules = [
+            'question_id'   => ['required' ],
+            'answer_id'     => ['required' ],
+        ];
+
+        $params = Request::validate($rules);
+
+        $question = $this->checknAswer($params);
+
+        return $question;
     }
 }

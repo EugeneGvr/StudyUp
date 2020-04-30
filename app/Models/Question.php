@@ -59,7 +59,7 @@ class Question extends Model
         return $questions;
     }
 
-    public function getQuestion($id)
+    public function getQuestion($id, $withAnswerStatus = true)
     {
         try {
             $question = $this
@@ -83,7 +83,7 @@ class Question extends Model
                 throw new \Exception("Question not found");
             }
 
-            $answers = Answer::getAnswersByQuestionId($question['id'], $question['answer_type']);
+            $answers = Answer::getAnswersByQuestionId($question['id'], $question['answer_type'], $withAnswerStatus);
 
             $photoPath = $this->getFilePublicUrl(
                 $question['photo_path'],

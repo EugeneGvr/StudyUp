@@ -32,7 +32,9 @@
                               v-model="answer"
                               :value= "answers_element.id"
                               :ref="answers_element.id"
-                    >{{answers_element.text}}</md-radio>
+                    >
+                        {{answers_element.text}}
+                    </md-radio>
                 </div>
             </div>
             <div v-else-if="question.answer_type == 'multi'">
@@ -41,7 +43,9 @@
                                  v-model="answer"
                                  :value= "answers_element.id"
                                  :ref="answers_element.id"
-                    >{{answers_element.text}}</md-checkbox>
+                    >
+                        {{answers_element.text}}
+                    </md-checkbox>
                 </div>
             </div>
             <div v-if="question.answer_type == 'correlation'">
@@ -115,14 +119,19 @@ export default {
                 })
         },
         submitAnswer() {
+            const result = {
+                'question_id': this.question.id,
+                'answer_id': this.answer,
+            };
+            console.log(result);
             axios.defaults.headers.common = {
                 'X-Requested-With': 'XMLHttpRequest',
                 'X-CSRF-TOKEN' : document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
             };
-            axios.post(this.route('api.v1.answer-question'), this.answer)
+            axios.post(this.route('api.v1.answer-question'), result)
                 .then(response => {
-                    console.log(this.answer);
-                    console.log(response.data);
+                    this.testSession.push(response.data);
+                    console.log(this.testSession);
                 })
                 .catch(e => {
                     this.errors.push(e)

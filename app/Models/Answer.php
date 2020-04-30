@@ -24,19 +24,25 @@ class Answer extends Model
         return $answers;
     }
 
-    public static function getAnswersByQuestionId($questionId, $answerType)
+    public static function getAnswersByQuestionId($questionId, $answerType, $withStatus = true)
     {
         if ($answerType != 'correlation') {
-            $answers = AnswerQuestionConnections::select([
-                    'answers.text AS text',
-                    'answer_question_connections.correct AS correct',
-                ])
+            $select = [
+                'answers.id AS id',
+                'answers.text AS text',
+            ];
+            if ($withStatus) {
+                $select[] = 'answer_question_connections.correct AS correct';
+            }
+            $answers = AnswerQuestionConnections::select($select)
                 ->join('answers', 'answer_question_connections.answer_id', '=', 'answers.id')
                 ->where(['question_id' => $questionId])
                 ->get()
                 ->toArray();
         } else {
             $answers = AnswerCorrelationQuestionConnections::select([
+                'answer1.id AS id1',
+                'answer2.id AS id2',
                 'answer1.text as text1',
                 'answer2.text as text2',
             ])
